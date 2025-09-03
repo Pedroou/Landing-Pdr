@@ -188,6 +188,343 @@
                     top: 12px;
                 }
             }
+            /* CV styles */
+            .cv-container {
+                position: relative;
+                z-index: 1;
+                max-width: 620px;
+                margin: 60px auto 0;
+                padding: 36px 24px 32px 24px;
+                background: var(--card);
+                border-radius: 12px;
+                box-shadow: 0 4px 32px rgba(0, 0, 0, 0.07);
+                overflow: hidden;
+            }
+            .cv-container header {
+                display: flex;
+                gap: 18px;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                margin-bottom: 24px;
+                padding-bottom: 24px;
+                border-bottom: 1px solid #e9ecef;
+            }
+            .cv-container .identity {
+                display: flex;
+                gap: 16px;
+                align-items: center;
+            }
+            .cv-container .avatar {
+                width: 86px;
+                height: 86px;
+                border-radius: 14px;
+                background-color: var(--accent);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: 'Fira Mono', monospace;
+                color: #fff;
+                font-weight: 700;
+                font-size: 2rem;
+                box-shadow: 0 4px 12px rgba(161, 88, 234, 0.2);
+            }
+            @media (max-width: 880px) { .cv-container .avatar { width: 72px; height: 72px; } }
+            .cv-container .name {
+                font-size: 2.1rem;
+                font-weight: 700;
+                margin: 18px 0 5px 0;
+                font-family: "Fira Mono", monospace;
+                letter-spacing: 1.2px;
+                color: var(--fg);
+            }
+            .cv-container .meta {
+                color: var(--muted);
+                font-size: 14px;
+                margin-top: 6px;
+            }
+            .cv-container .contacts {
+                display: flex;
+                gap: 12px;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+            .cv-container .pill {
+                background-color: #f1f3f5;
+                padding: 8px 12px;
+                border-radius: 999px;
+                font-size: 13px;
+                font-weight: 500;
+                color: var(--fg);
+                border: 1px solid #e9ecef;
+                text-decoration: none;
+                transition: background-color 0.2s;
+                cursor: pointer;
+            }
+            .cv-container .pill:hover {
+                background-color: #e9ecef;
+            }
+            .cv-container .lang-switch {
+                display: flex;
+                gap: 8px;
+            }
+            .cv-container main {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            .cv-container section.card {
+                background-color: transparent;
+                padding: 0;
+            }
+            .cv-container h2 {
+                font-family: "Fira Mono", monospace;
+                color: var(--muted);
+                font-size: 1.02rem;
+                margin: 32px 0 12px 0;
+                text-transform: uppercase;
+                letter-spacing: 1.2px;
+            }
+            .cv-container h3 {
+                margin: 0 0 8px 0;
+                font-size: 15px;
+                color: var(--fg);
+                font-weight: 600;
+            }
+            .cv-container p.lead {
+                margin: 0;
+                color: var(--fg);
+                line-height: 1.6;
+                font-size: 1rem;
+            }
+            .cv-container ul.skill-grid {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                padding: 0;
+                margin: 8px 0 0 0;
+                list-style: none;
+            }
+            .cv-container ul.skill-grid li {
+                background: var(--bg);
+                color: var(--accent);
+                border-radius: 50px;
+                padding: 6px 16px;
+                font-family: "Fira Mono", monospace;
+                font-size: 0.98rem;
+                border: 1px solid #e0e4e8;
+                font-weight: 500;
+            }
+            .cv-container .experience {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+            }
+            .cv-container .job {
+                padding: 16px;
+                border-radius: 8px;
+                background-color: var(--bg);
+                border: 1px solid #e9ecef;
+            }
+            .cv-container .job .role {
+                font-weight: 700;
+                font-size: 1.1rem;
+                color: var(--fg);
+            }
+            .cv-container .job .meta {
+                font-size: 13px;
+                color: var(--muted);
+            }
+            .cv-container .job ul {
+                margin: 12px 0 0 18px;
+                padding-left: 0;
+                color: var(--fg);
+                line-height: 1.7;
+            }
+            .cv-container .job ul li {
+                margin-bottom: 8px;
+            }
+            .cv-container li::marker {
+                color: var(--accent);
+            }
+            .cv-container .projects a {
+                color: var(--accent);
+                text-decoration: none;
+                font-weight: 600;
+            }
+            .cv-container .projects a:hover {
+                text-decoration: underline;
+            }
+            .cv-container .project {
+                padding: 16px;
+                border-radius: 8px;
+                border: 1px solid #e9ecef;
+                margin-bottom: 12px;
+            }
+            .cv-container footer {
+                margin-top: 24px;
+                padding-top: 18px;
+                border-top: 1px solid #e9ecef;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .cv-container .download {
+                background: var(--accent);
+                padding: 10px 16px;
+                border-radius: 8px;
+                color: #fff;
+                font-weight: 700;
+                border: none;
+                cursor: pointer;
+                transition: background-color 0.2s;
+            }
+            .cv-container .download:hover {
+                background-color: #8e44ad;
+            }
+            .cv-container .print-btn {
+                margin-left: 10px;
+                background-color: #28a745;
+            }
+            .cv-container .print-btn:hover {
+                background-color: #218838;
+            }
+            .cv-container .small {
+                font-size: 13px;
+                color: var(--muted);
+            }
+            .cv-container .repo-link {
+                display: inline-flex;
+                gap: 8px;
+                align-items: center;
+            }
+            .cv-container .repo-badge {
+                background-color: var(--accent);
+                padding: 6px 10px;
+                border-radius: 6px;
+                font-size: 13px;
+                color: #fff;
+                font-weight: 500;
+            }
+            .cv-container aside.right {
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+            }
+            .cv-container aside .card {
+                padding: 18px;
+                border-radius: 10px;
+                border: 1px solid #e9ecef;
+                background-color: var(--card);
+            }
+            .cv-container .edu,
+            .cv-container .certs {
+                font-size: 14px;
+                color: var(--fg);
+            }
+            .cv-container aside a {
+                color: var(--accent);
+                text-decoration: none;
+            }
+            .cv-container aside a:hover {
+                text-decoration: underline;
+            }
+            .cv-container .toast-container {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 1000;
+                pointer-events: none;
+            }
+            .cv-container .toast {
+                background: #333;
+                color: #fff;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                font-size: 14px;
+                font-weight: 500;
+                margin-bottom: 10px;
+                transform: translateX(400px);
+                opacity: 0;
+                transition: all 0.3s ease;
+                pointer-events: auto;
+                max-width: 300px;
+                word-wrap: break-word;
+            }
+            .cv-container .toast.show {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            .cv-container .toast.success {
+                background: linear-gradient(135deg, #4CAF50, #45a049);
+                border-left: 4px solid #2E7D32;
+            }
+            .cv-container .toast.error {
+                background: linear-gradient(135deg, #f44336, #d32f2f);
+                border-left: 4px solid #B71C1C;
+            }
+            .cv-container .toast .close-btn {
+                float: right;
+                margin-left: 10px;
+                cursor: pointer;
+                font-weight: bold;
+                color: #fff;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+            .cv-container .toast .close-btn:hover {
+                opacity: 1;
+            }
+            @media (max-width: 520px) {
+                .cv-container .contacts {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                .cv-container .lang-switch {
+                    margin-top: 10px;
+                }
+                .cv-container .toast-container {
+                    bottom: 10px;
+                    right: 10px;
+                    left: 10px;
+                    width: auto;
+                }
+                .cv-container .toast {
+                    max-width: none;
+                    margin-bottom: 5px;
+                }
+            }
+            @media print {
+                .cv-container {
+                    box-shadow: none !important;
+                    border: 0 !important;
+                    max-width: 100% !important;
+                    padding: 20px;
+                    background: #fff;
+                }
+                .cv-container .download, .cv-container .toast-container, .cv-container .lang-switch {
+                    display: none !important;
+                }
+                .cv-container h2, .cv-container h3, .cv-container .name {
+                    color: #000 !important;
+                }
+                .cv-container .job, .cv-container .project, .cv-container aside .card {
+                    break-inside: avoid;
+                    margin-bottom: 15px;
+                }
+                .cv-container ul.skill-grid {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 6px;
+                }
+                .cv-container ul.skill-grid li {
+                    border: 1px solid #ddd;
+                    page-break-inside: avoid;
+                }
+            }
         </style>
         <!-- Font Awesome for icons (free CDN) -->
         <link
@@ -237,6 +574,7 @@
                 <span class="skill">Python</span>
                 <span class="skill">C</span>
                 <span class="skill">Docker</span>
+                <span class="skill">React</span>
             </div>
             <div class="section-title" id="links-title">Links</div>
             <div class="links" id="links-list">
@@ -263,14 +601,14 @@
                     <div id="linkedin-link-desc">CV &amp; background</div>
                 </a>
                 <a
-                    href="https://drive.google.com/file/d/1CB_q0iHNyHxccg6LLWK6bleTm0sTvnrE/view?usp=sharing"
+                    href="cv.html"
                     class="link-card"
                     target="_blank"
                 >
                     <div class="link-title" id="cv-link-title">
                         <i class="fas fa-file-alt"></i> CV
                     </div>
-                    <div id="cv-link-desc">See my CV</div>
+                    <div id="cv-link-desc">View my CV</div>
                 </a>
                 <a href="mailto:pedro.g.ourique@gmail.com" class="link-card">
                     <div class="link-title" id="email-link-title">
@@ -308,7 +646,7 @@
                     linkedinTitle: '<i class="fab fa-linkedin"></i> LinkedIn',
                     linkedinDesc: "CV &amp; background",
                     cvTitle: '<i class="fas fa-file-alt"></i> CV',
-                    cvDesc: "See my CV",
+                    cvDesc: "View my CV",
                     emailTitle: '<i class="fas fa-envelope"></i> Email',
                     emailDesc: "Let's get in touch",
                     socialTitle: "Social",
@@ -323,7 +661,7 @@
                     linkedinTitle: '<i class="fab fa-linkedin"></i> LinkedIn',
                     linkedinDesc: "CV &amp; experiência",
                     cvTitle: '<i class="fas fa-file-alt"></i> Currículo',
-                    cvDesc: "Meu currículo",
+                    cvDesc: "Ver meu currículo",
                     emailTitle: '<i class="fas fa-envelope"></i> Email',
                     emailDesc: "Vamos conversar",
                     socialTitle: "Social",

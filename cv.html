@@ -1,0 +1,901 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pedro Guimarães Ourique — CV</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ESTILO VISUAL CRIADO POR GEMINI (GOOGLE)
+      APLICADO À ESTRUTURA HTML FORNECIDA PELO USUÁRIO
+    */
+    :root {
+      --accent: #a158ea;
+      --bg: #f6f8fa;
+      --fg: #171c22;
+      --muted: #8a8e97;
+      --card: #fff;
+      --border-color: #e9ecef;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background-color: var(--bg);
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      padding: 32px;
+    }
+    
+    @media (max-width: 520px) {
+        body { padding: 16px; }
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      background-color: var(--card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 26px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+    }
+
+    header {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .identity {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2.5px solid var(--accent);
+      background: #fff;
+      box-shadow: 0 2px 10px #e5e5e5;
+    }
+    
+    @media (max-width: 880px) { .avatar{width: 72px; height: 72px} }
+
+    .name {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0;
+      color: var(--fg);
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    .contacts {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    .pill {
+      background-color: #f1f3f5;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--fg);
+      border: 1px solid var(--border-color);
+      text-decoration: none;
+      transition: background-color 0.2s;
+      cursor: pointer;
+    }
+    .pill:hover {
+        background-color: #e9ecef;
+    }
+
+    .lang-switch {
+      display: flex;
+      gap: 8px
+    }
+
+    .lang-btn {
+      background: var(--card);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: "Fira Mono", monospace;
+      font-weight: 700;
+      padding: 5px 15px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition:
+          background 0.2s,
+          color 0.2s;
+    }
+    
+    .lang-btn:hover {
+        background: var(--accent);
+        color: #fff;
+    }
+
+    .lang-btn.active {
+      background-color: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 1fr 300px; /* Coluna direita um pouco mais estreita */
+      gap: 24px
+    }
+
+    @media (max-width: 880px) {
+      main {
+        grid-template-columns: 1fr
+      }
+    }
+
+    section.card {
+      background-color: transparent; /* No card BG needed if container has it */
+      padding: 0; /* Remove padding if not needed */
+    }
+
+    h2 {
+      font-family: "Fira Mono", monospace;
+      color: var(--muted);
+      font-size: 1.02rem;
+      margin: 24px 0 12px 0;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--accent);
+    }
+    
+    h3 {
+        margin: 0 0 8px 0;
+        font-size: 15px;
+        color: var(--fg);
+        font-weight: 600;
+    }
+
+    p.lead {
+      margin: 0;
+      color: var(--fg);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    ul.skill-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0;
+      margin: 8px 0 0 0;
+      list-style: none
+    }
+
+    ul.skill-grid li {
+      background: var(--bg);
+      color: var(--accent);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-family: "Fira Mono", monospace;
+      font-size: 0.98rem;
+      border: 1px solid #e0e4e8;
+      font-weight: 500;
+    }
+
+    .section-title {
+      margin-bottom: 16px;
+    }
+
+    .experience {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .job {
+      padding: 16px;
+      border-radius: 8px;
+      background-color: var(--bg);
+      border: 1px solid var(--border-color);
+    }
+
+    .job .role {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--fg);
+    }
+
+    .job .meta {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .job ul {
+      margin: 12px 0 0 18px;
+      padding-left: 0;
+      color: var(--fg);
+      line-height: 1.7;
+    }
+    .job ul li {
+        margin-bottom: 8px;
+    }
+    li::marker {
+        color: var(--accent);
+    }
+
+    .projects a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .projects a:hover {
+        text-decoration: underline;
+    }
+
+    .project {
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 12px;
+    }
+
+    footer {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .download {
+      background: var(--accent);
+      padding: 10px 16px;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .download:hover {
+        background-color: #8e44ad;
+    }
+
+    .print-btn {
+      margin-left: 10px;
+      background-color: #28a745;
+    }
+    
+    .print-btn:hover {
+      background-color: #218838;
+    }
+
+    .small {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .repo-link {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .repo-badge {
+      background-color: var(--accent);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    aside.right {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    
+    aside .card {
+        padding: 18px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        background-color: var(--card);
+    }
+
+    /* Avoid element splits inside PDF pages */
+    header, .job, .project, aside .card, footer, section, .experience { 
+      break-inside: avoid; 
+      page-break-inside: avoid; 
+    }
+
+    /* Manual page break utilities */
+    .page-break { page-break-before: always; break-before: page; }
+    .page-break-after { page-break-after: always; break-after: page; }
+    .page-break-avoid { page-break-inside: avoid; break-inside: avoid; }
+    .page-break-inside { page-break-inside: auto; break-inside: auto; }
+    
+    /* Specific break points for better PDF layout */
+    .break-before-experience { page-break-before: always; break-before: page; }
+    .break-before-projects { page-break-before: always; break-before: page; }
+    .break-before-sidebar { page-break-before: always; break-before: page; }
+
+    @media print {
+      html, body { 
+        padding: 0; 
+        margin: 0;
+        background: #fff; 
+        font-size: 12pt;
+        line-height: 1.4;
+      }
+      body { 
+        -webkit-print-color-adjust: exact; 
+        print-color-adjust: exact; 
+      }
+      .container { 
+        box-shadow: none !important; 
+        border: 0 !important; 
+        max-width: 100% !important;
+        padding: 20px;
+        background: #fff;
+      }
+      .download, .toast-container, .lang-switch { 
+        display: none !important; 
+      }
+      
+      /* Better print layout */
+      main {
+        grid-template-columns: 1fr 240px;
+        gap: 20px;
+      }
+      
+      /* Ensure proper page breaks */
+      header { break-after: avoid; }
+      .job, .project, aside .card { 
+        break-inside: avoid; 
+        margin-bottom: 15px;
+      }
+      
+      /* Improve text contrast for print */
+      h2, h3, .name { color: #000 !important; }
+      
+      /* Fix sidebar positioning */
+      aside .card {
+        border: 1px solid #ddd;
+        margin-bottom: 15px;
+        padding: 15px;
+      }
+      
+      /* Ensure skills display properly */
+      ul.skill-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      
+      ul.skill-grid li {
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+      }
+    }
+
+  /* ensure no scaling transforms leak */
+  body.pdf-capture-active * { transform:none !important; }
+
+    .edu,
+    .certs {
+      font-size: 14px;
+      color: var(--fg);
+    }
+    
+    aside a {
+        color: var(--accent);
+        text-decoration: none;
+    }
+     aside a:hover {
+        text-decoration: underline;
+    }
+    
+    /* Toast notification styles */
+    .toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: #333;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 10px;
+      transform: translateX(400px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: auto;
+      max-width: 300px;
+      word-wrap: break-word;
+    }
+
+    .toast.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      border-left: 4px solid #2E7D32;
+    }
+
+    .toast.error {
+      background: linear-gradient(135deg, #f44336, #d32f2f);
+      border-left: 4px solid #B71C1C;
+    }
+
+    .toast .close-btn {
+      float: right;
+      margin-left: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #fff;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .toast .close-btn:hover {
+      opacity: 1;
+    }
+    
+    @media (max-width: 520px) {
+      .contacts {
+        flex-direction: column;
+        align-items: flex-start
+      }
+      .lang-switch {
+        margin-top: 10px
+      }
+      .toast-container {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+        width: auto;
+      }
+      .toast {
+        max-width: none;
+        margin-bottom: 5px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="cv-container">
+    <header>
+      <div class="identity">
+        <img src="images/teste.png" alt="Pedro Ourique" class="avatar" />
+        <div>
+          <div id="name" class="name">Pedro Guimarães Ourique</div>
+          <div id="location" class="meta">Santo Antônio da Patrulha, RS • Brasil</div>
+          <div class="contacts" style="margin-top:8px">
+            <div class="pill" id="phone">(+55) 51 98058-4781</div>
+            <div class="pill" id="email">pedro.g.ourique@gmail.com</div>
+            <a class="pill" id="github" href="https://github.com/Pedroou" target="_blank" rel="noopener noreferrer">GitHub: Pedroou</a>
+            <a class="pill" id="landing" href="https://pedroou.github.io/Landing-Pdr/" target="_blank" rel="noopener noreferrer">Landing Page</a>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="lang-switch" role="tablist" aria-label="language switch">
+          <button class="lang-btn active" id="btn-en">EN</button>
+          <button class="lang-btn" id="btn-pt">PT</button>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section id="main-col">
+        <div class="section-title">
+          <h2 id="heading-summary">Summary</h2>
+        </div>
+        <p id="summary" class="lead">
+          Developer experienced in full-stack projects, specialized in Computer Vision and AI-integrated systems. Strong expertise in TypeScript/React for modern, high-performance web interfaces and Python + Docker for backend, model integration and deployment. Active open-source contributor — focused on UI/UX improvements, feature delivery, and performance optimization.
+        </p>
+        <div style="height:16px"></div>
+        <div class="section-title">
+          <h2 id="heading-skills">Technical Skills</h2>
+        </div>
+        <div>
+            <h3 id="skills-languages" style="margin-top:12px;font-size:14px">Languages</h3>
+            <ul class="skill-grid" aria-hidden="false">
+              <li>TypeScript</li><li>JavaScript (ES6+)</li><li>Python</li><li>HTML5</li><li>CSS3</li><li>Shell</li><li>Ruby (familiar)</li><li>C</li>
+            </ul>
+            <h3 style="margin-top:16px;font-size:14px">Frontend</h3>
+            <ul class="skill-grid">
+              <li>React</li><li>Tailwind CSS</li><li>Bootstrap</li><li>Axios</li><li>Animations &amp; performance</li><li>i18n</li>
+            </ul>
+            <h3 style="margin-top:16px;font-size:14px">Backend / ML / DevOps</h3>
+            <ul class="skill-grid">
+              <li>Docker &amp; Compose</li><li>Multi-stage Dockerfiles</li><li>Nvidia Runtime (TensorRT)</li><li>OpenVINO, ONNX, TFLite</li><li>Jina/CLIP</li><li>Makefiles</li>
+            </ul>
+            <h3 style="margin-top:16px;font-size:14px">Tools &amp; Practices</h3>
+            <ul class="skill-grid">
+              <li>Git / GitHub</li><li>ESLint / Prettier</li><li>npm</li><li>CI-friendly builds</li><li>Secrets via .env</li>
+            </ul>
+        </div>
+        <div style="height:16px"></div>
+        <div class="section-title page-break">
+          <h2 id="heading-experience">Professional Experience</h2>
+        </div>
+        <div class="experience">
+          <div class="job">
+            <div class="role" id="job1-role">Assistente de Desenvolvedor — NetComet</div>
+            <div class="meta" id="job1-meta">Santo Antônio da Patrulha, RS — Sep 2025 — Present</div>
+            <ul id="job1-desc">
+              <li>Maintained and extended a TypeScript + React SPA for an NVR product (Frigate-based), creating modular components and enforcing strict typing & linting.</li>
+              <li>Implemented streaming log ingestion (ReadableStream) and robust parsing for Frigate / go2rtc / nginx logs, improving reliability of the live logs UI.</li>
+              <li>Authored multi-stage Dockerfiles that integrate OpenVINO/ONNX/TFLite models and support GPU (TensorRT) and CPU builds; automated model downloads (wget / Kaggle API).</li>
+              <li>Improved UI/UX, accessibility and animation performance across the product (ripple effects, z-index issues, responsive layout fixes).</li>
+              <li>Managed production configs with docker-compose and migrated sensitive keys to .env for safer deployments.</li>
+            </ul>
+          </div>
+          <div class="job">
+            <div class="role" id="job2-role">Estagiário em Desenvolvimento — NetComet</div>
+            <div class="meta" id="job2-meta">May 2025 — Sep 2025</div>
+            <ul id="job2-desc">
+              <li>Worked on real-time image processing and AI pipelines for CCTV systems, contributed UI fixes and feature implementations for the monitoring dashboard.</li>
+              <li>Collaborated in cross-functional tasks: camera configuration, detection tuning and integration testing on Proxmox-based environments.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <aside class="right">
+        <section class="card certs" aria-labelledby="certs-title">
+          <div class="section-title">
+            <h2 id="certs-title">Certifications &amp; Courses</h2>
+          </div>
+          <div class="small">
+            <div style="height:8px"></div>
+            <div id="cursos-certificacoes-1" style="font-weight:600;margin-top:8px"><strong>Cursos e Certificações Relevantes</strong></div>
+            <div style="margin-left:10px">
+              <ul>
+                <li style="margin-bottom:3px">Curso Avançado de Língua Inglesa Presencial (ENGLISH PLACE)</li>
+                <li style="margin-bottom:3px">py4e101x: Programming for Everybody (University of Michigan)</li>
+                <li style="margin-bottom:3px">Fundamentals of digital marketing (Google Digital Garage)</li>
+                <li style="margin-bottom:3px">Understand the basics of code (Google Digital Garage)</li>
+                <li style="margin-bottom:3px">Curso de Extensão de Banco de Dados 1: fundamentos (Instituto Federal RS)</li>
+              </ul>
+              <div id="cursos-certificacoes-2" style="font-weight:600;margin-top:8px"><strong>FiberSchool</strong></div>
+              <ul>
+                <li style="margin-bottom:3px">Técnico IoT 3.0: Fibra Óptica</li>
+                <li style="margin-bottom:3px">Técnico IoT 3.0: Instalação Blindada</li>
+                <li style="margin-bottom:3px">Técnico IoT 3.0: Redes TCP/IP</li>
+                <li style="margin-bottom:3px">Técnico IoT 3.0: Wi-Fi Premium</li>
+                <li style="margin-bottom:3px">Técnico IoT 3.0: Dispositivos Inteligentes</li>
+                <li style="margin-bottom:3px">Trilha Técnico IoT 3.0</li>
+                <li style="margin-bottom:3px">Fibra Óptica do Zero</li>
+                <li style="margin-bottom:3px">Atendimento Encantador</li>
+                <li style="margin-bottom:3px">Cultura do Encantamento</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <section class="card edu" aria-labelledby="edu-title">
+          <div class="section-title">
+            <h2 id="edu-title">Education</h2>
+          </div>
+          <div>
+            <div id="edu1-title" style="font-weight:700">Tecnologia em Análise e Desenvolvimento de Sistemas - (Cursando)</div>
+            <div class="small" id="edu1-inst">Instituto Federal do Rio Grande do Sul - Campus Osório</div>
+            <div style="height:12px"></div>
+            <div id="edu2-title" style="font-weight:700">Ensino Médio - (Concluído — 2024)</div>
+            <div class="small" id="edu2-inst">Instituto Federal do Rio Grande do Sul - Campus Osório</div>            
+            <div style="height:12px"></div>
+            <div id="edu3-title" style="font-weight:700">Técnico em Informática Integrado - (Incompleto — 2021 - 2022)</div>
+            <div class="small" id="edu3-inst">Instituto Federal do Rio Grande do Sul - Campus Osório</div>
+          </div>
+        </section>
+        <section class="card" aria-labelledby="contact-title">
+          <div class="section-title">
+            <h2 id="contact-title">Contact</h2>
+          </div>
+          <div class="small">
+            <div style="margin-bottom:10px"><strong id="contact-email-label">Email</strong><br><a href="mailto:pedro.g.ourique@gmail.com">pedro.g.ourique@gmail.com</a></div>
+            <div style="margin-bottom:10px"><strong id="contact-phone-label">Phone</strong><br><a href="tel:+5551980584781">(+55) 51 98058-4781</a></div>
+            <div style="margin-bottom:10px"><strong>GitHub</strong><br><a href="https://github.com/Pedroou" target="_blank" rel="noopener noreferrer">github.com/Pedroou</a></div>
+            <div><strong>LinkedIn</strong><br><a href="https://www.linkedin.com/in/pedro-guimaraes-ourique/" target="_blank" rel="noopener noreferrer">linkedin.com/in/pedro-g-ourique</a></div>
+          </div>
+        </section>
+      </aside>
+    </main>
+    <section id="full-width-projects">
+      <div style="height:16px"></div>
+      <div class="section-title page-break">
+        <h2 id="heading-projects">Selected Projects</h2>
+      </div>
+      <div class="projects">
+        <div class="project">
+          <div style="display:flex;justify-content:space-between;align-items:center; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <a class="repo-link" href="https://github.com/Pedroou/Frigate-Dev" target="_blank" rel="noopener noreferrer">
+                <span class="repo-badge">Frigate-Dev</span>
+              </a>
+              <div class="small" style="margin-top:6px">TypeScript + React SPA for NVR/AI monitoring. Evidence: streaming logs parsing (web/src/utils/logUtil.ts), many UI/UX fixes and component refactors.</div>
+            </div>
+            <div style="text-align:right" class="small">Open-source • Active</div>
+          </div>
+        </div>
+        <div class="project">
+          <a class="repo-link" href="https://github.com/Pedroou/Frigate-Config" target="_blank" rel="noopener noreferrer"><span class="repo-badge">Frigate-Config</span></a>
+          <div class="small" style="margin-top:6px">Production Frigate configs, docker-compose, secrets migration to .env and GPU/CPU build instructions.</div>
+        </div>
+        <div class="project">
+          <a class="repo-link" href="https://github.com/Pedroou/GPU-Video_Processing.Visualisation" target="_blank" rel="noopener noreferrer"><span class="repo-badge">GPU Visualisation</span></a>
+          <div class="small" style="margin-top:6px">Interactive GPU architecture visualization (NVDEC → CUDA → PCIe) built with HTML/CSS/JS and Tailwind utilities.</div>
+        </div>
+        <div class="project">
+          <a class="repo-link" href="https://github.com/Pedroou/html-ModernSite" target="_blank" rel="noopener noreferrer"><span class="repo-badge">Modern Site (template)</span></a>
+          <div class="small" style="margin-top:6px">Responsive marketing site template — Bootstrap + custom JS (animations, IntersectionObserver).</div>
+        </div>
+        <div class="project">
+          <a class="repo-link" href="https://github.com/Pedroou/Landing-Pdr" target="_blank" rel="noopener noreferrer"><span class="repo-badge">Landing-Pdr</span></a>
+          <div class="small" style="margin-top:6px">Personal landing page with language switcher, canvas background animation and contact links.</div>
+        </div>
+      </div>
+    </section>
+    <footer>
+      <button class="download print-btn" id="printBtn">Print PDF</button>
+    </footer>
+  </div>
+  <!-- Toast notification container -->
+  <div class="toast-container" id="toast-container"></div>
+  <script>
+    // Minimal language toggle using translations (EN / PT) derived from the suggested CV.
+    const translations = {
+      en: {
+        headingSummary: "Summary",
+        summary: "Developer experienced in full-stack projects, specialized in Computer Vision and AI-integrated systems. Strong expertise in TypeScript/React for modern, high-performance web interfaces and Python + Docker for backend, model integration and deployment. Active open-source contributor — focused on UI/UX improvements, feature delivery, and performance optimization.",
+        headingSkills: "Technical Skills",
+        headingExperience: "Professional Experience",
+        headingProjects: "Selected Projects",
+        eduTitle: "Education",
+        certsTitle: "Certifications & Courses",
+        contactTitle: "Contact",
+        cursosCertificacoes: "Relevant Courses and Certifications",
+        job1Role: "Developer Assistant — NetComet",
+        job1Meta: "Santo Antônio da Patrulha, RS — Sep 2025 — Present",
+        job1Desc: `<li>Maintained and extended a TypeScript + React SPA for an NVR product (Frigate-based), creating modular components and enforcing strict typing & linting.</li>
+        <li>Implemented streaming log ingestion (ReadableStream) and robust parsing for Frigate / go2rtc / nginx logs, improving reliability of the live logs UI.</li>
+        <li>Authored multi-stage Dockerfiles that integrate OpenVINO/ONNX/TFLite models and support GPU (TensorRT) and CPU builds; automated model downloads (wget / Kaggle API).</li>
+        <li>Improved UI/UX, accessibility and animation performance across the product (ripple effects, z-index issues, responsive layout fixes).</li>
+        <li>Managed production configs with docker-compose and migrated sensitive keys to .env for safer deployments.</li>`,
+        job2Role: "Development Intern — NetComet",
+        job2Meta: "May 2025 — Sep 2025",
+        job2Desc: `<li>Worked on real-time image processing and AI pipelines for CCTV systems, contributed UI fixes and feature implementations for the monitoring dashboard.</li>
+        <li>Collaborated in cross-functional tasks: camera configuration, detection tuning and integration testing on Proxmox-based environments.</li>`,
+        edu1Title: "Bachelor's in Systems Analysis and Development - (In Progress)",
+        edu1Inst: "Federal Institute of Rio Grande do Sul - Osório Campus",
+        edu2Title: "High School - (Completed — 2024)",
+        edu2Inst: "Federal Institute of Rio Grande do Sul - Osório Campus",
+        edu3Title: "Integrated Technical in Informatics - (Incomplete — 2021 - 2022)",
+        edu3Inst: "Federal Institute of Rio Grande do Sul - Osório Campus",
+        contactEmailLabel: "Email",
+        contactPhoneLabel: "Phone",
+        skillsLanguages: "Languages",
+        printPdf: "Print PDF"
+      },
+      pt: {
+        headingSummary: "Resumo",
+        summary: "Desenvolvedor com experiência em projetos Full-Stack, especializado em Visão Computacional e sistemas com IA. Forte domínio em TypeScript/React para interfaces web modernas e performáticas, e em Python + Docker para backend, integração de modelos e deploy. Contribuidor ativo em open-source — foco em UI/UX, entrega de funcionalidades e otimização de performance.",
+        headingSkills: "Habilidades Técnicas",
+        headingExperience: "Experiência Profissional",
+        headingProjects: "Projetos em Destaque",
+        eduTitle: "Formação",
+        certsTitle: "Certificações & Cursos",
+        contactTitle: "Contato",
+        cursosCertificacoes: "Cursos e Certificações Relevantes",
+        job1Role: "Assistente de Desenvolvedor — NetComet",
+        job1Meta: "Santo Antônio da Patrulha, RS — Set 2025 — Presente",
+        job1Desc: `<li>Mantive e estendi um SPA TypeScript + React para um produto NVR (baseado em Frigate), criando componentes modulares e aplicando tipagem rigorosa e linting.</li>
+        <li>Implementei ingestão de logs em streaming (ReadableStream) e parsing robusto para logs Frigate / go2rtc / nginx, melhorando a confiabilidade da UI de logs ao vivo.</li>
+        <li>Escrevi Dockerfiles multi-estágio que integram modelos OpenVINO/ONNX/TFLite e suportam builds GPU (TensorRT) e CPU; automatizei downloads de modelos (wget / Kaggle API).</li>
+        <li>Melhorei UI/UX, acessibilidade e performance de animações no produto (efeitos ripple, problemas de z-index, correções de layout responsivo).</li>
+        <li>Gerenciei configurações de produção com docker-compose e migrei chaves sensíveis para .env para implantações mais seguras.</li>`,
+        job2Role: "Estagiário em Desenvolvimento — NetComet",
+        job2Meta: "Maio 2025 — Set 2025",
+        job2Desc: `<li>Trabalhei em processamento de imagem em tempo real e pipelines de IA para sistemas CCTV, contribuí com correções de UI e implementações de funcionalidades para o painel de monitoramento.</li>
+        <li>Colaborei em tarefas multifuncionais: configuração de câmeras, ajuste de detecção e testes de integração em ambientes baseados em Proxmox.</li>`,
+        edu1Title: "Tecnologia em Análise e Desenvolvimento de Sistemas - (Cursando)",
+        edu1Inst: "Instituto Federal do Rio Grande do Sul - Campus Osório",
+        edu2Title: "Ensino Médio - (Concluído — 2024)",
+        edu2Inst: "Instituto Federal do Rio Grande do Sul - Campus Osório",
+        edu3Title: "Técnico em Informática Integrado - (Incompleto — 2021 - 2022)",
+        edu3Inst: "Instituto Federal do Rio Grande do Sul - Campus Osório",
+        contactEmailLabel: "Email",
+        contactPhoneLabel: "Telefone",
+        skillsLanguages: "Linguagens",
+        printPdf: "Imprimir PDF"
+      }
+    };
+    const btnEn = document.getElementById('btn-en');
+    const btnPt = document.getElementById('btn-pt');
+
+    function setLang(lang) {
+      const t = translations[lang];
+      document.getElementById('heading-summary').textContent = t.headingSummary;
+      document.getElementById('summary').textContent = t.summary;
+      document.getElementById('heading-skills').textContent = t.headingSkills;
+      document.getElementById('heading-experience').textContent = t.headingExperience;
+      document.getElementById('heading-projects').textContent = t.headingProjects;
+      document.getElementById('edu-title').textContent = t.eduTitle;
+      document.getElementById('certs-title').textContent = t.certsTitle;
+      document.getElementById('contact-title').textContent = t.contactTitle;
+      document.getElementById('cursos-certificacoes-1').textContent = t.cursosCertificacoes;
+      document.getElementById('skills-languages').textContent = t.skillsLanguages;
+      document.getElementById('job1-role').textContent = t.job1Role;
+      document.getElementById('job1-meta').textContent = t.job1Meta;
+      document.getElementById('job1-desc').innerHTML = t.job1Desc;
+      document.getElementById('job2-role').textContent = t.job2Role;
+      document.getElementById('job2-meta').textContent = t.job2Meta;
+      document.getElementById('job2-desc').innerHTML = t.job2Desc;
+      document.getElementById('edu1-title').textContent = t.edu1Title;
+      document.getElementById('edu1-inst').textContent = t.edu1Inst;
+      document.getElementById('edu2-title').textContent = t.edu2Title;
+      document.getElementById('edu2-inst').textContent = t.edu2Inst;
+      document.getElementById('edu3-title').textContent = t.edu3Title;
+      document.getElementById('edu3-inst').textContent = t.edu3Inst;
+      document.getElementById('contact-email-label').textContent = t.contactEmailLabel;
+      document.getElementById('contact-phone-label').textContent = t.contactPhoneLabel;
+      document.getElementById('printBtn').textContent = t.printPdf;
+      if (lang === 'en') {
+        btnEn.classList.add('active');
+        btnPt.classList.remove('active');
+        document.documentElement.lang = 'en'
+      } else {
+        btnPt.classList.add('active');
+        btnEn.classList.remove('active');
+        document.documentElement.lang = 'pt'
+      }
+    }
+    btnEn.addEventListener('click', () => setLang('en'));
+    btnPt.addEventListener('click', () => setLang('pt'));
+    // default language depends on browser or fallback to en
+    const browserLang = navigator.language && navigator.language.startsWith('pt') ? 'pt' : 'en';
+    setLang(browserLang);
+    // Function to copy text to clipboard (works with local files)
+    function copyToClipboard(text, elementId) {
+      // Try modern Clipboard API first
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('Copied to clipboard!', 'success');
+        }).catch(() => {
+          fallbackCopyTextToClipboard(text, elementId);
+        });
+      } else {
+        // Fallback for local files and older browsers
+        fallbackCopyTextToClipboard(text, elementId);
+      }
+    }
+
+    function fallbackCopyTextToClipboard(text, elementId) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          showToast('Copied to clipboard!', 'success');
+        } else {
+          showToast('Copy failed. Please copy manually.', 'error');
+        }
+      } catch (err) {
+        showToast('Copy failed. Please copy manually.', 'error');
+      }
+      
+      document.body.removeChild(textArea);
+    }
+
+    // Toast notification functions
+    function showToast(message, type = 'success') {
+      const toastContainer = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <span class="close-btn" onclick="closeToast(this)">×</span>
+        ${message}
+      `;
+
+      toastContainer.appendChild(toast);
+
+      // Trigger animation
+      setTimeout(() => toast.classList.add('show'), 10);
+
+      // Auto remove after 3 seconds
+      setTimeout(() => {
+        closeToast(toast.querySelector('.close-btn'));
+      }, 3000);
+    }
+
+    function closeToast(closeBtn) {
+      const toast = closeBtn.parentElement;
+      toast.classList.remove('show');
+      // Remove after animation completes
+      setTimeout(() => {
+        if (toast.parentElement) {
+          toast.parentElement.removeChild(toast);
+        }
+      }, 300);
+    }
+
+    // Print button - uses browser's native print (much better for PDFs)
+    document.getElementById('printBtn').addEventListener('click', () => {
+      // Show helpful instruction
+      showToast('💡 In print dialog: Set margins to "None" or "Minimum" for best results', 'success');
+      
+      // Hide elements that shouldn't appear in print
+      document.body.classList.add('pdf-capture-active');
+      
+      // Small delay to let user see the instruction
+      setTimeout(() => {
+        window.print();
+      }, 1000);
+      
+      // Restore after print dialog closes (timeout needed)
+      setTimeout(() => {
+        document.body.classList.remove('pdf-capture-active');
+      }, 2000);
+    });
+
+    // Copy phone number to clipboard
+    document.getElementById('phone').addEventListener('click', () => {
+      copyToClipboard('(+55) 51 98058-4781', 'phone');
+    });
+
+    // Copy email to clipboard
+    document.getElementById('email').addEventListener('click', () => {
+      copyToClipboard('pedro.g.ourique@gmail.com', 'email');
+    });
+  </script>
+</body>
+</html>
