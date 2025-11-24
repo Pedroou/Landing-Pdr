@@ -6,7 +6,7 @@
     <title>Pedro Ourique | Portfolio & CV</title>
     <meta
       name="description"
-      content="Professional portfolio of Pedro Ourique - Junior Developer"
+      content="Professional portfolio of Pedro Ourique - Mid-level software engineer"
     />
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -42,6 +42,13 @@
             animation: {
               "fade-in": "fadeIn 1s ease-out forwards",
               "slide-up": "slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+              "slide-down":
+                "slideDown 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+              "menu-slide-down":
+                "menuSlideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+              "menu-slide-up":
+                "menuSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+              shine: "shine 5s linear infinite",
             },
             keyframes: {
               fadeIn: {
@@ -51,6 +58,22 @@
               slideUp: {
                 "0%": { opacity: "0", transform: "translateY(20px)" },
                 "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              slideDown: {
+                "0%": { opacity: "0", transform: "translateY(-20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              menuSlideDown: {
+                "0%": { opacity: "0", transform: "translateY(-10px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              menuSlideUp: {
+                "0%": { opacity: "1", transform: "translateY(0)" },
+                "100%": { opacity: "0", transform: "translateY(-10px)" },
+              },
+              shine: {
+                "0%": { "background-position": "100%" },
+                "100%": { "background-position": "-100%" },
               },
             },
           },
@@ -97,6 +120,8 @@
         body {
           background-color: white;
           color: black;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
         }
         .no-print {
           display: none !important;

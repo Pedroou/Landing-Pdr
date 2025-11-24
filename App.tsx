@@ -1,4 +1,10 @@
-import React, { useState, createContext, useContext } from "react";
+import React, {
+  useState,
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+} from "react";
 import { HashRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 import LandingPage from "./pages/Landing";
 import CVPage from "./pages/CV";
@@ -29,7 +35,41 @@ export const useLanguage = () => {
 const Navbar = () => {
   const { lang, setLang, content } = useLanguage();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const location = useLocation();
+  const navRef = useRef<HTMLElement>(null);
+
+  const closeMenu = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsMenuOpen(false);
+      setIsClosing(false);
+    }, 400);
+  };
+
+  const toggleMenu = () => {
+    if (isMenuOpen) {
+      closeMenu();
+    } else {
+      setIsMenuOpen(true);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        if (isMenuOpen) closeMenu();
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   const navLinkClass = (path: string) =>
     `text-sm font-medium transition-colors duration-300 ${
@@ -37,9 +77,35 @@ const Navbar = () => {
     }`;
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-black/50 backdrop-blur-xl border-b border-white/5 no-print transition-all duration-500">
+    <nav
+      ref={navRef}
+      className="fixed top-0 w-full z-50 bg-black/50 backdrop-blur-xl border-b border-white/5 no-print transition-all duration-500 animate-slide-down"
+    >
       <div className="max-w-5xl mx-auto px-6 relative">
         <div className="flex items-center h-16">
+          {/* Mobile Menu Button (Left) */}
+          <button
+            onClick={toggleMenu}
+            className="md:hidden text-muted hover:text-white w-10 h-10 relative flex items-center justify-center transition-colors"
+          >
+            <Menu
+              size={20}
+              className={`absolute transition-all duration-300 transform ${
+                isMenuOpen && !isClosing
+                  ? "opacity-0 rotate-90 scale-75"
+                  : "opacity-100 rotate-0 scale-100"
+              }`}
+            />
+            <X
+              size={20}
+              className={`absolute transition-all duration-300 transform ${
+                isMenuOpen && !isClosing
+                  ? "opacity-100 rotate-0 scale-100"
+                  : "opacity-0 -rotate-90 scale-75"
+              }`}
+            />
+          </button>
+
           {/* Center Nav Links (Desktop) - Absolutely positioned for true centering */}
           <div className="hidden md:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2">
             <Link to="/" className={navLinkClass("/")}>
@@ -74,51 +140,55 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Mobile Menu Button & Lang Switch (Right Aligned) */}
-          <div className="md:hidden ml-auto flex items-center gap-4">
-            <div className="flex items-center space-x-1 bg-[#1c1c1e] rounded-full p-1 border border-white/10">
-              <button
-                onClick={() => setLang("en")}
-                className={`px-2 py-1 text-[10px] font-medium rounded-full transition-all ${
-                  lang === "en" ? "bg-white text-black" : "text-muted"
-                }`}
-              >
-                EN
-              </button>
-              <button
-                onClick={() => setLang("pt")}
-                className={`px-2 py-1 text-[10px] font-medium rounded-full transition-all ${
-                  lang === "pt" ? "bg-white text-black" : "text-muted"
-                }`}
-              >
-                PT
-              </button>
-            </div>
+          {/* Mobile Language Switcher (Right Aligned) */}
+          <div className="md:hidden flex items-center space-x-1 bg-[#1c1c1e] rounded-full p-1 ml-auto border border-white/10">
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-muted hover:text-white p-2 transition-colors"
+              onClick={() => setLang("en")}
+              className={`px-2 py-1 text-[10px] font-medium rounded-full transition-all ${
+                lang === "en" ? "bg-white text-black" : "text-muted"
+              }`}
             >
-              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              EN
+            </button>
+            <button
+              onClick={() => setLang("pt")}
+              className={`px-2 py-1 text-[10px] font-medium rounded-full transition-all ${
+                lang === "pt" ? "bg-white text-black" : "text-muted"
+              }`}
+            >
+              PT
             </button>
           </div>
         </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-[#1c1c1e] border-b border-white/10 animate-fade-in">
-          <div className="px-4 pt-2 pb-4 space-y-1">
+      {(isMenuOpen || isClosing) && (
+        <div
+          className={`md:hidden absolute top-full left-0 w-full bg-black/50 backdrop-blur-xl border-b border-white/5 ${
+            isClosing ? "animate-menu-slide-up" : "animate-menu-slide-down"
+          }`}
+        >
+          <div className="px-4 py-2 space-y-1">
             <Link
               to="/"
-              onClick={() => setIsMenuOpen(false)}
-              className="block px-3 py-3 rounded-md text-base font-medium text-muted hover:text-white hover:bg-white/5"
+              onClick={closeMenu}
+              className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                location.pathname === "/"
+                  ? "bg-white/10 text-white"
+                  : "text-gray-300 hover:text-white hover:bg-white/5"
+              }`}
             >
               {content.navigation.home}
             </Link>
             <Link
               to="/cv"
-              onClick={() => setIsMenuOpen(false)}
-              className="block px-3 py-3 rounded-md text-base font-medium text-muted hover:text-white hover:bg-white/5"
+              onClick={closeMenu}
+              className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                location.pathname === "/cv"
+                  ? "bg-white/10 text-white"
+                  : "text-gray-300 hover:text-white hover:bg-white/5"
+              }`}
             >
               {content.navigation.cv}
             </Link>
@@ -187,7 +257,7 @@ const App: React.FC = () => {
       <HashRouter>
         <div className="min-h-screen flex flex-col font-sans antialiased">
           <Navbar />
-          <main className="flex-grow pt-20">
+          <main className="flex-grow pt-20 print:pt-0">
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/cv" element={<CVPage />} />

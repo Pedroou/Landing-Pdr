@@ -35,7 +35,7 @@ const CVPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black md:py-12 px-4 md:px-6 relative pb-20">
+    <div className="min-h-screen bg-black md:py-12 px-4 md:px-6 relative pb-20 print:bg-white print:p-0">
       {/* Toast Notification */}
       {toast && (
         <div
@@ -131,14 +131,14 @@ const CVPage: React.FC = () => {
         </header>
 
         {/* BODY */}
-        <div className="p-10 grid grid-cols-1 lg:grid-cols-3 gap-12 print:grid-cols-3 print:gap-8 print:p-0 print:pt-6">
+        <div className="p-10 grid grid-cols-1 lg:grid-cols-3 gap-12 print:grid-cols-3 print:bg-white print:gap-8 print:p-0 print:pt-6">
           {/* Main Column */}
-          <main className="lg:col-span-2 print:col-span-2 space-y-10">
+          <main className="lg:col-span-2 print:col-span-2 space-y-5">
             {/* Summary */}
             <section>
               <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center">
                 {content.cv.headings.summary}
-                <span className="ml-3 h-px flex-grow bg-gray-100"></span>
+                <span className="ml-3 h-px flex-grow bg-gray-100 print:bg-gray-300"></span>
               </h2>
               <p className="text-gray-800 leading-relaxed text-sm text-justify font-normal">
                 {content.cv.summary}
@@ -149,16 +149,32 @@ const CVPage: React.FC = () => {
             <section>
               <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center">
                 {content.cv.headings.skills}
-                <span className="ml-3 h-px flex-grow bg-gray-100"></span>
+                <span className="ml-3 h-px flex-grow bg-gray-100 print:bg-gray-300"></span>
               </h2>
 
-              <div className="grid grid-cols-1 gap-6">
+              <div className="grid grid-cols-2 gap-6">
                 <div>
                   <h3 className="text-xs font-semibold text-black uppercase mb-2">
                     {content.cv.skills.languagesTitle}
                   </h3>
                   <div className="flex flex-wrap gap-1.5">
                     {content.cv.skills.languages.map((s) => (
+                      <span
+                        key={s}
+                        className="px-2 py-0.5 bg-gray-50 text-gray-700 text-[11px] font-medium border border-gray-200 rounded-sm"
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-xs font-semibold text-black uppercase mb-2">
+                    {content.cv.skills.backendTitle}
+                  </h3>
+                  <div className="flex flex-wrap gap-1.5">
+                    {content.cv.skills.backend.map((s) => (
                       <span
                         key={s}
                         className="px-2 py-0.5 bg-gray-50 text-gray-700 text-[11px] font-medium border border-gray-200 rounded-sm"
@@ -187,10 +203,10 @@ const CVPage: React.FC = () => {
 
                 <div>
                   <h3 className="text-xs font-semibold text-black uppercase mb-2">
-                    {content.cv.skills.backendTitle}
+                    {content.cv.skills.toolsTitle}
                   </h3>
                   <div className="flex flex-wrap gap-1.5">
-                    {content.cv.skills.backend.map((s) => (
+                    {content.cv.skills.tools.map((s) => (
                       <span
                         key={s}
                         className="px-2 py-0.5 bg-gray-50 text-gray-700 text-[11px] font-medium border border-gray-200 rounded-sm"
@@ -204,17 +220,17 @@ const CVPage: React.FC = () => {
             </section>
 
             {/* Experience */}
-            <section className="break-inside-avoid">
+            <section className="">
               <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center">
                 {content.cv.headings.experience}
-                <span className="ml-3 h-px flex-grow bg-gray-100"></span>
+                <span className="ml-3 h-px flex-grow bg-gray-100 print:bg-gray-300"></span>
               </h2>
 
-              <div className="space-y-8 border-l border-gray-200 pl-6 ml-1">
+              <div className="space-y-8 border-l border-gray-200 print:border-gray-300 pl-6 ml-1">
                 {content.cv.experience.map((job, idx) => (
                   <div key={idx} className="relative break-inside-avoid">
                     {/* Timeline Dot */}
-                    <div className="absolute -left-[27.5px] top-1.5 w-2 h-2 bg-gray-300 rounded-full ring-4 ring-white"></div>
+                    <div className="absolute -left-[28px] top-1.5 w-2 h-2 bg-gray-300 print:bg-gray-400 rounded-full ring-4 ring-white"></div>
 
                     <div className="flex flex-col mb-2">
                       <h3 className="text-sm font-bold text-black">
@@ -248,7 +264,7 @@ const CVPage: React.FC = () => {
             <section className="break-inside-avoid">
               <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center">
                 {content.cv.headings.education}
-                <span className="ml-3 h-px flex-grow bg-gray-100"></span>
+                <span className="ml-3 h-px flex-grow bg-gray-100 print:bg-gray-300"></span>
               </h2>
               <div className="space-y-5">
                 {content.cv.education.map((edu, idx) => (
@@ -263,12 +279,11 @@ const CVPage: React.FC = () => {
                 ))}
               </div>
             </section>
-
             {/* Certifications */}
             <section className="break-inside-avoid">
-              <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center">
+              <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest my-3 flex items-center">
                 {content.cv.headings.certs}
-                <span className="ml-3 h-px flex-grow bg-gray-100"></span>
+                <span className="ml-3 h-px flex-grow bg-gray-100 print:bg-gray-300"></span>
               </h2>
               <div className="text-xs text-gray-600 space-y-5">
                 <div>
@@ -301,31 +316,29 @@ const CVPage: React.FC = () => {
         </div>
 
         {/* Full Width Projects Section */}
-        <div className="bg-gray-50 border-t border-gray-100 p-10 break-before-page print:bg-white print:p-0 print:mt-6">
+        <div className="bg-gray-50 p-10 print:bg-white print:p-0 print:mt-6">
           <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center">
             {content.cv.headings.projects}
-            <span className="ml-3 h-px flex-grow bg-gray-200"></span>
+            <span className="ml-3 h-px flex-grow bg-gray-200 print:bg-gray-300"></span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {content.cv.projects.map((proj, idx) => (
-              <div
+              <a
                 key={idx}
-                className="bg-white p-5 rounded-sm border border-gray-200 hover:border-gray-400 transition-colors break-inside-avoid shadow-sm"
+                href={proj.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white p-5 rounded-sm border border-gray-200 hover:border-gray-400 transition-colors break-inside-avoid shadow-sm block group"
               >
                 <div className="flex justify-between items-start mb-2">
-                  <a
-                    href={proj.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm font-bold text-black hover:text-gray-600 flex items-center group"
-                  >
+                  <span className="text-sm font-bold text-black group-hover:text-gray-600 flex items-center">
                     {proj.title}
                     <Share2
                       size={12}
                       className="ml-1 opacity-30 group-hover:opacity-100 transition-opacity"
                     />
-                  </a>
+                  </span>
                   {proj.status && (
                     <span className="text-[10px] uppercase font-bold text-black bg-gray-100 px-2 py-0.5 rounded border border-gray-200">
                       {proj.status}
@@ -335,14 +348,14 @@ const CVPage: React.FC = () => {
                 <p className="text-xs text-gray-600 leading-relaxed">
                   {proj.desc}
                 </p>
-              </div>
+              </a>
             ))}
           </div>
         </div>
 
         {/* Footer for Print */}
         <div className="hidden print:block text-center text-[10px] text-gray-400 mt-8 pb-4">
-          CV generated from portfolio - {window.location.href}
+          Pedro G Ourique portfolio - {window.location.href}
         </div>
       </div>
     </div>

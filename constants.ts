@@ -7,7 +7,7 @@ export const translations: Record<Language, Content> = {
   en: {
     hero: {
       name: "Pedro Ourique",
-      tagline: "Junior Developer",
+      tagline: "Mid-level software engineer",
       about:
         "Hi! I'm <b>Pedro Ourique</b>, a junior software developer passionate about clean code, open source, and building tools that empower others. I enjoy working with <b>JavaScript</b>, <b>HTML</b>, and <b>Docker</b>.<br /><br />I like to learn, tinker, and share what I discover.",
       avatarAlt: "Pedro Ourique Avatar",
@@ -22,10 +22,10 @@ export const translations: Record<Language, Content> = {
       linksTitle: "Links",
       socialTitle: "Social",
       links: {
-        github: { title: "GitHub", desc: "Open source, projects, code." },
+        github: { title: "GitHub", desc: "Projects and code." },
         linkedin: { title: "LinkedIn", desc: "CV & background" },
         cv: { title: "CV", desc: "View my CV" },
-        email: { title: "Email", desc: "Let's get in touch" },
+        email: { title: "Email", desc: "Let's get in touch!" },
       },
     },
     cv: {
@@ -53,42 +53,25 @@ export const translations: Record<Language, Content> = {
           "TypeScript",
           "JavaScript (ES6+)",
           "Python",
-          "HTML5",
-          "CSS3",
-          "Shell",
-          "Ruby (familiar)",
           "C",
+          "Shell",
+          "HTML5 / CSS3",
         ],
         frontendTitle: "Frontend",
-        frontend: [
-          "React",
-          "Tailwind CSS",
-          "Bootstrap",
-          "Axios",
-          "Animations & performance",
-          "i18n",
-        ],
-        backendTitle: "Backend / ML / DevOps",
+        frontend: ["React", "Tailwind CSS", "Bootstrap"],
+        backendTitle: "ML Ops & Backend",
         backend: [
-          "Docker & Compose",
-          "Multi-stage Dockerfiles",
-          "Nvidia Runtime (TensorRT)",
-          "OpenVINO, ONNX, TFLite",
-          "Jina/CLIP",
-          "Makefiles",
+          "Docker",
+          "TensorRT",
+          "OpenVINO / ONNX / TFLite",
+          "Jina / CLIP",
         ],
-        toolsTitle: "Tools & Practices",
-        tools: [
-          "Git / GitHub",
-          "ESLint / Prettier",
-          "npm",
-          "CI-friendly builds",
-          "Secrets via .env",
-        ],
+        toolsTitle: "Tools",
+        tools: ["Git / GitHub", "Makefiles", "ESLint / Prettier", "npm"],
       },
       experience: [
         {
-          role: "Developer Assistant",
+          role: "Mid-level Software Developer",
           company: "NetComet",
           date: "Sep 2025 — Present",
           desc: [
@@ -117,7 +100,7 @@ export const translations: Record<Language, Content> = {
         },
         {
           title: "High School - (Completed — 2024)",
-          institution: "Federal Institute of Rio Grande do Sul - Osório Campus",
+          institution: "E.E.E.M. Patrulhense - Santo Antônio da Patrulha",
         },
         {
           title:
@@ -184,7 +167,7 @@ export const translations: Record<Language, Content> = {
   pt: {
     hero: {
       name: "Pedro Ourique",
-      tagline: "Desenvolvedor Júnior",
+      tagline: "Engenheiro de software pleno",
       about:
         "Olá! Eu sou <b>Pedro Ourique</b>, um desenvolvedor de software júnior apaixonado por código limpo, open source e construir ferramentas que ajudam outras pessoas. Gosto de trabalhar com <b>JavaScript</b>, <b>HTML</b> e <b>Docker</b>.<br /><br />Gosto de aprender, experimentar e compartilhar o que descubro.",
       avatarAlt: "Avatar Pedro Ourique",
@@ -199,10 +182,10 @@ export const translations: Record<Language, Content> = {
       linksTitle: "Links",
       socialTitle: "Social",
       links: {
-        github: { title: "GitHub", desc: "Open source, projetos, código." },
-        linkedin: { title: "LinkedIn", desc: "CV & experiência" },
-        cv: { title: "Currículo", desc: "Ver meu currículo" },
-        email: { title: "Email", desc: "Vamos conversar" },
+        github: { title: "GitHub", desc: "Projetos e código." },
+        linkedin: { title: "LinkedIn", desc: "CV e experiência" },
+        cv: { title: "Currículo", desc: "Veja o meu currículo" },
+        email: { title: "Email", desc: "Entre em contato!" },
       },
     },
     cv: {
@@ -230,42 +213,25 @@ export const translations: Record<Language, Content> = {
           "TypeScript",
           "JavaScript (ES6+)",
           "Python",
-          "HTML5",
-          "CSS3",
-          "Shell",
-          "Ruby (familiar)",
           "C",
+          "Shell",
+          "HTML5 / CSS3",
         ],
         frontendTitle: "Frontend",
-        frontend: [
-          "React",
-          "Tailwind CSS",
-          "Bootstrap",
-          "Axios",
-          "Animations & performance",
-          "i18n",
-        ],
+        frontend: ["React", "Tailwind CSS", "Bootstrap"],
         backendTitle: "Backend / ML / DevOps",
         backend: [
-          "Docker & Compose",
-          "Multi-stage Dockerfiles",
-          "Nvidia Runtime (TensorRT)",
-          "OpenVINO, ONNX, TFLite",
-          "Jina/CLIP",
-          "Makefiles",
+          "Docker",
+          "TensorRT",
+          "OpenVINO / ONNX / TFLite",
+          "Jina / CLIP",
         ],
         toolsTitle: "Tools & Practices",
-        tools: [
-          "Git / GitHub",
-          "ESLint / Prettier",
-          "npm",
-          "CI-friendly builds",
-          "Secrets via .env",
-        ],
+        tools: ["Git / GitHub", "Makefiles", "ESLint / Prettier", "npm"],
       },
       experience: [
         {
-          role: "Assistente de Desenvolvedor",
+          role: "Desenvolvedor de Software Pleno",
           company: "NetComet",
           date: "Set 2025 — Presente",
           desc: [
@@ -294,7 +260,7 @@ export const translations: Record<Language, Content> = {
         },
         {
           title: "Ensino Médio - (Concluído — 2024)",
-          institution: "Instituto Federal do Rio Grande do Sul - Campus Osório",
+          institution: "E.E.E.M. Patrulhense - Santo Antônio da Patrulha",
         },
         {
           title:

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../App";
 import DarkVeil from "../components/DarkVeil";
+import ShinyText from "../components/ShinyText";
 import { Github, Linkedin, FileText, Mail, ArrowRight } from "lucide-react";
 import { AVATAR_URL } from "../constants";
 import { Link } from "react-router-dom";
@@ -78,9 +79,12 @@ const LandingPage: React.FC = () => {
           className="animate-fade-in opacity-0 mb-16"
           style={{ animationDelay: "900ms" }}
         >
-          <span className="font-mono text-sm md:text-base text-muted tracking-[0.2em] uppercase">
-            {content.hero.tagline}
-          </span>
+          <ShinyText
+            text={content.hero.tagline}
+            disabled={false}
+            speed={3}
+            className="font-mono text-sm md:text-base text-muted tracking-[0.2em] uppercase"
+          />
         </div>
 
         {/* About Blurb - Apple Gray */}
