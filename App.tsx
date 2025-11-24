@@ -238,6 +238,21 @@ const Footer = () => {
   );
 };
 
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    // Disable browser's default scroll restoration to prevent fighting
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
 // --- App Component ---
 
 const App: React.FC = () => {
@@ -255,6 +270,7 @@ const App: React.FC = () => {
   return (
     <LanguageContext.Provider value={contextValue}>
       <HashRouter>
+        <ScrollToTop />
         <div className="min-h-screen flex flex-col font-sans antialiased">
           <Navbar />
           <main className="flex-grow pt-20 print:pt-0">
