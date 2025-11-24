@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pedro Ourique | Portfolio & CV</title>
+    <meta
+      name="description"
+      content="Professional portfolio of Pedro Ourique - Mid-level software engineer"
+    />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              // Apple-style "True Black" Palette
+              background: "#000000", // Pure Black
+              surface: "#1c1c1e", // Apple Dark Surface
+              border: "#2c2c2e", // Apple Dark Border
+              muted: "#86868b", // Apple Gray text
+              text: "#f5f5f7", // Apple Off-white
+
+              // Accents (Subtle, High Quality)
+              brand: {
+                start: "#2997ff", // Apple Blue
+                end: "#bf5af2", // Apple Purple
+              },
+            },
+            fontFamily: {
+              sans: [
+                "Inter",
+                "-apple-system",
+                "BlinkMacSystemFont",
+                "sans-serif",
+              ],
+              mono: ["Fira Mono", "SF Mono", "monospace"],
+            },
+            // ...existing code...
+            animation: {
+              "fade-in": "fadeIn 1s ease-out forwards",
+              "slide-up": "slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+              "slide-down":
+                "slideDown 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+              "menu-slide-down":
+                "menuSlideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+              "menu-slide-up":
+                "menuSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+              shine: "shine 5s linear infinite",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0", transform: "translateY(10px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              slideUp: {
+                "0%": { opacity: "0", transform: "translateY(20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              slideDown: {
+                "0%": { opacity: "0", transform: "translateY(-20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              menuSlideDown: {
+                "0%": { opacity: "0", transform: "translateY(-10px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              menuSlideUp: {
+                "0%": { opacity: "1", transform: "translateY(0)" },
+                "100%": { opacity: "0", transform: "translateY(-10px)" },
+              },
+              shine: {
+                "0%": { "background-position": "100%" },
+                "100%": { "background-position": "-100%" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        background-color: #000000;
+        color: #f5f5f7;
+      }
+
+      /* Smooth Scroll */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Custom Scrollbar - Minimal */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #000000;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+
+      /* Print Styles */
+      @media print {
+        body {
+          background-color: white;
+          color: black;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        .no-print {
+          display: none !important;
+        }
+        .print-only {
+          display: block !important;
+        }
+        @page {
+          margin: 0.5cm;
+        }
+      }
+    </style>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://aistudiocdn.com/react@^19.2.0",
+          "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+          "react/": "https://aistudiocdn.com/react@^19.2.0/",
+          "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+          "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.6"
+        }
+      }
+    </script>
+    <script type="module" crossorigin src="/Landing-Pdr/assets/index-CsIfj0-k.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
