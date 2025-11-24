@@ -21,7 +21,7 @@ const LandingPage: React.FC = () => {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.5 }
     );
 
     if (linksRef.current) {
@@ -95,7 +95,7 @@ const LandingPage: React.FC = () => {
         />
 
         {/* Tech Stack - Sequential Stagger */}
-        <div className="w-full max-w-3xl mb-20">
+        <div className="w-full max-w-3xl mb-24">
           <div className="flex flex-wrap justify-center gap-3">
             {skills.map((skill, idx) => (
               <div
