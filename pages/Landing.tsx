@@ -10,8 +10,19 @@ const LandingPage: React.FC = () => {
   const { content } = useLanguage();
   const linksRef = useRef<HTMLDivElement>(null);
   const [linksVisible, setLinksVisible] = useState(false);
+  const [animationsDone, setAnimationsDone] = useState(false);
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setAnimationsDone(true);
+    }, 2800); // Wait for the initial staggered animations to finish (1500ms + 8*150ms ≈ 2700ms)
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!animationsDone) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -21,7 +32,7 @@ const LandingPage: React.FC = () => {
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.3 }
     );
 
     if (linksRef.current) {
@@ -31,7 +42,7 @@ const LandingPage: React.FC = () => {
     return () => {
       if (linksRef.current) observer.unobserve(linksRef.current);
     };
-  }, []);
+  }, [animationsDone]);
 
   const skills = [
     "JavaScript",
@@ -54,8 +65,8 @@ const LandingPage: React.FC = () => {
       <div className="relative z-10 w-full max-w-4xl mx-auto px-6 flex flex-col items-center text-center">
         {/* Avatar - Floating Glass Container */}
         <div
-          className="relative mb-10 animate-fade-in opacity-0"
-          style={{ animationDelay: "300ms" }}
+          className="relative mb-10 animate-fade-in"
+          style={{ opacity: 0, animationDelay: "300ms" }}
         >
           <div className="relative p-1.5 rounded-full bg-gradient-to-b from-white/10 to-transparent border border-white/5 shadow-2xl">
             <img
@@ -68,16 +79,16 @@ const LandingPage: React.FC = () => {
 
         {/* Hero Name - Crisp White */}
         <h1
-          className="text-6xl md:text-8xl font-bold tracking-tighter text-white mb-8 animate-fade-in opacity-0 drop-shadow-xl"
-          style={{ animationDelay: "600ms" }}
+          className="text-6xl md:text-8xl font-bold tracking-tighter text-white mb-8 animate-fade-in drop-shadow-xl"
+          style={{ opacity: 0, animationDelay: "600ms" }}
         >
           {content.hero.name}
         </h1>
 
         {/* Tagline - Technical Mono */}
         <div
-          className="animate-fade-in opacity-0 mb-16"
-          style={{ animationDelay: "900ms" }}
+          className="animate-fade-in mb-16"
+          style={{ opacity: 0, animationDelay: "900ms" }}
         >
           <ShinyText
             text={content.hero.tagline}
@@ -89,8 +100,8 @@ const LandingPage: React.FC = () => {
 
         {/* About Blurb - Apple Gray */}
         <div
-          className="text-muted text-lg md:text-2xl font-normal leading-relaxed max-w-2xl mb-16 animate-fade-in opacity-0"
-          style={{ animationDelay: "1200ms" }}
+          className="text-muted text-lg md:text-2xl font-normal leading-relaxed max-w-2xl mb-16 animate-fade-in"
+          style={{ opacity: 0, animationDelay: "1200ms" }}
           dangerouslySetInnerHTML={{ __html: content.hero.about }}
         />
 
@@ -100,8 +111,8 @@ const LandingPage: React.FC = () => {
             {skills.map((skill, idx) => (
               <div
                 key={skill}
-                className="px-5 py-2 bg-white/5 backdrop-blur-md border border-white/5 rounded-lg text-neutral-300 text-sm font-medium hover:bg-white/10 hover:text-white hover:border-white/20 transition-all cursor-default animate-fade-in opacity-0"
-                style={{ animationDelay: `${1500 + idx * 150}ms` }}
+                className="px-5 py-2 bg-white/5 backdrop-blur-md border border-white/5 rounded-lg text-neutral-300 text-sm font-medium hover:bg-white/10 hover:text-white hover:border-white/20 transition-all cursor-default animate-fade-in"
+                style={{ opacity: 0, animationDelay: `${1500 + idx * 150}ms` }}
               >
                 {skill}
               </div>
@@ -154,8 +165,8 @@ const LandingPage: React.FC = () => {
               <Wrapper
                 key={idx}
                 {...props}
-                style={{ animationDelay: `${idx * 300}ms` }}
-                className={`group relative flex items-center justify-between p-6 bg-[#1c1c1e]/60 hover:bg-[#2c2c2e]/80 border border-white/5 hover:border-white/10 rounded-2xl transition-all duration-300 backdrop-blur-xl overflow-hidden opacity-0 ${
+                style={{ opacity: 0, animationDelay: `${idx * 300}ms` }}
+                className={`group relative flex items-center justify-between p-6 bg-[#1c1c1e]/60 hover:bg-[#2c2c2e]/80 border border-white/5 hover:border-white/10 rounded-2xl transition-all duration-300 backdrop-blur-xl overflow-hidden ${
                   linksVisible ? "animate-fade-in" : ""
                 }`}
               >
