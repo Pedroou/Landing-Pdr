@@ -65,8 +65,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 
 void main(){
     vec4 col;mainImage(col,gl_FragCoord.xy);
-    float luminance = dot(col.rgb, vec3(0.299, 0.587, 0.114));
-    col.rgb = luminance * vec3(0.0, 0.898, 1.0) * 1.8;
+    col.rgb=hueShiftRGB(col.rgb,uHueShift);
     float scanline_val=sin(gl_FragCoord.y*uScanFreq)*0.5+0.5;
     col.rgb*=1.-(scanline_val*scanline_val)*uScan;
     col.rgb+=(rand(gl_FragCoord.xy+uTime)-0.5)*uNoise;
