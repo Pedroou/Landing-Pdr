@@ -7,9 +7,9 @@ export const translations: Record<Language, Content> = {
   en: {
     hero: {
       name: "Pedro Ourique",
-      tagline: "Mid-level software engineer",
+      tagline: "Junior software engineer",
       about:
-        "Hi! I'm <b>Pedro Ourique</b>, a junior software developer passionate about clean code, open source, and building tools that empower others. I enjoy working with <b>JavaScript</b>, <b>HTML</b>, and <b>Docker</b>.<br /><br />I like to learn, tinker, and share what I discover.",
+        "Focus on Open Source Projects.<br > A <b>JavaScript</b>, <b>React</b>, and <b>Docker</b> enjoyer.<br /><br />I like to learn, tinker, and share what I discover.",
       avatarAlt: "Pedro Ourique Avatar",
     },
     navigation: {
@@ -167,9 +167,9 @@ export const translations: Record<Language, Content> = {
   pt: {
     hero: {
       name: "Pedro Ourique",
-      tagline: "Engenheiro de software pleno",
+      tagline: "Engenheiro de software junior",
       about:
-        "Olá! Eu sou <b>Pedro Ourique</b>, um desenvolvedor de software júnior apaixonado por código limpo, open source e construir ferramentas que ajudam outras pessoas. Gosto de trabalhar com <b>JavaScript</b>, <b>HTML</b> e <b>Docker</b>.<br /><br />Gosto de aprender, experimentar e compartilhar o que descubro.",
+        "Foco em Projetos Open Source.<br > Um adorador de <b>JavaScript</b>, <b>React</b> e <b>Docker</b>.<br /><br />Gosto de aprender, experimentar e compartilhar o que descubro.",
       avatarAlt: "Avatar Pedro Ourique",
     },
     navigation: {
