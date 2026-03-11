@@ -64,7 +64,7 @@ const CVPage: React.FC = () => {
       </div>
 
       {/* CV PAPER CONTAINER - Designed as a clean white document on a dark desk */}
-      <div className="max-w-[21cm] mx-auto bg-white text-black shadow-2xl shadow-black overflow-hidden print:shadow-none print:max-w-none print:w-full print:bg-white rounded-sm">
+      <div className="max-w-[24cm] mx-auto bg-white text-black shadow-2xl shadow-black overflow-hidden print:shadow-none print:max-w-none print:w-full print:bg-white rounded-sm">
         {/* HEADER */}
         <header className="bg-white border-b border-gray-100 p-10 flex flex-col md:flex-row gap-8 items-start justify-between print:p-0 print:pb-6 print:border-b">
           <div className="flex gap-6 items-center">
