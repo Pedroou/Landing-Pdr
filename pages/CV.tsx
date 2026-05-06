@@ -66,7 +66,7 @@ const CVPage: React.FC = () => {
       {/* CV PAPER CONTAINER - Designed as a clean white document on a dark desk */}
       <div className="max-w-[24cm] mx-auto bg-white text-black shadow-2xl shadow-black overflow-hidden print:shadow-none print:max-w-none print:w-full print:bg-white rounded-sm">
         {/* HEADER */}
-        <header className="bg-white border-b border-gray-100 p-10 flex flex-col md:flex-row gap-8 items-start justify-between print:p-0 print:pb-6 print:border-b">
+        <header className="bg-white border-b border-gray-100 p-10 flex flex-col md:flex-row gap-8 items-start justify-between print:p-0 print:pb-2 print:border-b">
           <div className="flex gap-6 items-center">
             <div className="relative shrink-0">
               <img
@@ -131,12 +131,12 @@ const CVPage: React.FC = () => {
         </header>
 
         {/* BODY */}
-        <div className="p-10 grid grid-cols-1 lg:grid-cols-3 gap-12 print:grid-cols-3 print:bg-white print:gap-8 print:p-0 print:pt-6">
+        <div className="p-10 grid grid-cols-1 lg:grid-cols-3 gap-12 print:grid-cols-3 print:bg-white print:gap-1 print:p-0 print:py-0">
           {/* Main Column */}
-          <main className="lg:col-span-2 print:col-span-2 space-y-5">
+          <main className="lg:col-span-2 print:col-span-2 space-y-3 print:space-y-2">
             {/* Summary */}
             <section>
-              <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center">
+              <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center print:mb-2">
                 {content.cv.headings.summary}
                 <span className="ml-3 h-px flex-grow bg-gray-100 print:bg-gray-300"></span>
               </h2>
@@ -147,7 +147,7 @@ const CVPage: React.FC = () => {
 
             {/* Technical Skills */}
             <section>
-              <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center">
+              <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center print:mb-3">
                 {content.cv.headings.skills}
                 <span className="ml-3 h-px flex-grow bg-gray-100 print:bg-gray-300"></span>
               </h2>
@@ -220,8 +220,8 @@ const CVPage: React.FC = () => {
             </section>
 
             {/* Experience */}
-            <section className="">
-              <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center">
+            <section className="print:mb-2">
+              <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest my-5 flex items-center print:my-3">
                 {content.cv.headings.experience}
                 <span className="ml-3 h-px flex-grow bg-gray-100 print:bg-gray-300"></span>
               </h2>
@@ -230,7 +230,7 @@ const CVPage: React.FC = () => {
                 {content.cv.experience.map((job, idx) => (
                   <div key={idx} className="relative break-inside-avoid">
                     {/* Timeline Dot */}
-                    <div className="absolute -left-[28px] top-1.5 w-2 h-2 bg-gray-300 print:bg-gray-400 rounded-full ring-4 ring-white"></div>
+                    <div className="absolute -left-[28px] top-1 w-2 h-2 bg-gray-300 print:bg-gray-400 rounded-full ring-4 ring-white"></div>
 
                     <div className="flex flex-col mb-2">
                       <h3 className="text-sm font-bold text-black">
@@ -245,7 +245,7 @@ const CVPage: React.FC = () => {
                         </span>
                       </div>
                     </div>
-                    <ul className="list-disc list-outside ml-4 space-y-1.5 text-sm text-gray-600 marker:text-gray-300">
+                    <ul className="list-disc list-outside ml-4 space-y-1.5 text-justify text-sm text-gray-600 marker:text-gray-300">
                       {job.desc.map((d, i) => (
                         <li key={i} className="pl-1">
                           {d}
@@ -259,7 +259,7 @@ const CVPage: React.FC = () => {
           </main>
 
           {/* Sidebar Column */}
-          <aside className="space-y-10 lg:pl-2 print:pl-2">
+          <aside className="space-y-6 lg:pl-2 print:pl-2">
             {/* Education */}
             <section className="break-inside-avoid">
               <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center">
@@ -279,6 +279,25 @@ const CVPage: React.FC = () => {
                 ))}
               </div>
             </section>
+            {/* Languages */}
+            <section className="break-inside-avoid">
+              <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center">
+                {content.cv.headings.languages}
+                <span className="ml-3 h-px flex-grow bg-gray-100 print:bg-gray-300"></span>
+              </h2>
+              <ul className="space-y-1.5 text-xs text-gray-600">
+                {content.cv.humanLanguages.map((lang, i) => {
+                  const [name, level] = lang.split(" - ");
+                  return (
+                    <li key={i} className="flex items-start">
+                      <span className="mr-2 text-gray-400">•</span>
+                      <span><strong className="text-black">{name}</strong>{level && ` - ${level}`}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+
             {/* Certifications */}
             <section className="break-inside-avoid">
               <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest my-3 flex items-center">
@@ -355,7 +374,7 @@ const CVPage: React.FC = () => {
 
         {/* Footer for Print */}
         <div className="hidden print:block text-center text-[10px] text-gray-400 mt-8 pb-4">
-          Pedro G Ourique portfolio - {window.location.href}
+          Pedro Ourique - {window.location.href}
         </div>
       </div>
     </div>

@@ -39,6 +39,7 @@ export interface Content {
       education: string;
       certs: string;
       contact: string;
+      languages: string;
     };
     summary: string;
     skills: {
@@ -73,6 +74,7 @@ export interface Content {
       desc: string;
       status?: string;
     }>;
+    humanLanguages: string[];
     actions: {
       print: string;
       copied: string;

@@ -44,6 +44,7 @@ export const translations: Record<Language, Content> = {
         education: "Education",
         certs: "Certifications & Courses",
         contact: "Contact",
+        languages: "Languages",
       },
       summary:
         "Developer experienced in full-stack projects, specialized in Computer Vision and AI-integrated systems. Strong expertise in TypeScript/React for modern, high-performance web interfaces and Python + Docker for backend, model integration and deployment. Active open-source contributor — focused on UI/UX improvements, feature delivery, and performance optimization.",
@@ -59,15 +60,15 @@ export const translations: Record<Language, Content> = {
         ],
         frontendTitle: "Frontend",
         frontend: ["React", "Tailwind CSS", "Bootstrap"],
-        backendTitle: "ML Ops & Backend",
+        backendTitle: "Backend",
         backend: [
           "Docker",
           "TensorRT",
           "OpenVINO / ONNX / TFLite",
           "Jina / CLIP",
         ],
-        toolsTitle: "Tools",
-        tools: ["Git / GitHub", "Makefiles", "ESLint / Prettier", "npm"],
+        toolsTitle: "Tools & Practices",
+        tools: ["Git / GitHub", "Makefiles", "npm"],
       },
       experience: [
         {
@@ -157,6 +158,7 @@ export const translations: Record<Language, Content> = {
           desc: "Personal landing page with language switcher, canvas background animation and contact links.",
         },
       ],
+      humanLanguages: ["English - Advanced", "Portuguese - Native"],
       actions: {
         print: "Print PDF",
         copied: "Copied to clipboard!",
@@ -204,6 +206,7 @@ export const translations: Record<Language, Content> = {
         education: "Formação",
         certs: "Certificações & Cursos",
         contact: "Contato",
+        languages: "Idiomas",
       },
       summary:
         "Desenvolvedor com experiência em projetos Full-Stack, especializado em Visão Computacional e sistemas com IA. Forte domínio em TypeScript/React para interfaces web modernas e performáticas, e em Python + Docker para backend, integração de modelos e deploy. Contribuidor ativo em open-source — foco em UI/UX, entrega de funcionalidades e otimização de performance.",
@@ -219,15 +222,15 @@ export const translations: Record<Language, Content> = {
         ],
         frontendTitle: "Frontend",
         frontend: ["React", "Tailwind CSS", "Bootstrap"],
-        backendTitle: "Backend / ML / DevOps",
+        backendTitle: "Backend",
         backend: [
           "Docker",
           "TensorRT",
           "OpenVINO / ONNX / TFLite",
           "Jina / CLIP",
         ],
-        toolsTitle: "Tools & Practices",
-        tools: ["Git / GitHub", "Makefiles", "ESLint / Prettier", "npm"],
+        toolsTitle: "Ferramentas e Práticas",
+        tools: ["Git / GitHub", "Makefiles", "npm"],
       },
       experience: [
         {
@@ -317,6 +320,7 @@ export const translations: Record<Language, Content> = {
           desc: "Landing page pessoal com seletor de idiomas, animação de fundo em canvas e links de contato.",
         },
       ],
+      humanLanguages: ["Inglês - Avançado", "Português - Nativo"],
       actions: {
         print: "Imprimir PDF",
         copied: "Copiado para a área de transferência!",
