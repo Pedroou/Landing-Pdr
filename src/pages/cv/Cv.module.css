@@ -1,0 +1,206 @@
+/*
+ * One stylesheet for screen and paper. On wide screens the sheet is an A4-width
+ * preview set in points with the same margins as @page, so what you see is
+ * what prints. Sizes inside the sheet are in em and scale from its base size.
+ */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 210mm;
+  margin-inline: auto;
+  padding: 1.25rem 1.5rem;
+  font-size: 0.875rem;
+}
+
+.toolbar > :first-child {
+  margin-right: auto;
+}
+
+.save {
+  font: inherit;
+  color: var(--bg);
+  background: var(--fg);
+  border: 0;
+  border-radius: 999px;
+  padding: 0.375rem 0.875rem;
+  cursor: pointer;
+}
+
+.sheet {
+  font-size: 1rem;
+  line-height: 1.45;
+  padding: 0.5rem 1.5rem 4rem;
+}
+
+/* Wide screens and paper share the white A4 sheet. */
+@media (min-width: 52rem), print {
+  .sheet {
+    --fg: oklch(0.2 0.01 250);
+    --muted: oklch(0.45 0.01 250);
+    --rule: oklch(0.85 0.005 250);
+
+    width: 210mm;
+    margin: 0 auto 4rem;
+    padding: 12mm 14mm;
+    font-size: 10pt;
+    color: var(--fg);
+    background: #fff;
+    border-radius: 2px;
+    box-shadow:
+      0 1px 2px oklch(0 0 0 / 0.08),
+      0 8px 32px oklch(0 0 0 / 0.12);
+  }
+}
+
+.header {
+  margin-bottom: 1.1em;
+}
+
+.name {
+  font-size: 2em;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.role {
+  margin-top: 0.2em;
+  font-size: 1.1em;
+}
+
+.contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15em 1.25em;
+  margin-top: 0.6em;
+  font-size: 0.92em;
+  color: var(--muted);
+}
+
+.summary {
+  text-wrap: pretty;
+}
+
+.section {
+  margin-top: 1.2em;
+}
+
+.heading {
+  font-size: 1.1em;
+  font-weight: 600;
+  padding-bottom: 0.25em;
+  margin-bottom: 0.6em;
+  border-bottom: 0.5pt solid var(--rule);
+  break-after: avoid;
+}
+
+.entry + .entry {
+  margin-top: 0.75em;
+}
+
+/* Long entries may split across pages, but never inside a line item. */
+.entryHead {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  column-gap: 1em;
+  break-inside: avoid;
+  break-after: avoid;
+}
+
+.entry p,
+.highlights li {
+  break-inside: avoid;
+}
+
+.entryTitle {
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.org {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.aside {
+  font-size: 0.92em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.highlights {
+  margin-top: 0.3em;
+  padding-left: 1.1em;
+  list-style: disc;
+}
+
+.highlights li {
+  padding-left: 0.2em;
+  text-wrap: pretty;
+}
+
+.highlights li + li {
+  margin-top: 0.2em;
+}
+
+.highlights li::marker {
+  color: var(--muted);
+}
+
+.pairs {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25em 1.25em;
+  margin: 0;
+}
+
+.pairs > div {
+  display: contents;
+}
+
+.pairs dt {
+  font-weight: 600;
+}
+
+.pairs dd {
+  margin: 0;
+}
+
+@media (max-width: 32rem) {
+  .pairs {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .pairs > div + div dt {
+    margin-top: 0.5em;
+  }
+}
+
+@page {
+  margin: 12mm 14mm;
+}
+
+@media print {
+  .toolbar {
+    display: none;
+  }
+
+  .sheet {
+    width: auto;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    orphans: 3;
+    widows: 3;
+  }
+
+  .sheet a {
+    text-decoration: none;
+  }
+}

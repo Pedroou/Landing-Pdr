@@ -1,0 +1,109 @@
+/* Static instances, not the variable font: Chrome embeds variable fonts in
+   saved PDFs as Type 3 glyphs, which some résumé parsers handle poorly. */
+@import "@fontsource/instrument-sans/400.css";
+@import "@fontsource/instrument-sans/600.css";
+
+:root {
+  color-scheme: light dark;
+
+  --bg: light-dark(oklch(0.985 0.002 250), oklch(0.17 0.006 250));
+  --fg: light-dark(oklch(0.24 0.01 250), oklch(0.93 0.004 250));
+  --muted: light-dark(oklch(0.5 0.012 250), oklch(0.7 0.01 250));
+  --rule: light-dark(oklch(0.86 0.006 250), oklch(0.4 0.008 250));
+  /* Camera-overlay yellow. Reserved for the detection box. */
+  --detect: oklch(0.87 0.17 98);
+
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Paper is white whatever the screen theme. */
+@media print {
+  :root {
+    color-scheme: light;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+figure {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 0.25em;
+  transition: text-decoration-color 150ms;
+}
+
+a:hover {
+  text-decoration-color: currentColor;
+}
+
+:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+::selection {
+  background: light-dark(oklch(0.9 0.12 98), oklch(0.45 0.1 98));
+}
+
+/* Cross-document fade between the two pages (progressive enhancement). */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none;
+  }
+}

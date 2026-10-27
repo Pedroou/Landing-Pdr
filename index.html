@@ -1,153 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Pedro Ourique | Portfolio & CV</title>
+    <title>Pedro Ourique</title>
     <meta
       name="description"
-      content="Professional portfolio of Pedro Ourique - Mid-level software engineer"
+      content="Pedro Ourique, full-stack developer building AI video analytics and business software with TypeScript, React, Python and Docker."
     />
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              // Apple-style "True Black" Palette
-              background: "#000000", // Pure Black
-              surface: "#1c1c1e", // Apple Dark Surface
-              border: "#2c2c2e", // Apple Dark Border
-              muted: "#86868b", // Apple Gray text
-              text: "#f5f5f7", // Apple Off-white
+    <link rel="canonical" href="https://pedroou.github.io/Landing-Pdr/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#f9fafb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d1012" media="(prefers-color-scheme: dark)" />
 
-              // Accents (Subtle, High Quality)
-              brand: {
-                start: "#2997ff", // Apple Blue
-                end: "#bf5af2", // Apple Purple
-              },
-            },
-            fontFamily: {
-              sans: [
-                "Inter",
-                "-apple-system",
-                "BlinkMacSystemFont",
-                "sans-serif",
-              ],
-              mono: ["Fira Mono", "SF Mono", "monospace"],
-            },
-            // ...existing code...
-            animation: {
-              "fade-in": "fadeIn 1s ease-out both",
-              "slide-up": "slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both",
-              "slide-down":
-                "slideDown 1.5s cubic-bezier(0.16, 1, 0.3, 1) both",
-              "menu-slide-down":
-                "menuSlideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) both",
-              "menu-slide-up":
-                "menuSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both",
-              shine: "shine 5s linear infinite",
-            },
-            keyframes: {
-              fadeIn: {
-                "0%": { opacity: "0", transform: "translateY(10px)" },
-                "100%": { opacity: "1", transform: "translateY(0)" },
-              },
-              slideUp: {
-                "0%": { opacity: "0", transform: "translateY(20px)" },
-                "100%": { opacity: "1", transform: "translateY(0)" },
-              },
-              slideDown: {
-                "0%": { opacity: "0", transform: "translateY(-20px)" },
-                "100%": { opacity: "1", transform: "translateY(0)" },
-              },
-              menuSlideDown: {
-                "0%": { opacity: "0", transform: "translateY(-10px)" },
-                "100%": { opacity: "1", transform: "translateY(0)" },
-              },
-              menuSlideUp: {
-                "0%": { opacity: "1", transform: "translateY(0)" },
-                "100%": { opacity: "0", transform: "translateY(-10px)" },
-              },
-              shine: {
-                "0%": { "background-position": "100%" },
-                "100%": { "background-position": "-100%" },
-              },
-            },
-          },
-        },
-      };
-    </script>
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
+    <meta property="og:type" content="profile" />
+    <meta property="og:url" content="https://pedroou.github.io/Landing-Pdr/" />
+    <meta property="og:title" content="Pedro Ourique" />
+    <meta
+      property="og:description"
+      content="Full-stack developer building AI video analytics and business software with TypeScript, React, Python and Docker."
     />
-    <style>
-      body {
-        font-family: "Inter", sans-serif;
-        -webkit-font-smoothing: antialiased;
-        background-color: #000000;
-        color: #f5f5f7;
-      }
+    <meta property="og:image" content="https://pedroou.github.io/Landing-Pdr/og.png" />
+    <meta property="og:image:alt" content="Pedro Ourique, software developer" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="pt_BR" />
+    <meta name="twitter:card" content="summary_large_image" />
 
-      /* Smooth Scroll */
-      html {
-        scroll-behavior: smooth;
-      }
-
-      /* Custom Scrollbar - Minimal */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #000000;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #333;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #555;
-      }
-
-      /* Print Styles */
-      @media print {
-        body {
-          background-color: white;
-          color: black;
-          -webkit-print-color-adjust: exact;
-          print-color-adjust: exact;
-        }
-        .no-print {
-          display: none !important;
-        }
-        .print-only {
-          display: block !important;
-        }
-        @page {
-          margin: 0.5cm;
-        }
-      }
-    </style>
-    <script type="importmap">
+    <script type="application/ld+json">
       {
-        "imports": {
-          "react": "https://aistudiocdn.com/react@^19.2.0",
-          "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-          "react/": "https://aistudiocdn.com/react@^19.2.0/",
-          "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
-          "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.6"
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "mainEntity": {
+          "@type": "Person",
+          "name": "Pedro Ourique",
+          "jobTitle": "Software Developer",
+          "url": "https://pedroou.github.io/Landing-Pdr/",
+          "sameAs": [
+            "https://github.com/Pedroou",
+            "https://www.linkedin.com/in/pedro-guimaraes-ourique/"
+          ]
         }
       }
+    </script>
+    <script>
+      // Links to the old hash-routed CV (#/cv) still circulate.
+      if (location.hash === "#/cv") location.replace(`cv/${location.search}`);
     </script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="./index.tsx"></script>
+    <script type="module" src="/src/pages/landing/main.tsx"></script>
   </body>
 </html>

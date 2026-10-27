@@ -1,0 +1,122 @@
+.bar {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 64rem;
+  margin-inline: auto;
+  padding: 1.25rem 1.5rem;
+}
+
+.hero {
+  max-width: 34rem;
+  margin-inline: auto;
+  padding: clamp(2rem, 12svh, 7rem) 1.5rem 4rem;
+}
+
+.portrait {
+  position: relative;
+  width: 9rem;
+  aspect-ratio: 1;
+  margin-bottom: 2rem;
+}
+
+.portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Box geometry is tuned to the subject in avatar.webp. */
+.detection {
+  position: absolute;
+  inset: 17% 18% 0 22%;
+  border: 1.5px solid var(--detect);
+}
+
+.label {
+  position: absolute;
+  bottom: 100%;
+  left: -1.5px;
+  padding: 0 0.3em;
+  background: var(--detect);
+  color: oklch(0.2 0 0);
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1.6;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.name {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+.role {
+  margin-top: 0.25rem;
+  color: var(--muted);
+}
+
+.about {
+  display: grid;
+  gap: 1em;
+  margin-top: 2rem;
+  font-size: 1.0625rem;
+  text-wrap: pretty;
+}
+
+.stack {
+  margin-top: 1.5rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  text-wrap: balance;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 2.5rem;
+}
+
+/* One orchestrated entrance: the column settles in, then the detector locks on. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero > * {
+    animation: rise 600ms var(--ease-out) both;
+  }
+  .hero > :nth-child(2) {
+    animation-delay: 60ms;
+  }
+  .hero > :nth-child(3) {
+    animation-delay: 120ms;
+  }
+  .hero > :nth-child(4) {
+    animation-delay: 180ms;
+  }
+  .hero > :nth-child(n + 5) {
+    animation-delay: 240ms;
+  }
+
+  .detection {
+    animation: lock-on 420ms var(--ease-out) 650ms both;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+@keyframes lock-on {
+  from {
+    opacity: 0;
+    scale: 1.25;
+  }
+  60% {
+    opacity: 1;
+  }
+}
