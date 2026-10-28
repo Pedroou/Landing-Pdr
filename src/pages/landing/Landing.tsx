@@ -1,7 +1,7 @@
 import avatar from "../../assets/avatar.webp";
-import { LanguageSwitch } from "../../components/LanguageSwitch";
+import { SiteHeader } from "../../components/SiteHeader";
 import { profile } from "../../content";
-import { localize, useLanguage } from "../../i18n";
+import { useLanguage } from "../../i18n";
 import styles from "./Landing.module.css";
 
 export function Landing() {
@@ -10,19 +10,12 @@ export function Landing() {
   const links = [
     { label: "GitHub", href: profile.github },
     { label: "LinkedIn", href: profile.linkedin },
-    { label: t.ui.cv, href: localize("cv/", lang) },
     { label: t.ui.email, href: `mailto:${profile.email}` },
   ];
 
   return (
     <>
-      <header className={styles.bar}>
-        <LanguageSwitch
-          current={lang}
-          label={t.ui.languageSwitch}
-          onSwitch={switchTo}
-        />
-      </header>
+      <SiteHeader page="landing" lang={lang} t={t} onLanguage={switchTo} />
 
       <main className={styles.hero}>
         <figure className={styles.portrait}>
@@ -32,9 +25,9 @@ export function Landing() {
             width={160}
             height={160}
           />
-          {/* A nod to the day job: an NVR-style detection overlay. */}
+          {/* A nod to the day job: an NVR detection with face recognition. */}
           <span className={styles.detection} aria-hidden="true">
-            <span className={styles.label}>person 98%</span>
+            <span className={styles.label}>pedro 98%</span>
           </span>
         </figure>
 
@@ -49,10 +42,26 @@ export function Landing() {
 
         <p className={styles.stack}>{t.landing.stack.join(", ")}</p>
 
+        <section className={styles.projects}>
+          <h2 className={styles.projectsTitle}>{t.landing.projectsTitle}</h2>
+          <ul>
+            {t.landing.projects.map((project) => (
+              <li key={project.url}>
+                <a href={project.url} className="hover-underline">
+                  {project.name}
+                </a>
+                <p>{project.description}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
         <ul className={styles.links}>
           {links.map(({ label, href }) => (
             <li key={href}>
-              <a href={href}>{label}</a>
+              <a href={href} className="hover-underline">
+                {label}
+              </a>
             </li>
           ))}
         </ul>

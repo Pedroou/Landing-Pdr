@@ -8,13 +8,16 @@ export const en: Content = {
     languageSwitch: "Language",
     savePdf: "Save as PDF",
     email: "Email",
+    themeLight: "Switch to light theme",
+    themeDark: "Switch to dark theme",
   },
   landing: {
     title: "Pedro Ourique",
     role: "Software Developer",
     about: [
-      "Full-stack developer building AI video analytics and business software with TypeScript, React, Python and Docker.",
-      "I like to learn, tinker, and share what I discover.",
+      "I work at NetComet, an internet provider in southern Brazil, where most of my week goes into rewriting a decade-old PHP ERP as a React app with a REST API.",
+      "I was also the only developer of a video-surveillance product the company built for condominiums, office buildings and factories, based on Frigate NVR. I added automation rules that send push and MQTT alerts, and AI event descriptions that take a building's floor plan into account.",
+      "Outside work, I developed a school-transport platform that a city's school network is piloting with about 1,500 students.",
     ],
     stack: [
       "TypeScript",
@@ -22,29 +25,56 @@ export const en: Content = {
       "React",
       "Node.js",
       "Python",
+      "PHP",
       "PostgreSQL",
       "Docker",
-      "Tailwind",
+    ],
+    projectsTitle: "Projects",
+    projects: [
+      {
+        name: "Agent Session Manager",
+        url: "https://github.com/Pedroou/agent-session-manager",
+        description:
+          "KDE Plasma widget that shows which Claude Code sessions are waiting on you. Available on the KDE Store.",
+      },
+      {
+        name: "Claude Acc-Manager",
+        url: "https://github.com/Pedroou/Claude-Acc-Manager",
+        description:
+          "Command-line tool for running several Claude Code accounts on one machine.",
+      },
     ],
     avatarAlt: "Portrait of Pedro Ourique",
   },
   cv: {
     title: "Pedro Ourique - Resume",
-    role: "Software Developer · TypeScript · React · Python · Docker · AI & Computer Vision",
-    location: "Santo Antônio da Patrulha, RS, Brazil · UTC−3 · Open to remote",
+    headline: [
+      "Software Developer",
+      "React",
+      "TypeScript",
+      "Node.js",
+      "Docker",
+      "AI & Computer Vision",
+    ],
+    location: [
+      "Santo Antônio da Patrulha, RS, Brazil",
+      "UTC−3",
+      "Open to remote",
+    ],
     summary:
-      "Software developer with 1.5 years of experience building full-stack web products. Main developer of an ERP rewrite and sole developer of an AI video-surveillance platform at an internet provider in southern Brazil.",
+      "Software developer with 1.5 years of experience building full-stack web products with React and TypeScript. Main developer of an ERP rewrite and sole developer of an AI video-surveillance product at a Brazilian ISP.",
     headings: {
       experience: "Experience",
       projects: "Selected projects",
       skills: "Technical skills",
       education: "Education",
-      certifications: "Courses",
+      courses: "Courses",
       languages: "Languages",
     },
     experience: [
       {
-        company: "NetComet · Internet service provider",
+        company: "NetComet",
+        about: "Internet service provider",
         roles: [
           { title: "Software Developer", period: "Sep 2025 – Present" },
           {
@@ -52,25 +82,40 @@ export const en: Content = {
             period: "May 2025 – Sep 2025",
           },
         ],
-        highlights: [
-          "Main developer of a legacy ERP's PHP-to-React rewrite; 163 of 186 screens done and tested, not live yet.",
-          "Sole developer of the company's customized Frigate NVR (Python, React), in production with 6 cameras.",
-          "Built its automation engine: detections, zones and recognized faces trigger push, MQTT or alarm actions.",
-          "Used Google Gemini to describe events with floor-plan context and write a daily security briefing.",
-          "Configured cameras, tuned object detection and fixed dashboard UI bugs for a CCTV analytics system.",
+        work: [
+          {
+            name: "ERP rewrite",
+            stack: ["React", "JavaScript", "PHP (Slim)", "MySQL", "Puppeteer"],
+            highlights: [
+              "Main developer of the rewrite of a decade-old, 186-screen multi-tenant PHP ERP into React and a PHP REST API, covering sales, finance, Brazilian e-invoicing and ISP network management. Not live yet.",
+              "Wrote its tests: Puppeteer end-to-end flows checked against the database, Dockerized PHP integration tests.",
+            ],
+          },
+          {
+            name: "AI video-surveillance product",
+            stack: ["Python", "FastAPI", "React", "TypeScript", "Frigate NVR"],
+            highlights: [
+              "Sole developer of a video-surveillance product for condominiums, buildings and factories, built on Frigate NVR.",
+              "Built its automation engine: detections, zones, line crossings and known faces trigger push, MQTT or alarms.",
+              "Added AI event descriptions (Google Gemini) that use a building's floor plan, plus a daily security briefing.",
+              "As an intern, configured cameras, tuned object detection and fixed dashboard UI bugs.",
+            ],
+          },
         ],
       },
       {
-        company: "Independent · Part-time",
+        company: "Independent",
+        about: "Freelance & side projects, part-time",
         roles: [
-          {
-            title: "Full-stack Developer (freelance & side projects)",
-            period: "Feb 2026 – Present",
-          },
+          { title: "Full-stack Developer", period: "Feb 2026 – Present" },
         ],
-        highlights: [
-          "Co-developed a school-transport platform (React, Node.js, PostgreSQL) piloted by a city for ~1,500 students.",
-          "Built a link-in-bio site with an admin panel for a dance school; the client edits it without touching code.",
+        work: [
+          {
+            highlights: [
+              "Developed a school-transport platform (React, Node.js, PostgreSQL) piloted by a municipal school network: ~1,500 students across 19 schools, with route suggestions built on OSRM.",
+              "Built a dance school's links page and an admin panel to edit it without code (React, GitHub API).",
+            ],
+          },
         ],
       },
     ],
@@ -78,20 +123,30 @@ export const en: Content = {
       {
         name: "Agent Session Manager",
         url: "https://github.com/Pedroou/agent-session-manager",
+        year: "2026",
         description:
-          "Open-source KDE Plasma 6 widget (QML) showing what each Claude Code session is doing; on the KDE Store.",
+          "KDE Plasma 6 panel widget (QML, JavaScript) that shows which Claude Code sessions are waiting on you and jumps to their terminal. Four releases, 200+ automated tests. Available on the KDE Store.",
       },
       {
-        name: "MyNotes",
-        url: "https://pedroou.github.io/MyNotes/",
+        name: "Claude Acc-Manager",
+        url: "https://github.com/Pedroou/Claude-Acc-Manager",
+        year: "2026",
         description:
-          "Encrypted notes app (React) that syncs through a private GitHub repo, with QR device pairing. In daily use.",
+          "Command-line tool (fish) for running several Claude Code accounts on one machine with one shared set of history, settings and skills. 180+ tests run in CI.",
       },
     ],
     skills: [
       {
         label: "Languages",
-        items: ["TypeScript", "JavaScript", "Python", "PHP", "SQL", "Shell"],
+        items: [
+          "TypeScript",
+          "JavaScript",
+          "Python",
+          "PHP",
+          "SQL",
+          "Shell",
+          "HTML/CSS",
+        ],
       },
       {
         label: "Frontend",
@@ -101,6 +156,7 @@ export const en: Content = {
         label: "Backend & data",
         items: [
           "Node.js / Express",
+          "FastAPI",
           "PHP (Slim)",
           "REST APIs",
           "PostgreSQL",
@@ -108,13 +164,13 @@ export const en: Content = {
         ],
       },
       {
-        label: "AI & DevOps",
+        label: "DevOps & AI",
         items: [
-          "Docker",
+          "Docker / Compose",
           "Linux",
-          "GitHub Actions",
+          "Git / GitHub Actions",
           "Vitest",
-          "Frigate NVR",
+          "Puppeteer",
           "Gemini API",
           "MQTT",
         ],
@@ -122,20 +178,15 @@ export const en: Content = {
     ],
     education: [
       {
-        title:
-          "Technologist degree in Systems Analysis and Development · expected 2027",
+        degree: "Technologist degree in Systems Analysis and Development",
         institution:
           "Federal Institute of Rio Grande do Sul (IFRS), Osório Campus",
+        period: "Expected 2027",
       },
     ],
-    certifications: [
-      {
-        title: "Certificates",
-        items: [
-          "Programming for Everybody (py4e), University of Michigan",
-          "Database Fundamentals, IFRS",
-        ],
-      },
+    courses: [
+      "Programming for Everybody (py4e), University of Michigan",
+      "Database Fundamentals, IFRS",
     ],
     languages: [
       { name: "English", level: "Advanced, C1" },

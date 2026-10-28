@@ -15,12 +15,32 @@
 
   --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Paint the canvas from the root itself, so nothing (a transition, a slow
+     stylesheet) ever shows the browser's default white behind the page. */
+  background: var(--bg);
+
+  /* The dark-scheme native scrollbar paints its own grey track; a transparent
+     track lets the page show through in both themes. */
+  scrollbar-color: color-mix(in oklch, var(--fg) 25%, transparent) transparent;
+}
+
+/* A theme picked with the toggle (see src/theme.ts) pins the scheme. */
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 /* Paper is white whatever the screen theme. */
 @media print {
-  :root {
+  :root,
+  :root[data-theme] {
     color-scheme: light;
+    /* No off-white band below the sheet when background graphics are on. */
+    background: #fff;
   }
 }
 
@@ -33,7 +53,6 @@
 body {
   margin: 0;
   min-height: 100svh;
-  background: var(--bg);
   color: var(--fg);
   font-family: var(--font-sans);
   font-size: 1rem;
@@ -74,6 +93,50 @@ a:hover {
   text-decoration-color: currentColor;
 }
 
+/*
+ * Underline drawn from the centre outwards on hover (after Tobias Ahlin's
+ * pattern): a 1px bar scaled on X, so it animates on the compositor with no
+ * layout or repaint. Single-line links only; it is used for short nav labels.
+ * Always drawn for the current page and for keyboard focus.
+ */
+.hover-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.hover-underline::after {
+  content: "";
+  position: absolute;
+  /* Whole-pixel offset: a fractional one is resampled while the bar is
+     animating on its own layer and snaps sharper when it lands. Padded links
+     (the nav) raise it back up to the text. */
+  inset: auto 0 var(--underline-offset, -2px);
+  height: 1px;
+  /* Not currentColor: nav labels fade from muted to full colour on hover,
+     and the bar would change colour midway through drawing. */
+  background: var(--fg);
+  transform: scaleX(0);
+  transition: transform 250ms var(--ease-out);
+  will-change: transform;
+}
+
+@media (hover: hover) {
+  .hover-underline:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+.hover-underline:focus-visible::after,
+.hover-underline[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hover-underline::after {
+    transition: none;
+  }
+}
+
 :focus-visible {
   outline: 2px solid var(--fg);
   outline-offset: 3px;
@@ -87,6 +150,27 @@ a:hover {
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+/* A control label with a short form for narrow screens, e.g. "Português"
+   becomes "PT". The long form stays available to screen readers. */
+.label-short {
+  display: none;
+}
+
+@media (max-width: 40rem) {
+  .label-long {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .label-short {
+    display: inline;
+  }
 }
 
 ::selection {

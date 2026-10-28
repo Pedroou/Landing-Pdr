@@ -1,0 +1,118 @@
+/* Marks the top of the page; once it scrolls out of view, the bar is "stuck". */
+.sentinel {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 1px;
+}
+
+/* Full-bleed and sticky: transparent at rest, frosted once content scrolls under it. */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color 200ms ease-out,
+    border-color 200ms ease-out;
+}
+
+.header[data-scrolled] {
+  background-color: color-mix(in oklch, var(--bg) 75%, transparent);
+  border-bottom-color: color-mix(in oklch, var(--fg) 8%, transparent);
+  backdrop-filter: blur(12px) saturate(1.4);
+}
+
+/* Same geometry on every page, wider than the text column. */
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 64rem;
+  height: 3.5rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+  font-size: 0.9375rem;
+}
+
+.wordmark {
+  margin-right: auto;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  gap: 1.25rem;
+}
+
+/* 10px of padding gives a 40px-tall target; the underline sits on the text. */
+.nav a {
+  --underline-offset: 8px;
+  padding-block: 10px;
+  color: var(--muted);
+  transition: color 150ms;
+}
+
+.nav a:hover,
+.nav a[aria-current="page"] {
+  color: var(--fg);
+}
+
+.divider {
+  width: 1px;
+  height: 1rem;
+  background: var(--rule);
+}
+
+.control {
+  display: flex;
+  align-items: center;
+  min-height: 2.5rem;
+  min-width: 2.5rem;
+  justify-content: center;
+  margin-inline: -0.5rem;
+  font: inherit;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color 150ms;
+}
+
+.control:hover {
+  color: var(--fg);
+}
+
+.icon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+@media (max-width: 40rem) {
+  .inner {
+    gap: 1rem;
+    padding-inline: 1rem;
+  }
+
+  /* The nav's Home link covers the wordmark's job on narrow screens. */
+  .wordmark {
+    display: none;
+  }
+
+  .nav {
+    margin-right: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header {
+    transition: none;
+  }
+}
+
+@media print {
+  .header {
+    display: none;
+  }
+}

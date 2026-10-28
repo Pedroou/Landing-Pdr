@@ -8,13 +8,16 @@ export const pt: Content = {
     languageSwitch: "Idioma",
     savePdf: "Salvar como PDF",
     email: "E-mail",
+    themeLight: "Mudar para o tema claro",
+    themeDark: "Mudar para o tema escuro",
   },
   landing: {
     title: "Pedro Ourique",
     role: "Desenvolvedor de Software",
     about: [
-      "Desenvolvedor full-stack criando software de videoanálise com IA e sistemas de gestão com TypeScript, React, Python e Docker.",
-      "Gosto de aprender, experimentar e compartilhar o que descubro.",
+      "Trabalho na NetComet, um provedor de internet no Rio Grande do Sul, onde passo a maior parte da semana reescrevendo um ERP em PHP de mais de dez anos como uma aplicação React com API REST.",
+      "Também fui o único desenvolvedor de um produto de videomonitoramento que a empresa criou para condomínios, prédios comerciais e fábricas, baseado no Frigate NVR. Criei regras de automação que disparam alertas por push e MQTT, e descrições de eventos geradas por IA que levam em conta a planta de um prédio.",
+      "Fora do trabalho, desenvolvi uma plataforma de transporte escolar que a rede municipal de ensino de uma cidade usa em piloto, com cerca de 1.500 alunos.",
     ],
     stack: [
       "TypeScript",
@@ -22,29 +25,55 @@ export const pt: Content = {
       "React",
       "Node.js",
       "Python",
+      "PHP",
       "PostgreSQL",
       "Docker",
-      "Tailwind",
+    ],
+    projectsTitle: "Projetos",
+    projects: [
+      {
+        name: "Agent Session Manager",
+        url: "https://github.com/Pedroou/agent-session-manager",
+        description:
+          "Widget do KDE Plasma que mostra quais sessões do Claude Code estão esperando por você. Disponível na KDE Store.",
+      },
+      {
+        name: "Claude Acc-Manager",
+        url: "https://github.com/Pedroou/Claude-Acc-Manager",
+        description:
+          "Ferramenta de linha de comando para usar várias contas do Claude Code na mesma máquina.",
+      },
     ],
     avatarAlt: "Retrato de Pedro Ourique",
   },
   cv: {
     title: "Pedro Ourique - Currículo",
-    role: "Desenvolvedor de Software · TypeScript · React · Python · Docker · IA e Visão Computacional",
-    location: "Santo Antônio da Patrulha, RS · Presencial, híbrido ou remoto",
+    headline: [
+      "Desenvolvedor de Software",
+      "React",
+      "TypeScript",
+      "Node.js",
+      "Docker",
+      "IA e Visão Computacional",
+    ],
+    location: [
+      "Santo Antônio da Patrulha, RS",
+      "Presencial, híbrido ou remoto",
+    ],
     summary:
-      "Desenvolvedor de software com 1,5 ano de experiência em produtos web full-stack. Principal desenvolvedor da reescrita de um ERP e único desenvolvedor de uma plataforma de videomonitoramento com IA.",
+      "Desenvolvedor de software com 1,5 ano de experiência em produtos web full-stack (React, TypeScript). Principal desenvolvedor da reescrita de um ERP e único desenvolvedor de um produto de videomonitoramento com IA.",
     headings: {
       experience: "Experiência profissional",
       projects: "Projetos em destaque",
       skills: "Habilidades técnicas",
       education: "Formação acadêmica",
-      certifications: "Cursos",
+      courses: "Cursos",
       languages: "Idiomas",
     },
     experience: [
       {
-        company: "NetComet · Provedor de internet",
+        company: "NetComet",
+        about: "Provedor de internet",
         roles: [
           { title: "Desenvolvedor de Software", period: "set. 2025 – atual" },
           {
@@ -52,25 +81,40 @@ export const pt: Content = {
             period: "maio 2025 – set. 2025",
           },
         ],
-        highlights: [
-          "Conduzo a migração de um ERP de PHP para React; 163 de 186 telas prontas, ainda fora de produção.",
-          "Único desenvolvedor do Frigate NVR customizado da empresa (Python, React), em produção com 6 câmeras.",
-          "Criei o motor de automações: detecções, zonas e rostos reconhecidos disparam push, MQTT ou alarmes.",
-          "Usei o Google Gemini para descrever eventos com base na planta do local e gerar um resumo diário.",
-          "Configurei câmeras, ajustei a detecção de objetos e corrigi bugs de interface em um sistema de CFTV.",
+        work: [
+          {
+            name: "Reescrita do ERP",
+            stack: ["React", "JavaScript", "PHP (Slim)", "MySQL", "Puppeteer"],
+            highlights: [
+              "Principal desenvolvedor da reescrita de um ERP multiempresa em PHP com mais de dez anos e 186 telas (vendas, financeiro, NF-e, rede de provedor) para React e API REST. Ainda fora de produção.",
+              "Escrevi os testes: fluxos E2E com Puppeteer conferidos no banco e testes de integração PHP em Docker.",
+            ],
+          },
+          {
+            name: "Produto de videomonitoramento com IA",
+            stack: ["Python", "FastAPI", "React", "TypeScript", "Frigate NVR"],
+            highlights: [
+              "Único desenvolvedor de um produto de videomonitoramento para condomínios, prédios e fábricas, baseado no Frigate NVR.",
+              "Criei o motor de automações: detecções, zonas, linhas e rostos disparam push, MQTT ou alarmes.",
+              "Criei descrições de eventos por IA (Google Gemini) que usam a planta de um prédio, e um resumo diário de segurança.",
+              "Como estagiário, configurei câmeras, ajustei a detecção de objetos e corrigi bugs de interface.",
+            ],
+          },
         ],
       },
       {
-        company: "Independente · Meio período",
+        company: "Independente",
+        about: "Freelance e projetos paralelos, meio período",
         roles: [
-          {
-            title: "Desenvolvedor Full-stack (freelance e projetos paralelos)",
-            period: "fev. 2026 – atual",
-          },
+          { title: "Desenvolvedor Full-stack", period: "fev. 2026 – atual" },
         ],
-        highlights: [
-          "Codesenvolvi um sistema de transporte escolar (React, Node.js, PostgreSQL) em piloto com ~1.500 alunos.",
-          "Criei um site link-in-bio com painel admin para uma escola de dança; a cliente o edita sem mexer em código.",
+        work: [
+          {
+            highlights: [
+              "Desenvolvi uma plataforma de transporte escolar (React, Node.js, PostgreSQL) em piloto numa rede municipal: ~1.500 alunos em 19 escolas, com sugestão de rotas baseada no OSRM.",
+              "Fiz a página de links de uma escola de dança e um painel para editá-la sem código (React, API do GitHub).",
+            ],
+          },
         ],
       },
     ],
@@ -78,20 +122,30 @@ export const pt: Content = {
       {
         name: "Agent Session Manager",
         url: "https://github.com/Pedroou/agent-session-manager",
+        year: "2026",
         description:
-          "Widget open source do KDE Plasma 6 (QML) que mostra o que cada sessão do Claude Code está fazendo.",
+          "Widget do KDE Plasma 6 (QML, JavaScript) que mostra quais sessões do Claude Code esperam por você e abre o terminal certo. Quatro versões, 200+ testes automatizados. Disponível na KDE Store.",
       },
       {
-        name: "MyNotes",
-        url: "https://pedroou.github.io/MyNotes/",
+        name: "Claude Acc-Manager",
+        url: "https://github.com/Pedroou/Claude-Acc-Manager",
+        year: "2026",
         description:
-          "App de notas criptografadas (React) sincronizado por um repositório privado do GitHub. Em uso diário.",
+          "Ferramenta de linha de comando (fish) para usar várias contas do Claude Code na mesma máquina, com histórico, configurações e skills compartilhados. Mais de 180 testes rodando no CI.",
       },
     ],
     skills: [
       {
         label: "Linguagens",
-        items: ["TypeScript", "JavaScript", "Python", "PHP", "SQL", "Shell"],
+        items: [
+          "TypeScript",
+          "JavaScript",
+          "Python",
+          "PHP",
+          "SQL",
+          "Shell",
+          "HTML/CSS",
+        ],
       },
       {
         label: "Frontend",
@@ -101,6 +155,7 @@ export const pt: Content = {
         label: "Backend e dados",
         items: [
           "Node.js / Express",
+          "FastAPI",
           "PHP (Slim)",
           "APIs REST",
           "PostgreSQL",
@@ -108,13 +163,13 @@ export const pt: Content = {
         ],
       },
       {
-        label: "IA e DevOps",
+        label: "DevOps e IA",
         items: [
-          "Docker",
+          "Docker / Compose",
           "Linux",
-          "GitHub Actions",
+          "Git / GitHub Actions",
           "Vitest",
-          "Frigate NVR",
+          "Puppeteer",
           "API Gemini",
           "MQTT",
         ],
@@ -122,21 +177,16 @@ export const pt: Content = {
     ],
     education: [
       {
-        title:
-          "Tecnologia em Análise e Desenvolvimento de Sistemas · conclusão em 2027",
+        degree: "Tecnologia em Análise e Desenvolvimento de Sistemas",
         institution:
           "Instituto Federal do Rio Grande do Sul (IFRS), Campus Osório",
+        period: "Conclusão em 2027",
       },
     ],
-    certifications: [
-      {
-        title: "Certificados",
-        items: [
-          "py4e (University of Michigan)",
-          "Banco de Dados I (IFRS)",
-          "Trilha Técnico IoT 3.0 (FiberSchool)",
-        ],
-      },
+    courses: [
+      "py4e (University of Michigan)",
+      "Banco de Dados I (IFRS)",
+      "Trilha Técnico IoT 3.0: fibra óptica, redes TCP/IP e Wi-Fi (FiberSchool)",
     ],
     languages: [
       { name: "Português", level: "Nativo" },

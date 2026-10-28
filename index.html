@@ -12,6 +12,14 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#f9fafb" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0d1012" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      // Apply a saved theme before first paint, so it never flashes (src/theme.ts).
+      try {
+        const theme = localStorage.getItem("theme");
+        if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+      } catch {}
+    </script>
 
     <meta property="og:type" content="profile" />
     <meta property="og:url" content="https://pedroou.github.io/Landing-Pdr/" />

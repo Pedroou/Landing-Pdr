@@ -1,21 +1,45 @@
 /*
- * One stylesheet for screen and paper. On wide screens the sheet is an A4-width
- * preview set in points with the same margins as @page, so what you see is
- * what prints. Sizes inside the sheet are in em and scale from its base size.
+ * One DOM, two layouts.
+ *
+ * Screen: a web page in the site's theme, at reading size: a centred
+ * header, then sections with a left column for dates and labels (the layout
+ * of read.cv and Brittany Chiang's site). Print: the same markup as a
+ * one-page, single-column document at 10pt, with each date on the right of
+ * its title line, which is where recruiters look for it and where résumé
+ * parsers keep it with its title. Narrow screens use the print structure at
+ * screen sizes.
+ *
+ * Four tiers of emphasis, each a step apart in size, weight or colour:
+ * section labels and entry titles in full colour and bold; roles and
+ * products in medium; body text a shade softer; metadata (dates, rail
+ * labels, stacks) muted and smaller.
+ *
+ * Sizes inside the CV are in em, so print rescales everything from one
+ * font-size.
  */
 
-.toolbar {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  max-width: 210mm;
+.cv {
+  --rail: 8.5rem;
+  --gutter: 2.5rem;
+  --measure: 40rem;
+  --space-entry: 2em;
+  --space-section: 3.5em;
+  /* Body text a step below the titles, so bold reads as bold. */
+  --body: color-mix(in oklch, var(--fg) 82%, var(--bg));
+
+  max-width: calc(var(--rail) + var(--gutter) + var(--measure) + 3rem);
   margin-inline: auto;
-  padding: 1.25rem 1.5rem;
-  font-size: 0.875rem;
+  padding: 2rem 1.5rem 6rem;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
-.toolbar > :first-child {
-  margin-right: auto;
+/* Sits above the CV's top-right corner. */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
 }
 
 .save {
@@ -25,137 +49,259 @@
   border: 0;
   border-radius: 999px;
   padding: 0.375rem 0.875rem;
+  white-space: nowrap;
   cursor: pointer;
 }
 
-.sheet {
-  font-size: 1rem;
-  line-height: 1.45;
-  padding: 0.5rem 1.5rem 4rem;
-}
-
-/* Wide screens and paper share the white A4 sheet. */
-@media (min-width: 52rem), print {
-  .sheet {
-    --fg: oklch(0.2 0.01 250);
-    --muted: oklch(0.45 0.01 250);
-    --rule: oklch(0.85 0.005 250);
-
-    width: 210mm;
-    margin: 0 auto 4rem;
-    padding: 12mm 14mm;
-    font-size: 10pt;
-    color: var(--fg);
-    background: #fff;
-    border-radius: 2px;
-    box-shadow:
-      0 1px 2px oklch(0 0 0 / 0.08),
-      0 8px 32px oklch(0 0 0 / 0.12);
-  }
-}
+/* --- Header --------------------------------------------------------------- */
 
 .header {
-  margin-bottom: 1.1em;
+  text-align: center;
 }
 
 .name {
-  font-size: 2em;
+  font-size: 2.25em;
   font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
 }
 
-.role {
-  margin-top: 0.2em;
-  font-size: 1.1em;
-}
-
-.contacts {
+/* Real spacing around the dot; a plain " · " in this face sits too tight.
+   The dot trails each item, so a wrapped line never starts with one. */
+.dotted {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.15em 1.25em;
-  margin-top: 0.6em;
-  font-size: 0.92em;
+  justify-content: center;
+}
+
+.dotted li:not(:last-child)::after {
+  content: "·";
+  margin-inline: 0.5em;
   color: var(--muted);
 }
 
-.summary {
-  text-wrap: pretty;
+.headline {
+  margin-top: 2em;
+  font-size: 1em;
+  color: var(--muted);
 }
+
+.headline li:first-child {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.contacts {
+  font-size: 0.9375em;
+  color: var(--muted);
+}
+
+.contactBlock {
+  margin-top: 0.6em;
+}
+
+.summary {
+  max-width: var(--measure);
+  margin: 2em auto 0;
+  font-size: 1.0625em;
+  color: var(--body);
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* --- Sections ------------------------------------------------------------- */
 
 .section {
-  margin-top: 1.2em;
+  margin-top: var(--space-section);
 }
 
+/* Full colour, bold and ruled: clearly above the muted labels in the rail. */
 .heading {
-  font-size: 1.1em;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.6rem;
+  font-size: 0.8125em;
   font-weight: 600;
-  padding-bottom: 0.25em;
-  margin-bottom: 0.6em;
-  border-bottom: 0.5pt solid var(--rule);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rule);
   break-after: avoid;
+}
+
+/* An entry's children sit in the content column; the dates in the rail. */
+.entry {
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, var(--measure));
+  column-gap: var(--gutter);
+}
+
+.entry > * {
+  grid-column: 2;
 }
 
 .entry + .entry {
-  margin-top: 0.75em;
+  margin-top: var(--space-entry);
 }
 
-/* Long entries may split across pages, but never inside a line item. */
-.entryHead {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+.dated {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
   align-items: baseline;
-  column-gap: 1em;
   break-inside: avoid;
   break-after: avoid;
 }
 
-.entry p,
-.highlights li {
-  break-inside: avoid;
+.dated > :first-child {
+  grid-column: 2;
 }
 
-.entryTitle {
-  font-size: 1em;
+.date {
+  grid-row: 1;
+  grid-column: 1;
+  font-size: 0.875em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.company {
+  font-size: 1.25em;
   font-weight: 600;
+  line-height: 1.4;
 }
 
-.org {
+.about {
+  font-size: 0.75em;
   font-weight: 400;
   color: var(--muted);
 }
 
-.aside {
-  font-size: 0.92em;
+.title {
+  font-size: 1.0625em;
+  font-weight: 600;
+}
+
+/* Bold job titles: the most-looked-at item on a CV (TheLadders, 2018). */
+.role {
+  font-weight: 600;
+}
+
+.company + .dated {
+  margin-top: 0.25em;
+}
+
+.sep {
+  margin-inline: 0.15em;
+  font-weight: 400;
   color: var(--muted);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+}
+
+.product {
+  margin-top: 1em;
+  font-weight: 600;
+  break-after: avoid;
+}
+
+.stack {
+  font-size: 0.875em;
+  font-weight: 400;
+  color: var(--muted);
 }
 
 .highlights {
   margin-top: 0.3em;
   padding-left: 1.1em;
   list-style: disc;
+  color: var(--body);
 }
 
 .highlights li {
-  padding-left: 0.2em;
+  padding-left: 0.3em;
   text-wrap: pretty;
+  break-inside: avoid;
 }
 
 .highlights li + li {
-  margin-top: 0.2em;
+  margin-top: 0.35em;
 }
 
 .highlights li::marker {
   color: var(--muted);
 }
 
+.entry p {
+  text-wrap: pretty;
+  break-inside: avoid;
+}
+
+.project p {
+  color: var(--body);
+}
+
+.meta {
+  color: var(--muted);
+}
+
+/* --- Projects: the whole row opens the project ----------------------------- */
+
+.project {
+  --pad: 0.6em;
+  position: relative;
+  border-radius: 6px;
+  transition:
+    background-color 150ms,
+    box-shadow 150ms;
+}
+
+.projectLink {
+  text-decoration: none;
+}
+
+.projectLink::after {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--pad));
+}
+
+.projectLink:focus-visible {
+  outline: none;
+}
+
+.arrow {
+  display: inline-block;
+  margin-left: 0.3em;
+  color: var(--muted);
+  font-weight: 400;
+  transition: translate 150ms var(--ease-out);
+}
+
+.project:has(.projectLink:hover) {
+  --tint: color-mix(in oklch, var(--fg) 5%, transparent);
+  background-color: var(--tint);
+  box-shadow: 0 0 0 var(--pad) var(--tint);
+}
+
+.project:has(.projectLink:hover) .arrow {
+  color: var(--fg);
+  translate: 0.1em -0.1em;
+}
+
+.project:has(.projectLink:focus-visible) {
+  outline: 2px solid var(--fg);
+  outline-offset: var(--pad);
+}
+
+.printOnly {
+  display: none;
+}
+
+/* --- Label rows: skills, courses, languages ------------------------------- */
+
 .pairs {
   display: grid;
-  grid-template-columns: max-content 1fr;
-  gap: 0.25em 1.25em;
+  grid-template-columns: var(--rail) minmax(0, var(--measure));
+  align-items: baseline;
+  gap: 0.5em var(--gutter);
   margin: 0;
 }
 
@@ -163,44 +309,242 @@
   display: contents;
 }
 
+/* Same voice as the dates: the rail is all quiet metadata. */
 .pairs dt {
-  font-weight: 600;
+  font-size: 0.875em;
+  color: var(--muted);
 }
 
 .pairs dd {
   margin: 0;
 }
 
-@media (max-width: 32rem) {
+.courses {
+  margin-top: 1.25em;
+}
+
+/* --- Narrow screens and paper: one column, dates on the right ------------- */
+
+@media (max-width: 52rem), print {
+  .entry,
   .pairs {
-    grid-template-columns: 1fr;
-    gap: 0;
+    display: block;
   }
 
-  .pairs > div + div dt {
+  .dated {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    column-gap: 1em;
+  }
+
+  .pairs > div {
+    display: block;
+  }
+
+  .pairs > div + div {
     margin-top: 0.5em;
   }
 }
+
+/* Paper is narrower than 52rem too, so these must not reach print. */
+@media screen and (max-width: 52rem) {
+  /* Too narrow for a date beside a long title: it goes above, timeline-style. */
+  .dated {
+    flex-direction: column;
+  }
+
+  .date {
+    order: -1;
+  }
+
+  .company + .dated {
+    margin-top: 0.5em;
+  }
+
+  .dated + .dated {
+    margin-top: 0.4em;
+  }
+}
+
+/* --- Paper ---------------------------------------------------------------- */
 
 @page {
   margin: 12mm 14mm;
 }
 
 @media print {
-  .toolbar {
+  .actions,
+  .arrow,
+  .screenOnly {
     display: none;
   }
 
-  .sheet {
-    width: auto;
+  .printOnly {
+    display: inline;
+  }
+
+  .cv {
+    --fg: oklch(0.2 0.01 250);
+    --muted: oklch(0.42 0.01 250);
+    --rule: oklch(0.8 0.005 250);
+    --body: var(--fg);
+    --space-entry: 0.7em;
+    --space-section: 0.95em;
+
+    max-width: none;
     margin: 0;
     padding: 0;
-    box-shadow: none;
+    font-size: 10pt;
+    line-height: 1.3;
+    color: var(--fg);
     orphans: 3;
     widows: 3;
   }
 
-  .sheet a {
+  .name {
+    font-size: 2em;
+  }
+
+  .headline {
+    margin-top: 0.4em;
+  }
+
+  .contactBlock {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 0.35em;
+    font-size: 0.9em;
+  }
+
+  /* Place and contacts run on as one list, so they take two lines, not three. */
+  .contactBlock > ul {
+    display: contents;
+  }
+
+  .contactBlock > ul:first-child li:last-child::after {
+    content: "·";
+    margin-inline: 0.5em;
+    color: var(--muted);
+  }
+
+  .contacts {
+    font-size: 1em;
+  }
+
+  /* Centred is fine for a short header, not for a paragraph on paper. */
+  .summary {
+    max-width: none;
+    margin-top: 0.9em;
+    font-size: 1em;
+    text-align: left;
+    text-wrap: pretty;
+  }
+
+  .heading {
+    margin-bottom: 0.45em;
+    padding-bottom: 0.2em;
+    font-size: 0.85em;
+    color: var(--fg);
+    border-bottom: 0.5pt solid var(--rule);
+  }
+
+  .company {
+    font-size: 1.05em;
+  }
+
+  .about {
+    font-size: 0.86em;
+  }
+
+  .title {
+    font-size: 1em;
+  }
+
+  .company + .dated {
+    margin-top: 0;
+  }
+
+  .date {
+    font-size: 0.9em;
+  }
+
+  .product {
+    margin-top: 0.35em;
+  }
+
+  .highlights {
+    margin-top: 0.1em;
+  }
+
+  .highlights li + li {
+    margin-top: 0.1em;
+  }
+
+  /* Labels in a column of their own: a scannable list, still one row each. */
+  .pairs {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.15em 1.25em;
+  }
+
+  .pairs > div {
+    display: contents;
+  }
+
+  .pairs dt {
+    font-size: 1em;
+    color: var(--fg);
+    font-weight: 600;
+  }
+
+  .courses {
+    margin-top: 0.35em;
+  }
+
+  /* Two short facts: one line, "English: Advanced, C1 · Portuguese: Native". */
+  .languages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .languages > div {
+    display: flex;
+  }
+
+  .languages dd {
+    margin-left: 0.3em;
+  }
+
+  .languages dt::after {
+    content: ":";
+  }
+
+  .languages > div:not(:last-child)::after {
+    content: "·";
+    margin-inline: 0.5em;
+    color: var(--muted);
+  }
+
+  /*
+   * Unposition the project rows on paper. Chrome writes positioned boxes'
+   * text last, so PDFBox-based résumé parsers filed the projects under
+   * "Languages"; the stretched ::after also overflowed the page, which made
+   * Chrome shrink the whole print to 99%.
+   */
+  .project {
+    position: static;
+    background: none;
+    box-shadow: none;
+  }
+
+  .projectLink::after {
+    content: none;
+  }
+
+  .cv a {
     text-decoration: none;
   }
 }

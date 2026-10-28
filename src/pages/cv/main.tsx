@@ -1,3 +1,5 @@
+// Job titles sit between body text (400) and company names (600).
+import "@fontsource/instrument-sans/500.css";
 import "../../styles/base.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
