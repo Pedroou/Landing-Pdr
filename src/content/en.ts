@@ -6,7 +6,8 @@ export const en: Content = {
     home: "Home",
     cv: "CV",
     languageSwitch: "Language",
-    savePdf: "Save as PDF",
+    print: "Print",
+    downloadPdf: "Download PDF",
     email: "Email",
     themeLight: "Switch to light theme",
     themeDark: "Switch to dark theme",
@@ -62,7 +63,7 @@ export const en: Content = {
       "Open to remote",
     ],
     summary:
-      "Software developer with 1.5 years of experience building full-stack web products with React and TypeScript. Main developer of an ERP rewrite and sole developer of an AI video-surveillance product at a Brazilian ISP.",
+      "Software developer with 1.5 years of experience, hired after a four-month internship. I'm currently rewriting a legacy ERP in React, and on the side I built a school-transport platform that a municipal school network now uses.",
     headings: {
       experience: "Experience",
       projects: "Selected projects",
@@ -87,8 +88,8 @@ export const en: Content = {
             name: "ERP rewrite",
             stack: ["React", "JavaScript", "PHP (Slim)", "MySQL", "Puppeteer"],
             highlights: [
-              "Main developer of the rewrite of a decade-old, 186-screen multi-tenant PHP ERP into React and a PHP REST API, covering sales, finance, Brazilian e-invoicing and ISP network management. Not live yet.",
-              "Wrote its tests: Puppeteer end-to-end flows checked against the database, Dockerized PHP integration tests.",
+              "Main developer of the rewrite of a decade-old, 186-screen multi-tenant PHP ERP into React and a PHP REST API, covering sales, finance, Brazilian e-invoicing and ISP network management.",
+              "Puppeteer end-to-end flows checked against the database, and Dockerized PHP integration tests.",
             ],
           },
           {
@@ -96,8 +97,9 @@ export const en: Content = {
             stack: ["Python", "FastAPI", "React", "TypeScript", "Frigate NVR"],
             highlights: [
               "Sole developer of a video-surveillance product for condominiums, buildings and factories, built on Frigate NVR.",
-              "Built its automation engine: detections, zones, line crossings and known faces trigger push, MQTT or alarms.",
-              "Added AI event descriptions (Google Gemini) that use a building's floor plan, plus a daily security briefing.",
+              "Built its automation engine: face recognition, line crossings and plain-language AI searches trigger push, MQTT or on-screen alarms.",
+              "Added AI event descriptions that use a building's floor plan, plus a daily security briefing.",
+              "Added camera management without restarts, activity heatmaps and an analytics dashboard to its React UI.",
               "As an intern, configured cameras, tuned object detection and fixed dashboard UI bugs.",
             ],
           },
@@ -112,7 +114,7 @@ export const en: Content = {
         work: [
           {
             highlights: [
-              "Developed a school-transport platform (React, Node.js, PostgreSQL) piloted by a municipal school network: ~1,500 students across 19 schools, with route suggestions built on OSRM.",
+              "Developed a school-transport platform (React, Node.js, PostgreSQL) now in use by a municipal school network: ~1,500 students across 19 schools, with route suggestions built on OSRM.",
               "Built a dance school's links page and an admin panel to edit it without code (React, GitHub API).",
             ],
           },
@@ -125,14 +127,14 @@ export const en: Content = {
         url: "https://github.com/Pedroou/agent-session-manager",
         year: "2026",
         description:
-          "KDE Plasma 6 panel widget (QML, JavaScript) that shows which Claude Code sessions are waiting on you and jumps to their terminal. Four releases, 200+ automated tests. Available on the KDE Store.",
+          "KDE Plasma 6 panel widget (QML, JavaScript) that tracks running AI coding-agent sessions: live status, model, context use and git branch, with one click to jump to a session's terminal. Available on the KDE Store.",
       },
       {
         name: "Claude Acc-Manager",
         url: "https://github.com/Pedroou/Claude-Acc-Manager",
         year: "2026",
         description:
-          "Command-line tool (fish) for running several Claude Code accounts on one machine with one shared set of history, settings and skills. 180+ tests run in CI.",
+          "Command-line tool (fish) for running several Claude Code accounts on one machine with one shared set of history, settings and skills.",
       },
     ],
     skills: [

@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "type": "module",
   "engines": {
-    "node": ">=22.12"
+    "node": ">=22.18"
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/cv-pdf.ts",
     "preview": "vite preview",
     "check": "tsc -b && biome ci",
     "fix": "biome check --write"
@@ -24,6 +24,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "puppeteer-core": "^25.16.0",
     "typescript": "~7.0.2",
     "vite": "^8.3.5"
   }

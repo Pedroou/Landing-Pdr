@@ -6,7 +6,8 @@ export const pt: Content = {
     home: "Início",
     cv: "Currículo",
     languageSwitch: "Idioma",
-    savePdf: "Salvar como PDF",
+    print: "Imprimir",
+    downloadPdf: "Baixar PDF",
     email: "E-mail",
     themeLight: "Mudar para o tema claro",
     themeDark: "Mudar para o tema escuro",
@@ -61,7 +62,7 @@ export const pt: Content = {
       "Presencial, híbrido ou remoto",
     ],
     summary:
-      "Desenvolvedor de software com 1,5 ano de experiência em produtos web full-stack (React, TypeScript). Principal desenvolvedor da reescrita de um ERP e único desenvolvedor de um produto de videomonitoramento com IA.",
+      "Desenvolvedor de software com 1,5 ano de experiência, efetivado após quatro meses de estágio. Hoje reescrevo um ERP legado em React e, por fora, criei uma plataforma de transporte escolar que uma rede municipal de ensino usa.",
     headings: {
       experience: "Experiência profissional",
       projects: "Projetos em destaque",
@@ -86,8 +87,8 @@ export const pt: Content = {
             name: "Reescrita do ERP",
             stack: ["React", "JavaScript", "PHP (Slim)", "MySQL", "Puppeteer"],
             highlights: [
-              "Principal desenvolvedor da reescrita de um ERP multiempresa em PHP com mais de dez anos e 186 telas (vendas, financeiro, NF-e, rede de provedor) para React e API REST. Ainda fora de produção.",
-              "Escrevi os testes: fluxos E2E com Puppeteer conferidos no banco e testes de integração PHP em Docker.",
+              "Principal desenvolvedor da reescrita de um ERP multiempresa em PHP com mais de dez anos e 186 telas (vendas, financeiro, NF-e, rede de provedor) para React e API REST.",
+              "Fluxos E2E com Puppeteer conferidos no banco e testes de integração PHP em Docker.",
             ],
           },
           {
@@ -95,8 +96,9 @@ export const pt: Content = {
             stack: ["Python", "FastAPI", "React", "TypeScript", "Frigate NVR"],
             highlights: [
               "Único desenvolvedor de um produto de videomonitoramento para condomínios, prédios e fábricas, baseado no Frigate NVR.",
-              "Criei o motor de automações: detecções, zonas, linhas e rostos disparam push, MQTT ou alarmes.",
-              "Criei descrições de eventos por IA (Google Gemini) que usam a planta de um prédio, e um resumo diário de segurança.",
+              "Criei o motor de automações: rostos, cruzamento de linhas e buscas por IA disparam push, MQTT ou alarmes.",
+              "Criei descrições de eventos por IA que usam a planta de um prédio, e um resumo diário de segurança.",
+              "Adicionei à interface React gestão de câmeras sem reinício, mapas de calor e um painel de análises.",
               "Como estagiário, configurei câmeras, ajustei a detecção de objetos e corrigi bugs de interface.",
             ],
           },
@@ -111,7 +113,7 @@ export const pt: Content = {
         work: [
           {
             highlights: [
-              "Desenvolvi uma plataforma de transporte escolar (React, Node.js, PostgreSQL) em piloto numa rede municipal: ~1.500 alunos em 19 escolas, com sugestão de rotas baseada no OSRM.",
+              "Desenvolvi uma plataforma de transporte escolar (React, Node.js, PostgreSQL) hoje em uso numa rede municipal: ~1.500 alunos em 19 escolas, com sugestão de rotas baseada no OSRM.",
               "Fiz a página de links de uma escola de dança e um painel para editá-la sem código (React, API do GitHub).",
             ],
           },
@@ -124,14 +126,14 @@ export const pt: Content = {
         url: "https://github.com/Pedroou/agent-session-manager",
         year: "2026",
         description:
-          "Widget do KDE Plasma 6 (QML, JavaScript) que mostra quais sessões do Claude Code esperam por você e abre o terminal certo. Quatro versões, 200+ testes automatizados. Disponível na KDE Store.",
+          "Widget do KDE Plasma 6 (QML, JavaScript) que acompanha sessões de agentes de IA: status ao vivo, modelo, uso de contexto e branch do git, e um clique leva ao terminal da sessão. Disponível na KDE Store.",
       },
       {
         name: "Claude Acc-Manager",
         url: "https://github.com/Pedroou/Claude-Acc-Manager",
         year: "2026",
         description:
-          "Ferramenta de linha de comando (fish) para usar várias contas do Claude Code na mesma máquina, com histórico, configurações e skills compartilhados. Mais de 180 testes rodando no CI.",
+          "Ferramenta de linha de comando (fish) para usar várias contas do Claude Code na mesma máquina, com histórico, configurações e skills compartilhados.",
       },
     ],
     skills: [

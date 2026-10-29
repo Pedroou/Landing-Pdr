@@ -173,8 +173,10 @@ a:hover {
   }
 }
 
+/* Selected text takes full colour, so muted text stays readable on the yellow. */
 ::selection {
-  background: light-dark(oklch(0.9 0.12 98), oklch(0.45 0.1 98));
+  color: var(--fg);
+  background: light-dark(oklch(0.9 0.12 98), oklch(0.56 0.12 98));
 }
 
 /* Cross-document fade between the two pages (progressive enhancement). */

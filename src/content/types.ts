@@ -8,7 +8,8 @@ export interface Content {
     home: string;
     cv: string;
     languageSwitch: string;
-    savePdf: string;
+    print: string;
+    downloadPdf: string;
     email: string;
     themeLight: string;
     themeDark: string;

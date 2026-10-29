@@ -6,7 +6,7 @@ import styles from "./Cv.module.css";
 
 type CvContent = Content["cv"];
 
-async function saveAsPdf() {
+async function printCv() {
   // Printing before the web font arrives would bake the fallback into the PDF.
   await document.fonts.ready;
   window.print();
@@ -35,9 +35,17 @@ export function Cv() {
 
       <main className={styles.cv}>
         <div className={styles.actions}>
-          <button type="button" className={styles.save} onClick={saveAsPdf}>
-            {t.ui.savePdf}
+          <button type="button" className={styles.secondary} onClick={printCv}>
+            {t.ui.print}
           </button>
+          {/* Printed at build time by scripts/cv-pdf.ts; missing under `npm run dev`. */}
+          <a
+            className={styles.primary}
+            href={`pedro-ourique-cv-${lang}.pdf`}
+            download={`${cv.title}.pdf`}
+          >
+            {t.ui.downloadPdf}
+          </a>
         </div>
 
         <header className={styles.header}>
