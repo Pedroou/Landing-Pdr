@@ -62,7 +62,7 @@ export const pt: Content = {
       "Presencial, híbrido ou remoto",
     ],
     summary:
-      "Desenvolvedor de software com 1,5 ano de experiência, efetivado após quatro meses de estágio. Hoje reescrevo um ERP legado em React e, por fora, criei uma plataforma de transporte escolar que uma rede municipal de ensino usa.",
+      "Desenvolvedor de software com 1,5 ano de experiência. Hoje reescrevo um ERP legado em React e, por fora, desenvolvo projetos próprios: ferramentas que uso no dia a dia, projetos open source e trabalhos freelance.",
     headings: {
       experience: "Experiência profissional",
       projects: "Projetos em destaque",

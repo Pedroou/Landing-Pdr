@@ -63,7 +63,7 @@ export const en: Content = {
       "Open to remote",
     ],
     summary:
-      "Software developer with 1.5 years of experience, hired after a four-month internship. I'm currently rewriting a legacy ERP in React, and on the side I built a school-transport platform that a municipal school network now uses.",
+      "Software developer with 1.5 years of experience. I'm currently rewriting a legacy ERP in React, and on the side I build projects of my own: tools I use daily, open-source releases and freelance work.",
     headings: {
       experience: "Experience",
       projects: "Selected projects",
