@@ -460,6 +460,10 @@
       .shiny .spark {
         transform-box: fill-box;
         transform-origin: center;
+        /* Bigger stars: `transform` sets the size, the animation's `scale` pulses on
+           top of it. Non-scaling stroke keeps their lines as thin as the pencil's. */
+        transform: scale(1.5);
+        vector-effect: non-scaling-stroke;
         opacity: 0.7;
         animation: spark var(--sheen-period) var(--ease-out) 0.8s infinite;
       }
