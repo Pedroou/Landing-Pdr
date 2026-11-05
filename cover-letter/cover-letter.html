@@ -504,10 +504,10 @@
         font-size: 0.875rem;
         line-height: 1.5;
       }
-      /* Light that slowly travels around the border, so the card always shines: a
-         conic gradient turning around the card's centre, shown only in a ring (the
-         mask cuts out the inside). The ring covers the 1px border plus 1px outside
-         it, so the light reads like it's catching an edge. */
+      /* Light that travels around the border, so the card always shines: a conic
+         gradient turning around the card's centre, shown only in a ring (the mask
+         cuts out the inside). The ring covers the 1px border plus 1px outside it,
+         so the light reads like it's catching an edge. */
       @property --glint-angle {
         syntax: "<angle>";
         inherits: false;
@@ -520,7 +520,8 @@
         padding: 2px;
         /* The card's 6px, grown by the 1px the ring sticks out. */
         border-radius: 7px;
-        /* A bright arc with a fainter one opposite, so there's light somewhere at all times. */
+        /* A bright arc (centred 60deg past the angle) with a fainter one opposite,
+           so there's light somewhere at all times. */
         background: conic-gradient(
           from var(--glint-angle),
           transparent 0deg,
@@ -539,8 +540,16 @@
         pointer-events: none;
         animation: glint-orbit 10s linear infinite;
       }
+      /* Turning at a steady angle, the light crawls across the middle of the long
+         edges (closest to the centre) and races round the ends. Each long edge
+         (about 160deg of the turn on a wide card) eases in and out, so the turn is
+         quicker there: the light still slows across the middle, just less. */
       @keyframes glint-orbit {
-        to { --glint-angle: 360deg; }
+        0% { --glint-angle: -140deg; animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); }
+        44% { --glint-angle: 20deg; animation-timing-function: linear; }
+        50% { --glint-angle: 40deg; animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); }
+        94% { --glint-angle: 200deg; animation-timing-function: linear; }
+        100% { --glint-angle: 220deg; }
       }
       .findings-card .group-label { margin-bottom: 0.375rem; font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; }
       .findings-card ul { display: grid; gap: 0.375rem; margin-top: 0.5rem; padding-left: 1.125rem; list-style: disc; }
