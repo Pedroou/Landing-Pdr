@@ -3,6 +3,17 @@ rem Starts the local helper for cover-letter.html and opens the page.
 rem Installs Node.js first with winget (built into Windows 11) when it's missing.
 cd /d "%~dp0"
 
+rem Opened from inside the .zip: Windows copies only this file to a temp folder.
+if not exist "%~dp0cover-letter-helper.mjs" (
+  echo This was opened from inside the .zip file, so the other files aren't next to it.
+  echo.
+  echo Close this window, right-click the .zip and choose "Extract All",
+  echo then double-click "Start cover letter helper.cmd" in the extracted folder.
+  echo.
+  pause
+  exit /b 1
+)
+
 set "NODE=node"
 where node >nul 2>nul
 if not errorlevel 1 goto run
