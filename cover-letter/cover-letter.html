@@ -407,6 +407,41 @@
         gap: 1rem 2rem;
       }
 
+      /* "Fill with AI": a highlight-yellow sheen sweeps across every few seconds. */
+      .shiny {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        overflow: hidden;
+        isolation: isolate;
+      }
+      .shiny svg { flex: none; width: 1.0625rem; height: 1.0625rem; }
+      .shiny::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(
+          105deg,
+          transparent 30%,
+          color-mix(in oklch, var(--highlight) 85%, transparent) 50%,
+          transparent 70%
+        );
+        translate: -110% 0;
+        animation: sheen 4.5s var(--ease-out) 0.8s infinite;
+        pointer-events: none;
+      }
+      .shiny:hover::after { animation-duration: 1.6s; }
+      @keyframes sheen {
+        0% { translate: -110% 0; }
+        30%,
+        100% { translate: 110% 0; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .shiny::after { display: none; }
+      }
+
       .findings-card {
         padding: 0.75rem 1rem;
         border: 1px solid var(--rule);
@@ -554,7 +589,17 @@
           <h1 data-pt="Cartas de apresentação">Cover letters</h1>
           <p class="lede" data-pt="Preencha os campos para uma vaga, confira o resultado e copie como texto simples.">Fill in the blanks for one listing, check the result, and copy it as plain text.</p>
         </div>
-        <button type="button" class="button primary" id="autofill-open" data-pt="Preencher a partir de uma vaga com o Claude Code">Fill from a listing with Claude Code</button>
+        <button type="button" class="button primary shiny" id="autofill-open">
+          <!-- A pencil with sparkles: the usual mark for "AI writes this". -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M13.5 6.5l4 4L8 20H4v-4z" />
+            <path d="M11.5 8.5l4 4" />
+            <path d="M18 2v3.5M16.25 3.75h3.5" />
+            <path d="M21.5 8.5v2M20.5 9.5h2" />
+            <path d="M6.5 3v2M5.5 4h2" />
+          </svg>
+          <span data-pt="Preencher com IA">Fill with AI</span>
+        </button>
       </div>
 
       <div class="workspace">

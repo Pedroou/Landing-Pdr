@@ -18,7 +18,7 @@ Without a paid plan the page works the same; only the button that fills it in wi
    - A black window opens. The first time, it installs Node.js and Claude Code, which takes a few minutes; if Windows asks for permission, click **Yes**.
    - Then the page opens in your browser, and a second tab asks you to sign in to Claude. Sign in, then go back to the page.
    - Keep the black window open while you use the page; close it to stop.
-3. On the page, **Fill from a listing with Claude Code** fills in the letter from a job listing.
+3. On the page, **Fill with AI** fills in the letter from a job listing (Claude Code does the work).
 
 ## Next times
 
