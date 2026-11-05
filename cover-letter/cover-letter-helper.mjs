@@ -485,7 +485,8 @@ function registerScheme() {
       current = execFileSync(
         "reg",
         ["query", `${REG_KEY}\\shell\\open\\command`, "/ve"],
-        { encoding: "utf8", windowsHide: true },
+        // Not registered yet on a first run: reg prints an error, which is expected.
+        { encoding: "utf8", windowsHide: true, stdio: ["ignore", "pipe", "ignore"] },
       );
     } catch {}
     if (current.includes(command)) return false;
