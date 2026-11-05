@@ -471,13 +471,11 @@
         transform: scale(1.5);
         vector-effect: non-scaling-stroke;
         opacity: 0.7;
-        animation: spark var(--sheen-period) var(--ease-out) infinite;
-        /* After the sweep: it starts at 0.8s and ends 35% of the period later, so the
-           sparkles follow it one by one, on hover's shorter period too. */
-        animation-delay: calc(0.8s + var(--sheen-period) * 0.36);
+        animation: spark var(--sheen-period) var(--ease-out) 0.8s infinite;
       }
-      .shiny .spark:nth-of-type(4) { animation-delay: calc(0.8s + var(--sheen-period) * 0.41); }
-      .shiny .spark:nth-of-type(5) { animation-delay: calc(0.8s + var(--sheen-period) * 0.46); }
+      /* The sweep crosses the icon early in the cycle; stagger the sparkles behind it. */
+      .shiny .spark:nth-of-type(4) { animation-delay: 1.3s; }
+      .shiny .spark:nth-of-type(5) { animation-delay: 1.8s; }
       @keyframes sheen {
         0% { translate: -110% 0; }
         35%,
