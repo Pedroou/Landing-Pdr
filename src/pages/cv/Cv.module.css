@@ -116,8 +116,22 @@
   color: var(--muted);
 }
 
+/* Screen: the place on its own line, then contacts and links on the next. */
 .contactBlock {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   margin-top: 0.6em;
+}
+
+.place {
+  flex-basis: 100%;
+}
+
+.direct li:last-child::after {
+  content: "·";
+  margin-inline: 0.5em;
+  color: var(--muted);
 }
 
 .summary {
@@ -315,7 +329,7 @@
   display: none;
 }
 
-/* --- Label rows: skills, courses, languages ------------------------------- */
+/* --- Label rows: skills, languages ----------------------------------------- */
 
 .pairs {
   display: grid;
@@ -339,8 +353,14 @@
   margin: 0;
 }
 
-.courses {
-  margin-top: 1.25em;
+/* --- Courses: one line each, in the content column ------------------------- */
+
+.courseList li + li {
+  margin-top: 0.35em;
+}
+
+.issuer {
+  color: var(--muted);
 }
 
 /* --- Narrow screens and paper: one column, dates on the right ------------- */
@@ -431,22 +451,27 @@
   }
 
   .contactBlock {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     margin-top: 0.35em;
     font-size: 0.9em;
   }
 
-  /* Place and contacts run on as one list, so they take two lines, not three. */
-  .contactBlock > ul {
-    display: contents;
+  /* Paper: place and contacts share the first line, links get the second. */
+  .place {
+    flex-basis: auto;
   }
 
-  .contactBlock > ul:first-child li:last-child::after {
+  .place li:last-child::after {
     content: "·";
     margin-inline: 0.5em;
     color: var(--muted);
+  }
+
+  .direct li:last-child::after {
+    content: none;
+  }
+
+  .links {
+    flex-basis: 100%;
   }
 
   .contacts {
@@ -519,11 +544,18 @@
     font-weight: 600;
   }
 
-  .courses {
-    margin-top: 0.35em;
+  /* Two columns of short items: paper is the scarce thing. */
+  .courseList {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.1em 1.25em;
   }
 
-  /* Two short facts: one line, "English: Advanced, C1 · Portuguese: Native". */
+  .courseList li + li {
+    margin-top: 0;
+  }
+
+  /* Two short facts: one line, "English: Advanced (C1) · Portuguese: Native". */
   .languages {
     display: flex;
     flex-wrap: wrap;

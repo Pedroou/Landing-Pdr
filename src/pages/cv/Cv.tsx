@@ -1,6 +1,11 @@
 import type { ReactNode } from "react";
 import { SiteHeader } from "../../components/SiteHeader";
-import { type Content, displayUrl, profile } from "../../content";
+import {
+  type Content,
+  displayUrl,
+  profile,
+  yearsOfExperience,
+} from "../../content";
 import { useLanguage } from "../../i18n";
 import styles from "./Cv.module.css";
 
@@ -18,12 +23,14 @@ export function Cv() {
 
   // Paper can't be clicked, so print spells out every address; the screen
   // names the profiles instead, and leaves out a link to the page itself.
-  const contacts = [
+  const direct: Contact[] = [
     { screen: profile.email, href: `mailto:${profile.email}` },
     {
       screen: profile.phone,
       href: `tel:${profile.phone.replace(/[^+\d]/g, "")}`,
     },
+  ];
+  const links: Contact[] = [
     { screen: null, href: profile.site },
     { screen: "GitHub", href: profile.github },
     { screen: "LinkedIn", href: profile.linkedin },
@@ -55,28 +62,23 @@ export function Cv() {
               <li key={item}>{item}</li>
             ))}
           </ul>
+          {/* Three lists, two lines. Screen: place, then contacts and links.
+              Paper: place and contacts, then the spelled-out links. Each line
+              is short enough not to wrap, so no line ends on a stray dot. */}
           <div className={styles.contactBlock}>
-            <ul className={`${styles.dotted} ${styles.contacts}`}>
+            <ul
+              className={`${styles.dotted} ${styles.contacts} ${styles.place}`}
+            >
               {cv.location.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
-            <ul className={`${styles.dotted} ${styles.contacts}`}>
-              {contacts.map(({ screen, href }) => (
-                <li key={href} className={screen ? "" : styles.printOnly}>
-                  <a href={href}>
-                    <span className={styles.screenOnly}>{screen}</span>
-                    <span className={styles.printOnly}>
-                      {href.startsWith("http") ? displayUrl(href) : screen}
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <Contacts list={direct} className={styles.direct} />
+            <Contacts list={links} className={styles.links} />
           </div>
         </header>
 
-        <p className={styles.summary}>{cv.summary}</p>
+        <p className={styles.summary}>{cv.summary(yearsOfExperience())}</p>
 
         <Section title={cv.headings.experience}>
           {cv.experience.map((job) => (
@@ -110,12 +112,20 @@ export function Cv() {
               <p className={styles.meta}>{institution}</p>
             </article>
           ))}
-          <dl className={`${styles.pairs} ${styles.courses}`}>
-            <div>
-              <dt>{cv.headings.courses}</dt>
-              <dd>{cv.courses.join("; ")}</dd>
-            </div>
-          </dl>
+        </Section>
+
+        <Section title={cv.headings.courses}>
+          <div className={styles.entry}>
+            <ul className={styles.courseList}>
+              {cv.courses.map(({ name, issuer }) => (
+                <li key={name}>
+                  {name}
+                  <Sep />
+                  <span className={styles.issuer}>{issuer}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </Section>
 
         <Section title={cv.headings.languages}>
@@ -139,6 +149,32 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
       <h2 className={styles.heading}>{title}</h2>
       {children}
     </section>
+  );
+}
+
+/** `screen: null` is print-only: the page linking to itself. */
+type Contact = { screen: string | null; href: string };
+
+function Contacts({
+  list,
+  className,
+}: {
+  list: Contact[];
+  className?: string;
+}) {
+  return (
+    <ul className={`${styles.dotted} ${styles.contacts} ${className}`}>
+      {list.map(({ screen, href }) => (
+        <li key={href} className={screen ? "" : styles.printOnly}>
+          <a href={href}>
+            <span className={styles.screenOnly}>{screen}</span>
+            <span className={styles.printOnly}>
+              {href.startsWith("http") ? displayUrl(href) : screen}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
   );
 }
 

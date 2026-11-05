@@ -21,7 +21,8 @@ npm run build    # static site in dist/, including the CV PDFs
 - `src/theme.ts`: light/dark follows the OS until the visitor uses the toggle in the header; the choice is saved in `localStorage`. A small inline script in each HTML `<head>` applies the saved theme before first paint, so keep the two in sync.
 - `src/components/SiteHeader.tsx`: the navigation bar shared by both pages (page links, language, theme).
 - `src/pages/cv/Cv.module.css`: one stylesheet, two layouts. On screen the CV is a web page in the site theme, with dates and labels in a left column. In print it is a one-page, single-column document at 10 pt with dates on the right of each title, which keeps résumé parsers reading it in order.
-- `scripts/cv-pdf.ts`: the last step of `npm run build`. It prints the built CV with Chrome into `dist/cv/pedro-ourique-cv-{en,pt}.pdf` (English on Letter, Portuguese on A4), the files behind **Download PDF**, and fails the build if either one runs past one page. They don't exist under `npm run dev`.
+- `scripts/cv-pdf.ts`: the last step of `npm run build`. It prints the built CV with Chrome into `dist/cv/pedro-ourique-cv-{en,pt}.pdf` (English on Letter, Portuguese on A4), the files behind **Download PDF**, plus `pedro-ourique-cv-en-a4.pdf` (English on A4, unlinked, for applications in Brazil and Europe). The build fails if any of them runs past one page. They don't exist under `npm run dev`.
+- `src/content/profile.ts`: `careerStart` drives the years of experience in the CV summary, rounded to the nearest half year. The page computes it on load; the PDFs only change on a build, so `deploy.yml` also rebuilds on the 1st of each month.
 
 ## Deploy
 

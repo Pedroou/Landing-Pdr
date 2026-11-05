@@ -29,9 +29,10 @@ export interface Content {
     title: string;
     /** Role first, then the stack. */
     headline: string[];
-    /** Place, time zone, work arrangement; rendered with separators. */
+    /** Place and work arrangement; rendered with separators. */
     location: string[];
-    summary: string;
+    /** Takes the years of experience, already rounded (see `profile.ts`). */
+    summary: (years: number) => string;
     headings: {
       experience: string;
       projects: string;
@@ -61,7 +62,7 @@ export interface Content {
     }>;
     skills: Array<{ label: string; items: string[] }>;
     education: Array<{ degree: string; institution: string; period: string }>;
-    courses: string[];
+    courses: Array<{ name: string; issuer: string }>;
     languages: Array<{ name: string; level: string }>;
   };
 }

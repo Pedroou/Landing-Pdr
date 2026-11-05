@@ -1,5 +1,5 @@
 /*
- * Prints the built CV to PDF, one file per language, into dist/cv/. Run after
+ * Prints the built CV to PDF into dist/cv/: each language, plus an English A4 copy. Run after
  * `vite build` (it is part of `npm run build`), so the download on the CV page
  * is always the current CV, printed by the same stylesheet as the Print button.
  *
@@ -11,10 +11,12 @@ import puppeteer, { type PaperFormat } from "puppeteer-core";
 import { preview } from "vite";
 
 // Letter for the English CV (US companies hire most remote roles), A4 for the
-// Portuguese one (Brazil's paper size). Both fit on one page in either size.
-const files: Array<{ lang: string; format: PaperFormat }> = [
-  { lang: "en", format: "letter" },
-  { lang: "pt", format: "a4" },
+// Portuguese one (Brazil's paper size). The English A4 copy isn't linked from
+// the page: it's for applications to Brazil and Europe (SAP Labs, say).
+const files: Array<{ lang: string; format: PaperFormat; name: string }> = [
+  { lang: "en", format: "letter", name: "pedro-ourique-cv-en" },
+  { lang: "en", format: "a4", name: "pedro-ourique-cv-en-a4" },
+  { lang: "pt", format: "a4", name: "pedro-ourique-cv-pt" },
 ];
 
 const server = await preview({ preview: { port: 0, open: false } });
@@ -30,7 +32,7 @@ const browser = await puppeteer.launch({
 
 try {
   const page = await browser.newPage();
-  for (const { lang, format } of files) {
+  for (const { lang, format, name } of files) {
     await page.goto(new URL(`cv/?lang=${lang}`, base).href, {
       waitUntil: "networkidle0",
     });
@@ -47,7 +49,7 @@ try {
       );
     }
 
-    const out = `dist/cv/pedro-ourique-cv-${lang}.pdf`;
+    const out = `dist/cv/${name}.pdf`;
     await writeFile(out, pdf);
     console.log(`${out} (${format}, 1 page)`);
   }

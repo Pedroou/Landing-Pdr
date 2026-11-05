@@ -110,6 +110,30 @@
       }
       .icon-button:hover { color: var(--fg); }
       .icon-button svg { width: 1.125rem; height: 1.125rem; }
+      /* Same look as the site's language switch: muted text, full colour on hover. */
+      .text-button {
+        display: flex;
+        align-items: center;
+        min-height: 2.5rem;
+        margin-inline: -0.5rem;
+        padding-inline: 0.5rem;
+        color: var(--muted);
+        font: inherit;
+        background: none;
+        border: 0;
+        cursor: pointer;
+        transition: color 150ms;
+      }
+      .text-button:hover { color: var(--fg); }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
 
       /* --- Page ---------------------------------------------------------------- */
 
@@ -513,168 +537,169 @@
   </head>
   <body>
     <header class="bar">
-      <a class="wordmark" href="https://pedroou.github.io/Landing-Pdr/">Pedro Ourique</a>
+      <a class="wordmark" href="https://pedroou.github.io/Landing-Pdr/" data-site-page="">Pedro Ourique</a>
       <nav>
-        <a href="https://pedroou.github.io/Landing-Pdr/">Home</a>
-        <a href="https://pedroou.github.io/Landing-Pdr/cv/">CV</a>
+        <a href="https://pedroou.github.io/Landing-Pdr/" data-site-page="" data-pt="Início">Home</a>
+        <a href="https://pedroou.github.io/Landing-Pdr/cv/" data-site-page="cv/" data-pt="Currículo">CV</a>
       </nav>
       <span class="divider"></span>
+      <button type="button" class="text-button" id="ui-lang"></button>
       <button type="button" class="icon-button" id="theme-toggle"></button>
     </header>
 
     <main>
       <div class="intro">
         <div>
-          <h1>Cover letters</h1>
-          <p class="lede">Fill in the blanks for one listing, check the result, and copy it as plain text.</p>
+          <h1 data-pt="Cartas de apresentação">Cover letters</h1>
+          <p class="lede" data-pt="Preencha os campos para uma vaga, confira o resultado e copie como texto simples.">Fill in the blanks for one listing, check the result, and copy it as plain text.</p>
         </div>
-        <button type="button" class="button primary" id="autofill-open">Fill from a listing with Claude Code</button>
+        <button type="button" class="button primary" id="autofill-open" data-pt="Preencher a partir de uma vaga com o Claude Code">Fill from a listing with Claude Code</button>
       </div>
 
       <div class="workspace">
         <form class="controls" id="controls" autocomplete="off">
           <fieldset>
-            <legend class="group-label">What are you writing?</legend>
+            <legend class="group-label" data-pt="O que você está escrevendo?">What are you writing?</legend>
             <div class="pills">
-              <label><input type="radio" name="mode" value="letter" /><span>Cover letter</span></label>
-              <label><input type="radio" name="mode" value="short" /><span>Short answer</span></label>
-              <label><input type="radio" name="mode" value="project" /><span>Project answer</span></label>
+              <label><input type="radio" name="mode" value="letter" /><span data-pt="Carta de apresentação">Cover letter</span></label>
+              <label><input type="radio" name="mode" value="short" /><span data-pt="Resposta curta">Short answer</span></label>
+              <label><input type="radio" name="mode" value="project" /><span data-pt="Resposta sobre projeto">Project answer</span></label>
             </div>
-            <p class="hint" data-when="mode=short">For "Anything else?" and "Tell us about you" fields that a person reads.</p>
-            <p class="hint" data-when="mode=project">For "Tell us about a project you're proud of". No blanks to fill.</p>
+            <p class="hint" data-when="mode=short" data-pt="Para campos como &quot;Anything else?&quot; e &quot;Tell us about you&quot;, que uma pessoa lê.">For "Anything else?" and "Tell us about you" fields that a person reads.</p>
+            <p class="hint" data-when="mode=project" data-pt="Para &quot;Tell us about a project you're proud of&quot;. Nada para preencher.">For "Tell us about a project you're proud of". No blanks to fill.</p>
           </fieldset>
 
           <fieldset>
-            <legend class="group-label">Language</legend>
+            <legend class="group-label" data-pt="Idioma da carta">Letter language</legend>
             <div class="pills">
               <label><input type="radio" name="lang" value="en" /><span>English</span></label>
               <label lang="pt"><input type="radio" name="lang" value="pt" /><span>Português</span></label>
             </div>
-            <p class="hint" data-when="lang=pt mode=letter">For Gupy's "Apresente-se!", career-page fields, and emails.</p>
+            <p class="hint" data-when="lang=pt mode=letter" data-pt="Para o &quot;Apresente-se!&quot; da Gupy, campos de sites de carreira e e-mails.">For Gupy's "Apresente-se!", career-page fields, and emails.</p>
           </fieldset>
 
           <fieldset data-when="mode=letter, mode=short lang=en">
-            <legend class="group-label">Where is the job?</legend>
+            <legend class="group-label" data-pt="Onde é a vaga?">Where is the job?</legend>
             <div class="pills">
-              <label><input type="radio" name="location" value="remote" /><span>Remote</span></label>
-              <label><input type="radio" name="location" value="hybrid" /><span>Hybrid or on site in Brazil</span></label>
+              <label><input type="radio" name="location" value="remote" /><span data-pt="Remota">Remote</span></label>
+              <label><input type="radio" name="location" value="hybrid" /><span data-pt="Híbrida ou presencial no Brasil">Hybrid or on site in Brazil</span></label>
             </div>
-            <p class="hint" data-when="lang=en mode=letter">Remote is for jobs abroad (UTC−3, contractor or EOR). Hybrid covers jobs in Brazil, including ones in English like SAP Labs.</p>
+            <p class="hint" data-when="lang=en mode=letter" data-pt="Remota é para vagas no exterior (UTC−3, como contractor ou por EOR). Híbrida cobre vagas no Brasil, inclusive em inglês, como na SAP Labs.">Remote is for jobs abroad (UTC−3, contractor or EOR). Hybrid covers jobs in Brazil, including ones in English like SAP Labs.</p>
           </fieldset>
 
           <fieldset data-when="mode=letter">
-            <legend class="group-label">Main story</legend>
+            <legend class="group-label" data-pt="História principal">Main story</legend>
             <div class="choices">
               <label>
                 <input type="radio" name="story" value="erp" />
-                <span>ERP rewrite at NetComet<small>Default. Front-end or full-stack React, business software.</small></span>
+                <span data-pt="Reescrita do ERP na NetComet&lt;small&gt;Padrão. Front-end ou full-stack React, software de gestão.&lt;/small&gt;">ERP rewrite at NetComet<small>Default. Front-end or full-stack React, business software.</small></span>
               </label>
               <label>
                 <input type="radio" name="story" value="surveillance" />
-                <span>Video-surveillance product<small>Python, AI or product roles.</small></span>
+                <span data-pt="Produto de videomonitoramento&lt;small&gt;Vagas de Python, IA ou produto.&lt;/small&gt;">Video-surveillance product<small>Python, AI or product roles.</small></span>
               </label>
               <label>
                 <input type="radio" name="story" value="school" />
-                <span>School-transport platform<small>Node.js / PostgreSQL full-stack or startup roles.</small></span>
+                <span data-pt="Plataforma de transporte escolar&lt;small&gt;Vagas full-stack Node.js / PostgreSQL ou de startup.&lt;/small&gt;">School-transport platform<small>Node.js / PostgreSQL full-stack or startup roles.</small></span>
               </label>
             </div>
           </fieldset>
 
           <div class="toggles" data-when="mode=letter">
             <label class="switch" data-when="lang=en">
-              <input type="checkbox" name="asm" />Mention Agent Session Manager
+              <input type="checkbox" name="asm" /><span data-pt="Mencionar o Agent Session Manager">Mention Agent Session Manager</span>
             </label>
             <label class="switch" data-when="lang=pt">
-              <input type="checkbox" name="email" />Sending by email (subject line)
+              <input type="checkbox" name="email" /><span data-pt="Envio por e-mail (linha de assunto)">Sending by email (subject line)</span>
             </label>
             <label class="switch" data-when="lang=pt">
-              <input type="checkbox" name="salary" />The posting asks for a salary
+              <input type="checkbox" name="salary" /><span data-pt="A vaga pede pretensão salarial">The posting asks for a salary</span>
             </label>
           </div>
 
           <div class="field" data-when="mode=letter">
-            <label for="company">Company</label>
+            <label for="company" data-pt="Empresa">Company</label>
             <input type="text" id="company" name="company" />
           </div>
 
           <div class="field" data-when="mode=letter">
-            <label for="contact">Person's name (optional)</label>
+            <label for="contact" data-pt="Nome da pessoa (opcional)">Person's name (optional)</label>
             <input type="text" id="contact" name="contact" />
-            <p class="hint">Leave it empty to greet the company's team.</p>
+            <p class="hint" data-pt="Deixe vazio para cumprimentar a equipe da empresa.">Leave it empty to greet the company's team.</p>
           </div>
 
           <div class="field" data-when="mode=letter">
-            <label for="role">Exact role title</label>
+            <label for="role" data-pt="Título exato da vaga">Exact role title</label>
             <input type="text" id="role" name="role" />
           </div>
 
           <div class="field" data-when="mode=letter, mode=short">
-            <label for="why">Why this company</label>
+            <label for="why" data-pt="Por que esta empresa">Why this company</label>
             <textarea id="why" name="why"></textarea>
-            <p class="hint">One sentence, in the letter's language: something specific you used, read or noticed about their product, stack or domain, tied to your own work. If it still makes sense with a competitor's name in it, rewrite it.</p>
+            <p class="hint" data-pt="Uma frase, no idioma da carta: algo específico que você usou, leu ou notou no produto, na stack ou no ramo da empresa, ligado ao seu trabalho. Se ainda fizer sentido com o nome de um concorrente, reescreva.">One sentence, in the letter's language: something specific you used, read or noticed about their product, stack or domain, tied to your own work. If it still makes sense with a competitor's name in it, rewrite it.</p>
           </div>
 
           <div class="field" data-when="mode=letter">
-            <label for="extra">Company-specific sentence (optional)</label>
+            <label for="extra" data-pt="Frase específica da empresa (opcional)">Company-specific sentence (optional)</label>
             <textarea id="extra" name="extra" rows="2"></textarea>
-            <p class="hint">Added to the end of the main story. Claude fills it only when the company asks for something the story doesn't already show.</p>
+            <p class="hint" data-pt="Vai no fim da história principal. O Claude só preenche quando a empresa pede algo que a história ainda não mostra.">Added to the end of the main story. Claude fills it only when the company asks for something the story doesn't already show.</p>
           </div>
 
           <fieldset data-when="mode=letter lang=en location=remote, mode=short lang=en location=remote">
-            <legend class="group-label">Company's time zone</legend>
+            <legend class="group-label" data-pt="Fuso horário da empresa">Company's time zone</legend>
             <div class="pills">
-              <label><input type="radio" name="zone" value="americas" /><span>US / Americas</span></label>
-              <label><input type="radio" name="zone" value="europe" /><span>Europe</span></label>
-              <label><input type="radio" name="zone" value="unstated" /><span>Not stated</span></label>
+              <label><input type="radio" name="zone" value="americas" /><span data-pt="EUA / Américas">US / Americas</span></label>
+              <label><input type="radio" name="zone" value="europe" /><span data-pt="Europa">Europe</span></label>
+              <label><input type="radio" name="zone" value="unstated" /><span data-pt="Não informado">Not stated</span></label>
             </div>
-            <p class="hint">Look for a time zone or "overlap with" requirement in the listing, or where the team is based. Brazil is 1 to 2 hours ahead of US Eastern and 4 to 5 hours behind Central Europe.</p>
+            <p class="hint" data-pt="Procure na vaga um fuso horário ou uma exigência de &quot;overlap&quot;, ou veja onde fica o time. O Brasil está 1 a 2 horas à frente do leste dos EUA e 4 a 5 horas atrás da Europa Central.">Look for a time zone or "overlap with" requirement in the listing, or where the team is based. Brazil is 1 to 2 hours ahead of US Eastern and 4 to 5 hours behind Central Europe.</p>
           </fieldset>
 
           <div class="field" data-when="mode=letter location=hybrid">
-            <label for="city">City of the office</label>
+            <label for="city" data-pt="Cidade do escritório">City of the office</label>
             <input type="text" id="city" name="city" placeholder="São Leopoldo" />
           </div>
 
           <div class="field" data-when="mode=letter lang=pt salary=true">
-            <label for="salaryRange">Salary range</label>
+            <label for="salaryRange" data-pt="Faixa salarial">Salary range</label>
             <div class="row">
               <input type="text" id="salaryRange" name="salaryRange" placeholder="R$ 6.000 a R$ 7.500" />
-              <select name="contract" aria-label="Contract type">
+              <select name="contract" aria-label="Contract type" data-pt-aria-label="Tipo de contrato">
                 <option>CLT ou PJ</option>
                 <option>CLT</option>
                 <option>PJ</option>
               </select>
             </div>
-            <p class="hint">One line, as a range. "CLT ou PJ" when you have no preference and the listing doesn't say.</p>
+            <p class="hint" data-pt="Uma linha, como faixa. &quot;CLT ou PJ&quot; quando você não tem preferência e a vaga não diz.">One line, as a range. "CLT ou PJ" when you have no preference and the listing doesn't say.</p>
           </div>
 
           <div data-when="mode=letter, mode=short">
-            <button type="button" class="button secondary" id="reset">New listing</button>
-            <p class="hint">Clears the company, role, sentence and other per-listing fields. Everything you type is kept in this browser until then.</p>
+            <button type="button" class="button secondary" id="reset" data-pt="Nova vaga">New listing</button>
+            <p class="hint" data-pt="Limpa a empresa, a vaga, a frase e os outros campos da vaga. Tudo o que você digita fica salvo neste navegador até lá.">Clears the company, role, sentence and other per-listing fields. Everything you type is kept in this browser until then.</p>
           </div>
         </form>
 
-        <section class="output" aria-label="Result">
+        <section class="output" aria-label="Result" data-pt-aria-label="Resultado">
           <div class="toolbar">
             <span class="count" id="count"></span>
-            <button type="button" class="button primary" id="copy">Copy text</button>
+            <button type="button" class="button primary" id="copy" data-pt="Copiar texto">Copy text</button>
           </div>
 
           <div class="subject" id="subject" hidden>
-            <span class="group-label">Assunto</span>
+            <span class="group-label" data-pt="Assunto">Subject</span>
             <p id="subject-text"></p>
-            <button type="button" class="button secondary" id="copy-subject">Copy</button>
+            <button type="button" class="button secondary" id="copy-subject" data-pt="Copiar">Copy</button>
           </div>
 
           <div class="letter" id="letter"></div>
 
-          <aside class="checks-card" aria-label="Checks">
-            <p class="group-label">Checks</p>
+          <aside class="checks-card" aria-label="Checks" data-pt-aria-label="Verificações">
+            <p class="group-label" data-pt="Verificações">Checks</p>
             <ul class="checks" id="checks" aria-live="polite"></ul>
           </aside>
 
-          <aside class="findings-card" id="findings" aria-label="What Claude found" hidden>
-            <p class="group-label">From Claude</p>
+          <aside class="findings-card" id="findings" aria-label="What Claude found" data-pt-aria-label="O que o Claude encontrou" hidden>
+            <p class="group-label" data-pt="Do Claude">From Claude</p>
             <p id="findings-summary"></p>
             <ul id="findings-list"></ul>
           </aside>
@@ -682,39 +707,39 @@
       </div>
 
       <details class="notes">
-        <summary>When to send one, and how <span>Notes and checklist</span></summary>
+        <summary data-pt="Quando enviar e como &lt;span&gt;Notas e checklist&lt;/span&gt;">When to send one, and how <span>Notes and checklist</span></summary>
         <div class="notes-body">
           <section>
-            <h2>When to use it</h2>
+            <h2 data-pt="Quando usar">When to use it</h2>
             <ul>
-              <li><strong>Send one:</strong> startups and companies under ~200 people, remote-first companies, direct emails to a founder or engineering manager, Hacker News "Who is hiring" replies, and any posting that asks for one.</li>
-              <li><strong>Skip it:</strong> optional fields on big-company portals, LinkedIn Easy Apply, and vetting platforms (Lemon.io, Toptal, G2i). They don't read them. Exception: if the field says a person reads it ("We are real humans looking at applications"), fill it with the short answer.</li>
-              <li><strong>Screening questions instead of a letter?</strong> Answer the questions and skip the letter.</li>
-              <li><strong>Brazil:</strong> most companies don't ask for one. Use the Portuguese version in Gupy's "Apresente-se!" field (a person reads it; the AI ranking doesn't), in optional fields on career pages, and as the email body when a posting says "envie seu currículo". For email, turn on the subject line and attach the CV as a PDF. Gupy's field fits 1,500 characters.</li>
-              <li><strong>Format:</strong> paste it as plain text into the form or the email body. No bold, bullets or em dashes. Use a PDF only when there's nothing but an upload slot.</li>
+              <li data-pt="&lt;strong&gt;Envie:&lt;/strong&gt; startups e empresas com menos de ~200 pessoas, empresas remote-first, e-mails diretos para um fundador ou gerente de engenharia, respostas ao &quot;Who is hiring&quot; do Hacker News e qualquer vaga que peça uma."><strong>Send one:</strong> startups and companies under ~200 people, remote-first companies, direct emails to a founder or engineering manager, Hacker News "Who is hiring" replies, and any posting that asks for one.</li>
+              <li data-pt="&lt;strong&gt;Pule:&lt;/strong&gt; campos opcionais em portais de grandes empresas, LinkedIn Easy Apply e plataformas de seleção (Lemon.io, Toptal, G2i). Eles não leem. Exceção: se o campo diz que uma pessoa lê (&quot;We are real humans looking at applications&quot;), preencha com a resposta curta."><strong>Skip it:</strong> optional fields on big-company portals, LinkedIn Easy Apply, and vetting platforms (Lemon.io, Toptal, G2i). They don't read them. Exception: if the field says a person reads it ("We are real humans looking at applications"), fill it with the short answer.</li>
+              <li data-pt="&lt;strong&gt;Perguntas de triagem em vez de carta?&lt;/strong&gt; Responda às perguntas e pule a carta."><strong>Screening questions instead of a letter?</strong> Answer the questions and skip the letter.</li>
+              <li data-pt="&lt;strong&gt;Brasil:&lt;/strong&gt; a maioria das empresas não pede. Use a versão em português no campo &quot;Apresente-se!&quot; da Gupy (uma pessoa lê; o ranking por IA não), em campos opcionais de sites de carreira e como corpo do e-mail quando a vaga diz &quot;envie seu currículo&quot;. Para e-mail, ative a linha de assunto e anexe o CV em PDF. O campo da Gupy cabe 1.500 caracteres."><strong>Brazil:</strong> most companies don't ask for one. Use the Portuguese version in Gupy's "Apresente-se!" field (a person reads it; the AI ranking doesn't), in optional fields on career pages, and as the email body when a posting says "envie seu currículo". For email, turn on the subject line and attach the CV as a PDF. Gupy's field fits 1,500 characters.</li>
+              <li data-pt="&lt;strong&gt;Formato:&lt;/strong&gt; cole como texto simples no formulário ou no corpo do e-mail. Sem negrito, listas ou travessões. Use PDF só quando houver apenas um campo de upload."><strong>Format:</strong> paste it as plain text into the form or the email body. No bold, bullets or em dashes. Use a PDF only when there's nothing but an upload slot.</li>
             </ul>
-            <p>Never send it with blanks left in, and never without the company-specific sentence. Anyone can generate a polished generic letter now, so it counts for almost nothing. What a reader notices is the company-specific sentence and the details your CV can't show.</p>
+            <p data-pt="Nunca envie com campos em branco nem sem a frase específica da empresa. Qualquer pessoa gera hoje uma carta genérica bem escrita, então ela quase não conta. O que o leitor nota é a frase específica da empresa e os detalhes que o seu CV não mostra.">Never send it with blanks left in, and never without the company-specific sentence. Anyone can generate a polished generic letter now, so it counts for almost nothing. What a reader notices is the company-specific sentence and the details your CV can't show.</p>
           </section>
 
           <section>
-            <h2>Picking the story</h2>
-            <p>Keep one story per letter. The ERP rewrite is the default: it covers front-end and full-stack React and business software, and it carries the point about AI-written code checked by tests. Switch to the video-surveillance product for Python, AI or product roles, and to the school-transport platform for Node.js / PostgreSQL full-stack or startup roles.</p>
-            <p>Salary goes in only if the posting asks: one line, as a range, saying CLT, PJ, or "CLT ou PJ" when you have no preference and the listing doesn't say.</p>
+            <h2 data-pt="Escolhendo a história">Picking the story</h2>
+            <p data-pt="Uma história por carta. A reescrita do ERP é a padrão: cobre front-end e full-stack React e software de gestão, e carrega o ponto sobre código escrito por IA e conferido por testes. Troque para o produto de videomonitoramento em vagas de Python, IA ou produto, e para a plataforma de transporte escolar em vagas full-stack Node.js / PostgreSQL ou de startup.">Keep one story per letter. The ERP rewrite is the default: it covers front-end and full-stack React and business software, and it carries the point about AI-written code checked by tests. Switch to the video-surveillance product for Python, AI or product roles, and to the school-transport platform for Node.js / PostgreSQL full-stack or startup roles.</p>
+            <p data-pt="Pretensão salarial só se a vaga pedir: uma linha, como faixa, dizendo CLT, PJ ou &quot;CLT ou PJ&quot; quando você não tem preferência e a vaga não diz.">Salary goes in only if the posting asks: one line, as a range, saying CLT, PJ, or "CLT ou PJ" when you have no preference and the listing doesn't say.</p>
           </section>
 
           <section>
-            <h2>"Why do you want to work here?"</h2>
-            <p>Always write this one fresh: one specific thing about the company, then the closest thing you've actually done.</p>
+            <h2 data-pt="&quot;Por que você quer trabalhar aqui?&quot;">"Why do you want to work here?"</h2>
+            <p data-pt="Escreva essa sempre do zero: uma coisa específica da empresa e, depois, a coisa mais próxima disso que você já fez de verdade.">Always write this one fresh: one specific thing about the company, then the closest thing you've actually done.</p>
           </section>
 
           <section>
-            <h2>Before sending</h2>
+            <h2 data-pt="Antes de enviar">Before sending</h2>
             <ol>
-              <li>Every blank filled, and the "why this company" sentence fails the competitor-swap test.</li>
-              <li>No em dashes, bold, bullets, or words like "passionate", "thrive", "align", "leverage", "robust", "delve". The checks under the letter catch these.</li>
-              <li>No adjectives about yourself. Every claim is something you can explain on a call, screen by screen.</li>
-              <li>Read it out loud once and change anything you wouldn't say.</li>
-              <li>Free-text fields a person reads: about 100 words. A reader skims anything longer.</li>
+              <li data-pt="Todos os campos preenchidos, e a frase de &quot;por que esta empresa&quot; deixa de fazer sentido com o nome de um concorrente.">Every blank filled, and the "why this company" sentence fails the competitor-swap test.</li>
+              <li data-pt="Sem travessões, negrito, listas ou palavras como &quot;passionate&quot;, &quot;thrive&quot;, &quot;align&quot;, &quot;leverage&quot;, &quot;robust&quot;, &quot;delve&quot;. As verificações abaixo da carta pegam essas.">No em dashes, bold, bullets, or words like "passionate", "thrive", "align", "leverage", "robust", "delve". The checks under the letter catch these.</li>
+              <li data-pt="Sem adjetivos sobre você. Toda afirmação é algo que você consegue explicar numa conversa, tela por tela.">No adjectives about yourself. Every claim is something you can explain on a call, screen by screen.</li>
+              <li data-pt="Leia em voz alta uma vez e mude o que você não diria.">Read it out loud once and change anything you wouldn't say.</li>
+              <li data-pt="Campos de texto livre que uma pessoa lê: cerca de 100 palavras. Mais do que isso, o leitor só passa os olhos.">Free-text fields a person reads: about 100 words. A reader skims anything longer.</li>
             </ol>
           </section>
         </div>
@@ -722,14 +747,14 @@
 
       <dialog class="modal" id="autofill" aria-labelledby="autofill-title">
         <div class="modal-head">
-          <h2 id="autofill-title">Fill from a listing</h2>
-          <button type="button" class="icon-button" id="autofill-close" aria-label="Close">
+          <h2 id="autofill-title" data-pt="Preencher a partir de uma vaga">Fill from a listing</h2>
+          <button type="button" class="icon-button" id="autofill-close" aria-label="Close" data-pt-aria-label="Fechar">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
           </button>
         </div>
         <div class="tabs" role="tablist">
           <button type="button" role="tab" id="tab-connect" aria-controls="panel-connect" aria-selected="true">1. Claude Code</button>
-          <button type="button" role="tab" id="tab-listing" aria-controls="panel-listing" aria-selected="false" disabled>2. Listing</button>
+          <button type="button" role="tab" id="tab-listing" aria-controls="panel-listing" aria-selected="false" disabled data-pt="2. Vaga">2. Listing</button>
         </div>
 
         <section class="modal-body" role="tabpanel" id="panel-connect" aria-labelledby="tab-connect"></section>
@@ -737,44 +762,44 @@
         <section class="modal-body" role="tabpanel" id="panel-listing" aria-labelledby="tab-listing" hidden>
           <form id="listing-form" class="controls">
             <fieldset>
-              <legend class="group-label">What do you have?</legend>
+              <legend class="group-label" data-pt="O que você tem?">What do you have?</legend>
               <div class="pills">
-                <label><input type="radio" name="source" value="text" checked /><span>Copy - Paste</span></label>
+                <label><input type="radio" name="source" value="text" checked /><span data-pt="Copiar - Colar">Copy - Paste</span></label>
                 <label><input type="radio" name="source" value="url" /><span>URL</span></label>
-                <label><input type="radio" name="source" value="screenshot" /><span>Screenshot</span></label>
+                <label><input type="radio" name="source" value="screenshot" /><span data-pt="Captura de tela">Screenshot</span></label>
               </div>
             </fieldset>
             <div class="field" data-source="text">
-              <label for="listing-text">Paste the listing</label>
-              <textarea id="listing-text" rows="6" placeholder="Select everything on the job page (Ctrl+A), copy and paste it here."></textarea>
-              <p class="hint">Works best: nothing for Claude to open, nothing behind a login.</p>
+              <label for="listing-text" data-pt="Cole a vaga">Paste the listing</label>
+              <textarea id="listing-text" rows="6" placeholder="Select everything on the job page (Ctrl+A), copy and paste it here." data-pt-placeholder="Selecione tudo na página da vaga (Ctrl+A), copie e cole aqui."></textarea>
+              <p class="hint" data-pt="Funciona melhor: nada para o Claude abrir, nada atrás de login.">Works best: nothing for Claude to open, nothing behind a login.</p>
             </div>
             <div class="field" data-source="url" hidden>
-              <label for="listing-url">Link to the listing</label>
+              <label for="listing-url" data-pt="Link da vaga">Link to the listing</label>
               <input type="text" id="listing-url" inputmode="url" placeholder="https://…" />
-              <p class="hint">Fine for public pages. LinkedIn, Workday and other pages that need a login usually can't be opened; paste the text instead.</p>
+              <p class="hint" data-pt="Funciona com páginas públicas. LinkedIn, Workday e outras páginas que pedem login geralmente não abrem; cole o texto.">Fine for public pages. LinkedIn, Workday and other pages that need a login usually can't be opened; paste the text instead.</p>
             </div>
             <div class="field" data-source="screenshot" hidden>
-              <span class="group-label">Screenshot of the listing</span>
+              <span class="group-label" data-pt="Captura de tela da vaga">Screenshot of the listing</span>
               <div class="dropzone" id="dropzone">
-                <span id="dropzone-label">Paste it here (Ctrl+V), drop a file, or</span>
-                <button type="button" class="button secondary" id="screenshot-pick">Choose a file</button>
-                <button type="button" class="button secondary" id="screenshot-remove" hidden>Remove</button>
+                <span id="dropzone-label"></span>
+                <button type="button" class="button secondary" id="screenshot-pick" data-pt="Escolher arquivo">Choose a file</button>
+                <button type="button" class="button secondary" id="screenshot-remove" hidden data-pt="Remover">Remove</button>
                 <input type="file" id="screenshot-file" accept="image/png,image/jpeg,image/webp,image/gif" hidden />
               </div>
             </div>
-            <p class="hint">Each run starts a new Claude Code session. Claude reads the listing, checks the company's own careers pages for application preferences, then fills in the fields. It usually takes one to three minutes.</p>
+            <p class="hint" data-pt="Cada execução abre uma sessão nova do Claude Code. O Claude lê a vaga, confere as páginas de carreira da própria empresa atrás de preferências para candidaturas e preenche os campos. Costuma levar de um a três minutos.">Each run starts a new Claude Code session. Claude reads the listing, checks the company's own careers pages for application preferences, then fills in the fields. It usually takes one to three minutes.</p>
             <div class="error" id="listing-error" role="alert" hidden></div>
             <div class="modal-actions">
-              <button type="submit" class="button primary" id="listing-run">Fill it in</button>
+              <button type="submit" class="button primary" id="listing-run" data-pt="Preencher">Fill it in</button>
             </div>
           </form>
 
           <div id="listing-progress" hidden>
-            <div class="working"><span class="spinner" aria-hidden="true"></span>Claude is working<time id="listing-elapsed">0:00</time></div>
+            <div class="working"><span class="spinner" aria-hidden="true"></span><span data-pt="O Claude está trabalhando">Claude is working</span><time id="listing-elapsed">0:00</time></div>
             <ul class="progress" id="progress-list" aria-live="polite"></ul>
             <div class="modal-actions">
-              <button type="button" class="button secondary" id="listing-cancel">Cancel</button>
+              <button type="button" class="button secondary" id="listing-cancel" data-pt="Cancelar">Cancel</button>
             </div>
           </div>
         </section>
@@ -860,14 +885,14 @@
 
       const STORIES = {
         en: {
-          erp: "I work as a software developer at NetComet, an internet provider in southern Brazil. Most of my week goes into rewriting a decade-old, multi-tenant PHP ERP (sales, finance, Brazilian e-invoicing, ISP network management) as a React app on a PHP REST API, as its main developer. I write most of it with AI coding agents, and in a system like this a screen that looks right can still save the wrong data. So a screen only counts as done when a Puppeteer test runs its flows and checks the resulting rows in the database. 163 of its 186 screens pass so far. It isn't in production yet.",
+          erp: "I work as a software developer at NetComet, an internet provider in southern Brazil. Most of my week goes into rewriting a decade-old, multi-tenant PHP ERP (sales, finance, Brazilian e-invoicing, ISP network management) as a React app on a PHP REST API, as its main developer. I write most of it with AI coding agents and review every change myself, because in a system like this a screen that looks right can still save the wrong data. A screen only counts as done when a Puppeteer test runs its flows and checks the resulting rows in the database. 163 of its 186 screens pass so far. It isn't in production yet.",
           surveillance: "At NetComet I was the only developer of a video-surveillance product the company built on Frigate NVR for condominiums, office buildings and factories (Python/FastAPI, React/TypeScript). I wrote its automation engine, which turns detections, line crossings and recognized faces into push notifications, MQTT messages or on-screen alarms, and I used Gemini to describe events with the building's floor plan as context. It never went to market.",
-          school: "Outside work, I'm one of two developers of a school-transport platform that a municipal school network in southern Brazil is piloting, covering about 1,500 students in 19 schools. It runs on React, Node.js and PostgreSQL. My part includes the route suggestions, which use geocoding and OSRM walking distances to place each student on a route and stop.",
+          school: "Outside work, I co-developed a school-transport platform that the municipality of Imbé, in southern Brazil, runs its school transport on: its education and transport departments use it for about 1,500 students in 19 schools. It runs on React, Node.js and PostgreSQL. My part includes the route suggestions, which use geocoding and OSRM walking distances to place each student on a route and stop.",
         },
         pt: {
-          erp: "Sou o principal desenvolvedor da reescrita de um ERP multiempresa em PHP com mais de dez anos (vendas, financeiro, NF-e e gestão de rede de provedor) para React e uma API REST em PHP. Escrevo a maior parte com agentes de IA, e uma tela só conta como pronta quando um teste Puppeteer roda os fluxos e confere os dados gravados no banco. 163 das 186 telas já passam; o sistema ainda não está em produção.",
+          erp: "Sou o principal desenvolvedor da reescrita de um ERP multiempresa em PHP com mais de dez anos (vendas, financeiro, NF-e e gestão de rede de provedor) para React e uma API REST em PHP. Escrevo a maior parte com agentes de IA e reviso cada mudança eu mesmo, e uma tela só conta como pronta quando um teste Puppeteer roda os fluxos e confere os dados gravados no banco. 163 das 186 telas já passam; o sistema ainda não está em produção.",
           surveillance: "Lá, fui o único desenvolvedor de um produto de videomonitoramento que a empresa criou sobre o Frigate NVR para condomínios, prédios comerciais e fábricas (Python/FastAPI, React/TypeScript). Criei o motor de automações, que transforma detecções, cruzamentos de linha e rostos reconhecidos em notificações push, mensagens MQTT ou alarmes na tela, e usei o Gemini para descrever eventos com a planta do prédio como contexto. O produto não chegou ao mercado.",
-          school: "Fora do trabalho, sou um de dois desenvolvedores de uma plataforma de transporte escolar (React, Node.js, PostgreSQL) que a rede municipal de ensino de uma cidade do RS usa em piloto, com cerca de 1.500 alunos em 19 escolas. Fiz a sugestão de rotas, com geocodificação e distâncias a pé calculadas pelo OSRM.",
+          school: "Fora do trabalho, codesenvolvi uma plataforma de transporte escolar (React, Node.js, PostgreSQL) que a prefeitura de Imbé (RS) usa no transporte escolar, nas secretarias de Educação e de Transportes, com cerca de 1.500 alunos em 19 escolas. Fiz a sugestão de rotas, com geocodificação e distâncias a pé calculadas pelo OSRM.",
         },
       };
 
@@ -1230,10 +1255,10 @@ ${inputs}
 # Pedro (these are the only facts; never add to them)
 - Software developer in Santo Antônio da Patrulha, RS, Brazil (UTC−3). Portuguese native, English C1.
 - NetComet, an internet provider: software development intern from May 2025, software developer since September 2025.
-- Studying Systems Analysis and Development (technologist degree) at IFRS, Osório campus; expected to finish in 2027.
+- Studying Systems Analysis and Development (technologist degree) at IFRS, Osório campus, since February 2025; expected to finish in December 2027.
 - Stack: TypeScript, JavaScript, React, Node.js, Python (FastAPI), PHP (Slim), PostgreSQL, MySQL, Docker, Puppeteer, Gemini API, MQTT.
-- Writes most of his code with AI coding agents and counts work as done only when tests confirm it.
-- Side projects: Agent Session Manager (open-source KDE Plasma widget that tracks Claude Code sessions; 200+ tests; on the KDE Store) and Claude Acc-Manager (command-line tool for several Claude Code accounts on one machine).
+- Writes most of his code with AI coding agents, reviews every change himself, and counts work as done only when tests confirm it.
+- Side project: Agent Session Manager (open-source KDE Plasma widget that tracks Claude Code sessions; 200+ tests; on the KDE Store).
 - His three stories are the paragraphs under "story" below.
 
 # Options
@@ -1506,9 +1531,9 @@ ${KNOWN_GUIDANCE}`;
       function paintScreenshot() {
         const label = $("dropzone-label");
         if (screenshot) {
-          label.replaceChildren(Object.assign(document.createElement("img"), { src: screenshot.url, alt: "Screenshot of the listing" }));
+          label.replaceChildren(Object.assign(document.createElement("img"), { src: screenshot.url, alt: tr("Screenshot of the listing", "Captura de tela da vaga") }));
         } else {
-          label.textContent = "Paste it here (Ctrl+V), drop a file, or";
+          label.textContent = tr("Paste it here (Ctrl+V), drop a file, or", "Cole aqui (Ctrl+V), arraste um arquivo ou");
         }
         $("screenshot-pick").hidden = Boolean(screenshot);
         $("screenshot-remove").hidden = !screenshot;
@@ -1694,7 +1719,7 @@ ${KNOWN_GUIDANCE}`;
         const dark = currentTheme() === "dark";
         // Like the site: the icon shows where a click leads.
         themeButton.innerHTML = dark ? SUN : MOON;
-        themeButton.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
+        themeButton.setAttribute("aria-label", dark ? tr("Switch to light theme", "Mudar para o tema claro") : tr("Switch to dark theme", "Mudar para o tema escuro"));
       }
 
       themeButton.addEventListener("click", () => {

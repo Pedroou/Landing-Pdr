@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Monthly, so the years of experience in the PDFs keep up (src/content/profile.ts).
+  # GitHub pauses schedules after 60 days without a push; re-enable it in Actions.
+  schedule:
+    - cron: "0 9 1 * *"
 
 permissions:
   contents: read
