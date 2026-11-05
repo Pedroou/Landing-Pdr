@@ -412,8 +412,8 @@
       .shiny {
         /* Halfway between button and text in both themes: reads as metal, keeps contrast. */
         --sheen: color-mix(in oklch, var(--muted) 65%, var(--bg));
-        /* The sweep takes 35% of this (about 2.8s), then rests. */
-        --sheen-period: 8s;
+        /* The sweep takes 35% of this (about 3.5s), then rests. */
+        --sheen-period: 10s;
         position: relative;
         display: inline-flex;
         align-items: center;
@@ -422,8 +422,9 @@
         isolation: isolate;
       }
       .shiny:hover,
-      .shiny:focus-visible { --sheen-period: 4s; }
-      .shiny svg { flex: none; width: 1.0625rem; height: 1.0625rem; }
+      .shiny:focus-visible { --sheen-period: 5s; }
+      /* As tall as the text's line, so the sparkles read without growing the button. */
+      .shiny svg { flex: none; width: 1.375rem; height: 1.375rem; margin-block: -0.0625rem; }
       .shiny::before,
       .shiny::after {
         content: "";
@@ -460,8 +461,8 @@
         animation: spark var(--sheen-period) var(--ease-out) 0.8s infinite;
       }
       /* The sweep crosses the icon early in the cycle; stagger the sparkles behind it. */
-      .shiny .spark:nth-of-type(4) { animation-delay: 1.2s; }
-      .shiny .spark:nth-of-type(5) { animation-delay: 1.6s; }
+      .shiny .spark:nth-of-type(4) { animation-delay: 1.3s; }
+      .shiny .spark:nth-of-type(5) { animation-delay: 1.8s; }
       @keyframes sheen {
         0% { translate: -110% 0; }
         35%,
