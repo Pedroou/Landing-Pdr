@@ -326,15 +326,18 @@ async function prepare() {
 
 // --- One autofill run ---------------------------------------------------------
 
+/** Progress as data ({ kind, detail }), so the page words it in its own language. */
 function describeTool(block) {
   const input = block.input ?? {};
-  if (block.name === "WebSearch") return `Searching: ${input.query ?? ""}`;
+  if (block.name === "WebSearch")
+    return { kind: "search", detail: input.query ?? "" };
   if (block.name === "WebFetch") {
     try {
       const url = new URL(input.url);
-      return `Reading ${url.hostname}${url.pathname === "/" ? "" : url.pathname}`;
+      const path = url.pathname === "/" ? "" : url.pathname;
+      return { kind: "read", detail: `${url.hostname}${path}` };
     } catch {
-      return "Reading a page";
+      return { kind: "read", detail: "" };
     }
   }
   return null;
@@ -434,8 +437,8 @@ async function autofill(request, response) {
       }
       if (event.type === "assistant") {
         for (const block of event.message?.content ?? []) {
-          const text = block.type === "tool_use" ? describeTool(block) : null;
-          if (text) send({ type: "progress", text });
+          const step = block.type === "tool_use" ? describeTool(block) : null;
+          if (step) send({ type: "progress", ...step });
         }
       } else if (event.type === "result") {
         if (event.is_error || event.subtype !== "success") {
@@ -479,7 +482,7 @@ async function autofill(request, response) {
   child.stdin.end(
     `${JSON.stringify({ type: "user", message: { role: "user", content } })}\n`,
   );
-  send({ type: "progress", text: "Started a new Claude Code session" });
+  send({ type: "progress", kind: "start" });
 }
 
 function parseRequest(body) {

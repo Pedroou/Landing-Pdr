@@ -110,6 +110,7 @@
       }
       .icon-button:hover { color: var(--fg); }
       .icon-button svg { width: 1.125rem; height: 1.125rem; }
+
       /* Same look as the site's language switch: muted text, full colour on hover. */
       .text-button {
         display: flex;
@@ -817,6 +818,26 @@
         asm: "https://github.com/Pedroou/agent-session-manager",
       };
 
+      // --- Page language ----------------------------------------------------------
+      // The page's own words (labels, hints, checks). Separate from the letter's
+      // language, which is a field of the letter. Static text carries its
+      // Portuguese in data-pt attributes; script text goes through tr().
+
+      const UI_LANG_KEY = "cover-letter-ui-lang";
+      const isUiLang = (value) => value === "en" || value === "pt";
+
+      function initialUiLang() {
+        try {
+          const saved = localStorage.getItem(UI_LANG_KEY);
+          if (isUiLang(saved)) return saved;
+        } catch {}
+        return (navigator.languages ?? [navigator.language]).map((tag) => tag.slice(0, 2).toLowerCase()).find(isUiLang) ?? "en";
+      }
+
+      let uiLang = initialUiLang();
+      const tr = (en, pt) => (uiLang === "pt" ? pt : en);
+      const formatNumber = (n) => n.toLocaleString(tr("en", "pt-BR"));
+
       const STORAGE_KEY = "cover-letter-builder";
       const DEFAULTS = {
         mode: "letter",
@@ -1035,19 +1056,22 @@
         const items = [];
         const all = [...(result.subject ? [result.subject] : []), ...result.body].flat();
         const blanks = [...new Set(all.filter((part) => typeof part !== "string" && !part.value).map((part) => part.label))];
-        if (blanks.length) items.push({ warn: true, text: `${blanks.length} blank${blanks.length > 1 ? "s" : ""} left: ${blanks.join("; ")}` });
+        if (blanks.length) {
+          const left = blanks.length > 1 ? tr(`${blanks.length} blanks left`, `${blanks.length} campos em branco`) : tr("1 blank left", "1 campo em branco");
+          items.push({ warn: true, text: `${left}: ${blanks.join("; ")}` });
+        }
 
         const banned = [...new Set((text.match(BANNED) ?? []).map((word) => word.toLowerCase()))];
-        if (banned.length) items.push({ warn: true, text: `Words to cut: ${banned.join(", ")}` });
-        if (text.includes("—")) items.push({ warn: true, text: "Contains an em dash (—)" });
+        if (banned.length) items.push({ warn: true, text: `${tr("Words to cut", "Palavras para cortar")}: ${banned.join(", ")}` });
+        if (text.includes("—")) items.push({ warn: true, text: tr("Contains an em dash (—)", "Tem um travessão (—)") });
 
         const words = text.split(/\s+/).filter(Boolean).length;
         if (state.mode === "short" && words > SHORT_ANSWER_WORDS)
-          items.push({ warn: true, text: `${words} words: aim for about 100, a reader skims anything longer` });
+          items.push({ warn: true, text: tr(`${words} words: aim for about 100, a reader skims anything longer`, `${words} palavras: o ideal é cerca de 100; mais do que isso, o leitor só passa os olhos`) });
         if (state.mode === "letter" && state.lang === "pt" && !state.email && text.length > GUPY_LIMIT)
-          items.push({ warn: true, text: `${text.length} characters: over Gupy's ${GUPY_LIMIT.toLocaleString("en")}` });
+          items.push({ warn: true, text: tr(`${formatNumber(text.length)} characters: over Gupy's ${formatNumber(GUPY_LIMIT)}`, `${formatNumber(text.length)} caracteres: passa dos ${formatNumber(GUPY_LIMIT)} da Gupy`) });
 
-        if (!items.length) items.push({ warn: false, text: "No blanks or flagged words. Read it out loud once before sending." });
+        if (!items.length) items.push({ warn: false, text: tr("No blanks or flagged words. Read it out loud once before sending.", "Nenhum campo em branco nem palavra marcada. Leia em voz alta uma vez antes de enviar.") });
         return items;
       }
 
@@ -1067,10 +1091,11 @@
         if (result.subject) document.getElementById("subject-text").replaceChildren(renderParagraph(result.subject));
 
         const words = text.split(/\s+/).filter(Boolean).length;
+        const counted = `${words} ${tr("words", "palavras")} · ${formatNumber(text.length)}`;
         document.getElementById("count").textContent =
           state.lang === "pt" && state.mode === "letter"
-            ? `${words} words · ${text.length.toLocaleString("en")} / ${GUPY_LIMIT.toLocaleString("en")} characters`
-            : `${words} words · ${text.length.toLocaleString("en")} characters`;
+            ? `${counted} / ${formatNumber(GUPY_LIMIT)} ${tr("characters", "caracteres")}`
+            : `${counted} ${tr("characters", "caracteres")}`;
 
         document.getElementById("checks").replaceChildren(
           ...checks({ ...result, body }, text).map(({ warn, text: message }) => {
@@ -1173,7 +1198,7 @@
           area.remove();
         }
         const label = button.textContent;
-        button.textContent = "Copied";
+        button.textContent = tr("Copied", "Copiado");
         setTimeout(() => (button.textContent = label), 1500);
       }
 
@@ -1283,8 +1308,8 @@ ${inputs}
 - Style for both: plain and factual. No adjectives about Pedro, no flattery, no em dashes, and none of these words: passionate, thrive, align, leverage, robust, delve, apaixonado, alavancar.
 
 # Report
-- findings: up to 4 company preferences that matter for this application. Each is one English sentence of at most 25 words on what the company prefers and what you did about it, with the URL of the page that says so (the company's own page when possible). Always include it when the company doesn't read or doesn't accept cover letters. Use [] if you found nothing specific.
-- summary: one English sentence of at most 35 words on what you used (URL, text or screenshot) and anything Pedro should check, such as a URL that couldn't be opened, a time-zone mismatch, or a screening question that a short answer would fit better.
+- findings: up to 4 company preferences that matter for this application. Each is one ${tr("English", "Brazilian Portuguese")} sentence of at most 25 words on what the company prefers and what you did about it, with the URL of the page that says so (the company's own page when possible). Always include it when the company doesn't read or doesn't accept cover letters. Use [] if you found nothing specific.
+- summary: one ${tr("English", "Brazilian Portuguese")} sentence of at most 35 words on what you used (URL, text or screenshot) and anything Pedro should check, such as a URL that couldn't be opened, a time-zone mismatch, or a screening question that a short answer would fit better.
 
 # Known guidance
 ${KNOWN_GUIDANCE}`;
@@ -1334,21 +1359,28 @@ ${KNOWN_GUIDANCE}`;
         ? "<code>Start cover letter helper.cmd</code>"
         : /linux|x11/i.test(PLATFORM)
           ? "<code>start-cover-letter-helper.sh</code>"
-          : "<code>Start cover letter helper.cmd</code> (Windows) or <code>start-cover-letter-helper.sh</code> (Linux)";
-      const FIRST_TIME = `<p class="first-time"><strong>First time on this computer?</strong> Start the helper once by double-clicking ${LAUNCHER} in this page's folder.</p>`;
+          : null;
+      const firstTime = () => {
+        const launcher =
+          LAUNCHER ?? tr("<code>Start cover letter helper.cmd</code> (Windows) or <code>start-cover-letter-helper.sh</code> (Linux)", "<code>Start cover letter helper.cmd</code> (Windows) ou <code>start-cover-letter-helper.sh</code> (Linux)");
+        return `<p class="first-time">${tr(
+          `<strong>First time on this computer?</strong> Start the helper once by double-clicking ${launcher} in this page's folder.`,
+          `<strong>Primeira vez neste computador?</strong> Inicie o ajudante uma vez com dois cliques em ${launcher}, na pasta desta página.`,
+        )}</p>`;
+      };
 
       function renderNotRunning(message) {
         const secondary =
           location.protocol === "file:"
-            ? `<button type="button" class="button secondary" data-action="open-helper">Already running? Open its page</button>`
-            : `<button type="button" class="button secondary" data-action="recheck">Check again</button>`;
+            ? `<button type="button" class="button secondary" data-action="open-helper">${tr("Already running? Open its page", "Já está aberto? Abrir a página dele")}</button>`
+            : `<button type="button" class="button secondary" data-action="recheck">${tr("Check again", "Verificar de novo")}</button>`;
         panels.connect.innerHTML = `
           <p>${message}</p>
           <div class="modal-actions">
             ${secondary}
-            <button type="button" class="button primary" data-action="start">Start the helper</button>
+            <button type="button" class="button primary" data-action="start">${tr("Start the helper", "Iniciar o ajudante")}</button>
           </div>
-          ${FIRST_TIME}`;
+          ${firstTime()}`;
       }
 
       let setupPoll = null;
@@ -1356,9 +1388,9 @@ ${KNOWN_GUIDANCE}`;
 
       async function checkHelper({ quiet = false } = {}) {
         clearTimeout(setupPoll);
-        if (!quiet) panels.connect.innerHTML = `<p class="working"><span class="spinner" aria-hidden="true"></span>Looking for Claude Code…</p>`;
+        if (!quiet) panels.connect.innerHTML = `<p class="working"><span class="spinner" aria-hidden="true"></span>${tr("Looking for Claude Code…", "Procurando o Claude Code…")}</p>`;
         if (location.protocol === "file:") {
-          renderNotRunning("To fill this in with Claude Code, start the helper first.");
+          renderNotRunning(tr("To fill this in with Claude Code, start the helper first.", "Para preencher com o Claude Code, inicie o ajudante primeiro."));
           return;
         }
         let status;
@@ -1367,7 +1399,7 @@ ${KNOWN_GUIDANCE}`;
           if (!response.ok) throw new Error();
           status = await response.json();
         } catch {
-          renderNotRunning("The helper stopped. Start it again to continue.");
+          renderNotRunning(tr("The helper stopped. Start it again to continue.", "O ajudante parou. Inicie de novo para continuar."));
           return;
         }
         renderConnect(status);
@@ -1375,7 +1407,7 @@ ${KNOWN_GUIDANCE}`;
 
       /** The helper's page with this page's fields: file:// and http:// pages don't share storage. */
       function helperPageUrl() {
-        return `${HELPER_URL}#${new URLSearchParams({ import: JSON.stringify(state), autofill: "1" })}`;
+        return `${HELPER_URL}#${new URLSearchParams({ import: JSON.stringify(state), ui: uiLang, autofill: "1" })}`;
       }
 
       async function helperIsUp() {
@@ -1392,8 +1424,11 @@ ${KNOWN_GUIDANCE}`;
         // Hands the link to the OS, which runs the helper. Has to happen inside the click.
         location.href = HELPER_LINK;
         panels.connect.innerHTML = `
-          <p class="working"><span class="spinner" aria-hidden="true"></span>Starting the helper…</p>
-          <p class="hint">If the browser asks whether to open "Cover letter helper" or xdg-open, allow it. Ticking "always allow" skips the question next time.</p>`;
+          <p class="working"><span class="spinner" aria-hidden="true"></span>${tr("Starting the helper…", "Iniciando o ajudante…")}</p>
+          <p class="hint">${tr(
+            'If the browser asks whether to open "Cover letter helper" or xdg-open, allow it. Ticking "always allow" skips the question next time.',
+            'Se o navegador perguntar se pode abrir o "Cover letter helper" ou o xdg-open, permita. Marcar "sempre permitir" evita a pergunta da próxima vez.',
+          )}</p>`;
         const deadline = Date.now() + 60_000;
         while (Date.now() < deadline) {
           if (await helperIsUp()) {
@@ -1403,7 +1438,7 @@ ${KNOWN_GUIDANCE}`;
           }
           await new Promise((resolve) => setTimeout(resolve, 1000));
         }
-        renderNotRunning("The helper didn't start. If this is your first time on this computer, see below.");
+        renderNotRunning(tr("The helper didn't start. If this is your first time on this computer, see below.", "O ajudante não iniciou. Se é a primeira vez neste computador, veja abaixo."));
       }
 
       /** Reads fields handed over by `helperPageUrl`; returns whether to open the autofill. */
@@ -1420,11 +1455,16 @@ ${KNOWN_GUIDANCE}`;
         } catch {
           // A broken link: keep what this page already had.
         }
+        if (isUiLang(params.get("ui"))) setUiLang(params.get("ui"));
         history.replaceState(null, "", location.pathname + location.search);
         return params.get("autofill") === "1";
       }
 
-      const PLAN_NOTE = "Claude Code needs a paid Claude plan (Pro, Max, Team or Enterprise); the free plan doesn't include it.";
+      const planNote = () =>
+        tr(
+          "Claude Code needs a paid Claude plan (Pro, Max, Team or Enterprise); the free plan doesn't include it.",
+          "O Claude Code precisa de um plano pago do Claude (Pro, Max, Team ou Enterprise); o plano gratuito não inclui.",
+        );
 
       function renderWorking(message, hint) {
         panels.connect.innerHTML = `
@@ -1434,7 +1474,7 @@ ${KNOWN_GUIDANCE}`;
 
       /** Asks the helper to install Claude Code or sign in; it shows that in its own window. */
       async function startSetup(path) {
-        panels.connect.innerHTML = `<p class="working"><span class="spinner" aria-hidden="true"></span>Starting…</p>`;
+        panels.connect.innerHTML = `<p class="working"><span class="spinner" aria-hidden="true"></span>${tr("Starting…", "Iniciando…")}</p>`;
         try {
           await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
         } catch {}
@@ -1445,25 +1485,31 @@ ${KNOWN_GUIDANCE}`;
         // The helper installs Claude Code and signs in by itself on its first start.
         if (setup) {
           waitedForSetup = true;
-          if (setup === "installing") renderWorking("Installing Claude Code…", "This takes a minute or two. You can follow it in the helper's window.");
-          else renderWorking("Sign in to Claude in the browser tab that opened.", `Come back here when it says you're signed in. ${PLAN_NOTE}`);
+          if (setup === "installing") {
+            renderWorking(tr("Installing Claude Code…", "Instalando o Claude Code…"), tr("This takes a minute or two. You can follow it in the helper's window.", "Leva um ou dois minutos. Dá para acompanhar na janela do ajudante."));
+          } else {
+            renderWorking(
+              tr("Sign in to Claude in the browser tab that opened.", "Entre na sua conta do Claude na aba do navegador que abriu."),
+              `${tr("Come back here when it says you're signed in.", "Volte aqui quando aparecer que você entrou.")} ${planNote()}`,
+            );
+          }
           if (dialog.open) setupPoll = setTimeout(() => checkHelper({ quiet: true }), 2000);
           return;
         }
 
         if (!claude) {
           panels.connect.innerHTML = `
-            <p>Claude Code isn't on this computer yet.</p>
-            <div class="modal-actions"><button type="button" class="button primary" data-action="install">Install Claude Code</button></div>`;
+            <p>${tr("Claude Code isn't on this computer yet.", "O Claude Code ainda não está neste computador.")}</p>
+            <div class="modal-actions"><button type="button" class="button primary" data-action="install">${tr("Install Claude Code", "Instalar o Claude Code")}</button></div>`;
           return;
         }
 
         const usable = accounts.filter((a) => a.loggedIn);
         if (!usable.length) {
           panels.connect.innerHTML = `
-            <p>Sign in to Claude to continue.</p>
-            <p class="hint">${PLAN_NOTE}</p>
-            <div class="modal-actions"><button type="button" class="button primary" data-action="sign-in">Sign in</button></div>`;
+            <p>${tr("Sign in to Claude to continue.", "Entre na sua conta do Claude para continuar.")}</p>
+            <p class="hint">${planNote()}</p>
+            <div class="modal-actions"><button type="button" class="button primary" data-action="sign-in">${tr("Sign in", "Entrar")}</button></div>`;
           return;
         }
 
@@ -1473,20 +1519,20 @@ ${KNOWN_GUIDANCE}`;
             const details = [a.org, a.plan, a.dir].filter(Boolean).map(escapeHtml).join(" · ");
             return `<label>
                 <input type="radio" name="claude-account" value="${escapeHtml(a.id)}" ${a.loggedIn ? "" : "disabled"} ${a === preferred ? "checked" : ""} />
-                <span>${a.loggedIn ? escapeHtml(a.email || "Logged in") : "Not logged in"}<small>${details}</small></span>
+                <span>${a.loggedIn ? escapeHtml(a.email || tr("Logged in", "Conectada")) : tr("Not logged in", "Sem login")}<small>${details}</small></span>
               </label>`;
           })
           .join("");
 
         panels.connect.innerHTML = `
-          <p>Found Claude Code ${escapeHtml(claude.version)} at <code>${escapeHtml(claude.path)}</code>.</p>
+          <p>${tr(`Found Claude Code ${escapeHtml(claude.version)} at`, `Claude Code ${escapeHtml(claude.version)} encontrado em`)} <code>${escapeHtml(claude.path)}</code>.</p>
           <fieldset>
-            <legend class="group-label">Account to use</legend>
+            <legend class="group-label">${tr("Account to use", "Conta a usar")}</legend>
             <div class="choices accounts">${rows}</div>
           </fieldset>
           <div class="modal-actions">
-            <button type="button" class="button secondary" data-action="recheck">Check again</button>
-            <button type="button" class="button primary" data-action="connect">Continue</button>
+            <button type="button" class="button secondary" data-action="recheck">${tr("Check again", "Verificar de novo")}</button>
+            <button type="button" class="button primary" data-action="connect">${tr("Continue", "Continuar")}</button>
           </div>`;
 
         // Already set up on an earlier visit, or just now: go straight to the listing.
@@ -1542,7 +1588,7 @@ ${KNOWN_GUIDANCE}`;
       /** Scales big screenshots down and re-encodes them, so uploads stay small. */
       async function setScreenshot(file) {
         if (!file) return;
-        if (!IMAGE_TYPES.includes(file.type)) return showError("Use a PNG, JPEG, WebP or GIF image.");
+        if (!IMAGE_TYPES.includes(file.type)) return showError(tr("Use a PNG, JPEG, WebP or GIF image.", "Use uma imagem PNG, JPEG, WebP ou GIF."));
         showError("");
         const bitmap = await createImageBitmap(file);
         const scale = Math.min(1, MAX_IMAGE_EDGE / Math.max(bitmap.width, bitmap.height));
@@ -1618,6 +1664,13 @@ ${KNOWN_GUIDANCE}`;
         if (on) $("progress-list").replaceChildren();
       }
 
+      /** The helper reports steps as data, so they read in the page's language. */
+      function describeProgress({ kind, detail }) {
+        if (kind === "search") return `${tr("Searching", "Pesquisando")}: ${detail}`;
+        if (kind === "read") return `${tr("Reading", "Lendo")} ${detail}`;
+        return tr("Started a new Claude Code session", "Sessão nova do Claude Code iniciada");
+      }
+
       function addProgress(text) {
         const list = $("progress-list");
         list.append(Object.assign(document.createElement("li"), { textContent: text }));
@@ -1644,9 +1697,15 @@ ${KNOWN_GUIDANCE}`;
           image: source === "screenshot" ? screenshot : null,
         };
         if (!listing.text && !listing.url && !listing.image) {
-          return showError({ text: "Paste the listing first.", url: "Paste the link first.", screenshot: "Add a screenshot first." }[source]);
+          return showError(
+            {
+              text: tr("Paste the listing first.", "Cole a vaga primeiro."),
+              url: tr("Paste the link first.", "Cole o link primeiro."),
+              screenshot: tr("Add a screenshot first.", "Adicione uma captura de tela primeiro."),
+            }[source],
+          );
         }
-        if (listing.url && !safeUrl(listing.url)) return showError("The URL should start with https://");
+        if (listing.url && !safeUrl(listing.url)) return showError(tr("The URL should start with https://", "O link deve começar com https://"));
         showError("");
 
         running = new AbortController();
@@ -1672,7 +1731,7 @@ ${KNOWN_GUIDANCE}`;
           });
           if (!response.ok) {
             const body = await response.json().catch(() => ({}));
-            throw new Error(body.error || `The helper answered with an error (${response.status}).`);
+            throw new Error(body.error || tr(`The helper answered with an error (${response.status}).`, `O ajudante respondeu com um erro (${response.status}).`));
           }
 
           const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
@@ -1686,19 +1745,19 @@ ${KNOWN_GUIDANCE}`;
             buffer = lines.pop() ?? "";
             for (const line of lines.filter(Boolean)) {
               const message = JSON.parse(line);
-              if (message.type === "progress") addProgress(message.text);
+              if (message.type === "progress") addProgress(describeProgress(message));
               else outcome = message;
             }
           }
-          if (!outcome) throw new Error("The helper stopped without an answer.");
+          if (!outcome) throw new Error(tr("The helper stopped without an answer.", "O ajudante parou sem responder."));
           if (outcome.type === "error") throw new Error(outcome.message);
 
           applyAutofill(outcome.data);
           dialog.close();
         } catch (error) {
           if (error.name === "AbortError") showError("");
-          else if (error instanceof TypeError) showError("Lost the connection to the helper. Is its window still open?");
-          else showError(error.message || "Something went wrong.");
+          else if (error instanceof TypeError) showError(tr("Lost the connection to the helper. Is its window still open?", "A conexão com o ajudante caiu. A janela dele ainda está aberta?"));
+          else showError(error.message || tr("Something went wrong.", "Algo deu errado."));
         } finally {
           clearInterval(clock);
           running = null;
@@ -1732,10 +1791,57 @@ ${KNOWN_GUIDANCE}`;
       });
       systemDark.addEventListener("change", paintThemeButton);
 
+      // --- Page language switch ----------------------------------------------------
+
+      const LANGUAGE_NAMES = { en: "English", pt: "Português" };
+      const languageButton = $("ui-lang");
+
+      function setUiLang(next) {
+        uiLang = next;
+        try {
+          localStorage.setItem(UI_LANG_KEY, next);
+        } catch {}
+      }
+
+      /** Swaps every translatable text; the English is kept the first time. */
+      function applyUiLang() {
+        document.documentElement.lang = tr("en", "pt-BR");
+        document.title = tr("Cover letters · Pedro Ourique", "Cartas de apresentação · Pedro Ourique");
+
+        for (const el of document.querySelectorAll("[data-pt]")) {
+          el.dataset.en ??= el.innerHTML;
+          el.innerHTML = uiLang === "pt" ? el.dataset.pt : el.dataset.en;
+        }
+        for (const [attribute, key] of [["placeholder", "Placeholder"], ["aria-label", "AriaLabel"]]) {
+          for (const el of document.querySelectorAll(`[data-pt-${attribute}]`)) {
+            el.dataset[`en${key}`] ??= el.getAttribute(attribute) ?? "";
+            el.setAttribute(attribute, uiLang === "pt" ? el.dataset[`pt${key}`] : el.dataset[`en${key}`]);
+          }
+        }
+        // The site's pages in the same language, as its own links do.
+        for (const link of document.querySelectorAll("[data-site-page]")) {
+          link.href = `https://pedroou.github.io/Landing-Pdr/${link.dataset.sitePage}?lang=${uiLang}`;
+        }
+
+        // Like the site: the button names the other language, in that language.
+        const other = uiLang === "pt" ? "en" : "pt";
+        languageButton.innerHTML = `<span class="visually-hidden">${tr("Language", "Idioma")}: </span><span lang="${other}">${LANGUAGE_NAMES[other]}</span>`;
+
+        paintThemeButton();
+        paintScreenshot();
+        render();
+        // An open dialog's first step is built by script; rebuild it in the new language.
+        if (dialog.open && !panels.connect.hidden && !running) checkHelper({ quiet: true });
+      }
+
+      languageButton.addEventListener("click", () => {
+        setUiLang(uiLang === "pt" ? "en" : "pt");
+        applyUiLang();
+      });
+
       const openAutofillNow = importFromLink();
       syncForm();
-      paintThemeButton();
-      render();
+      applyUiLang();
       if (openAutofillNow) openAutofill();
     </script>
   </body>
