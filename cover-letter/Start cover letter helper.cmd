@@ -25,4 +25,5 @@ exit /b 1
 
 :run
 "%NODE%" "%~dp0cover-letter-helper.mjs"
-pause
+rem Keep the window open only when something went wrong, so the message stays readable.
+if errorlevel 1 pause

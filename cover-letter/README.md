@@ -4,19 +4,20 @@ A page that writes a cover letter from a fixed template. You can fill in the bla
 
 ## What you need
 
-- Claude Code, logged in: open a terminal, run `claude` and sign in to your account.
+A paid Claude plan (Pro, Max, Team or Enterprise). The free plan doesn't include Claude Code, which fills in the letter.
 
-Node.js is also needed, but you don't have to install it: the launcher below installs it the first time if it's missing.
+You don't have to install anything yourself. The first time, the launcher below installs what's missing: Node.js, then Claude Code (the Claude desktop app's copy is used if it has one). Then it opens Claude's sign-in in your browser.
 
-Without Claude Code the page works the same; only the button that fills it in with AI doesn't.
+Without a paid plan the page works the same; only the button that fills it in with AI doesn't.
 
 ## First time
 
 1. Right-click the `.zip` and choose **Extract All**. Don't open anything from inside the `.zip` before extracting it.
 2. In the extracted folder, double-click `Start cover letter helper.cmd`.
    - If Windows shows **Windows protected your PC**, click **More info**, then **Run anyway**.
-   - A black window opens. The first time, it installs Node.js, which takes a minute or two; if Windows asks for permission, click **Yes**.
-   - Then the page opens in your browser. Keep the black window open while you use the page; close it to stop.
+   - A black window opens. The first time, it installs Node.js and Claude Code, which takes a few minutes; if Windows asks for permission, click **Yes**.
+   - Then the page opens in your browser, and a second tab asks you to sign in to Claude. Sign in, then go back to the page.
+   - Keep the black window open while you use the page; close it to stop.
 3. On the page, **Fill from a listing with Claude Code** fills in the letter from a job listing.
 
 ## Next times

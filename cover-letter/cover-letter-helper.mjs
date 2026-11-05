@@ -77,33 +77,92 @@ function toCommand(file) {
     : { path: file, command: process.execPath, prefix: [full] };
 }
 
-function findClaude() {
-  if (process.env.CLAUDE_PATH) {
-    return isFile(process.env.CLAUDE_PATH)
-      ? toCommand(process.env.CLAUDE_PATH)
-      : null;
+const readdirSafe = (dir) => {
+  try {
+    return readdirSync(dir);
+  } catch {
+    return [];
   }
+};
+
+/** Every place Claude Code may be, most likely first. */
+function claudeCandidates() {
+  if (process.env.CLAUDE_PATH) return [process.env.CLAUDE_PATH];
   const home = homedir();
+  const appData = process.env.APPDATA ?? join(home, "AppData", "Roaming");
+  const localAppData =
+    process.env.LOCALAPPDATA ?? join(home, "AppData", "Local");
   const names = IS_WINDOWS ? ["claude.exe", "claude.cmd"] : ["claude"];
   const dirs = [
     ...(process.env.PATH ?? "").split(delimiter).filter(Boolean),
     join(home, ".local", "bin"),
     join(home, ".claude", "local"),
     ...(IS_WINDOWS
-      ? [join(process.env.APPDATA ?? join(home, "AppData", "Roaming"), "npm")]
+      ? [join(appData, "npm")]
       : [
           "/usr/local/bin",
           "/opt/homebrew/bin",
           join(home, ".npm-global", "bin"),
         ]),
   ];
-  for (const dir of dirs) {
-    for (const name of names) {
-      const file = join(dir, name);
-      if (isFile(file)) {
-        const command = toCommand(file);
-        if (command) return command;
-      }
+  const files = dirs.flatMap((dir) => names.map((name) => join(dir, name)));
+
+  if (IS_WINDOWS) {
+    // The Claude desktop app keeps its own copy in claude-code\<version>\. It's
+    // an MSIX app, so from outside it that %APPDATA% folder lives under Packages.
+    const roots = [
+      join(appData, "Claude", "claude-code"),
+      ...readdirSafe(join(localAppData, "Packages"))
+        .filter((name) => name.startsWith("Claude_"))
+        .map((name) =>
+          join(
+            localAppData,
+            "Packages",
+            name,
+            "LocalCache",
+            "Roaming",
+            "Claude",
+            "claude-code",
+          ),
+        ),
+    ];
+    const bundled = roots.flatMap((root) =>
+      readdirSafe(root)
+        .filter((name) => /^\d+(\.\d+)*$/.test(name))
+        .map((version) => ({
+          version,
+          file: join(root, version, "claude.exe"),
+        })),
+    );
+    bundled.sort((a, b) =>
+      b.version.localeCompare(a.version, undefined, { numeric: true }),
+    );
+    files.push(...bundled.map((copy) => copy.file));
+  }
+  return files;
+}
+
+let foundClaude = null;
+
+/**
+ * The first candidate that actually runs. Some exist and still fail, like the
+ * launchers the desktop app puts in ~/.local/bin, so each one is tried.
+ */
+async function findClaude() {
+  if (foundClaude && isFile(foundClaude.path)) return foundClaude;
+  foundClaude = null;
+  for (const file of claudeCandidates()) {
+    if (!isFile(file)) continue;
+    const command = toCommand(file);
+    if (!command) continue;
+    const { ok, stdout } = await runQuiet(
+      command,
+      ["--version"],
+      childEnv("default"),
+    );
+    if (ok) {
+      foundClaude = { ...command, version: stdout.trim().split(/\s/)[0] ?? "" };
+      return foundClaude;
     }
   }
   return null;
@@ -182,19 +241,87 @@ async function accountStatus(claude, account) {
 }
 
 async function status() {
-  const claude = findClaude();
-  if (!claude) return { claude: null, accounts: [] };
-  const [version, accounts] = await Promise.all([
-    runQuiet(claude, ["--version"], childEnv("default")),
-    Promise.all(configDirs().map((account) => accountStatus(claude, account))),
-  ]);
+  const claude = await findClaude();
+  if (!claude) return { setup, claude: null, accounts: [] };
+  const accounts = await Promise.all(
+    configDirs().map((account) => accountStatus(claude, account)),
+  );
   return {
-    claude: {
-      path: claude.path,
-      version: version.stdout.trim().split(/\s/)[0] ?? "",
-    },
+    setup,
+    claude: { path: claude.path, version: claude.version },
     accounts,
   };
+}
+
+// --- Installing and signing in ------------------------------------------------
+// Both run in this window, so a first-time user only has to follow what it says.
+
+let setup = null; // "installing" or "signing-in" while one runs
+
+function runVisible(command, args, env = childEnv("default")) {
+  return new Promise((done) => {
+    track(spawn(command, args, { stdio: "inherit", env, cwd: tmpdir() }))
+      .on("error", () => done(false))
+      .on("exit", (code) => done(code === 0));
+  });
+}
+
+/** Anthropic's official installer: no admin rights, lands in ~/.local/bin. */
+async function installClaude() {
+  if (setup) return;
+  setup = "installing";
+  console.log(
+    "\nClaude Code isn't installed yet, so it's being installed now. This takes a minute or two.",
+  );
+  const ok = IS_WINDOWS
+    ? await runVisible("powershell.exe", [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "irm https://claude.ai/install.ps1 | iex",
+      ])
+    : await runVisible("bash", [
+        "-c",
+        "curl -fsSL https://claude.ai/install.sh | bash",
+      ]);
+  setup = null;
+  if (!ok || !(await findClaude())) {
+    console.log(
+      "Claude Code couldn't be installed automatically. Install it from https://code.claude.com/docs/en/setup and start this again.",
+    );
+  }
+}
+
+async function signIn(account = "default") {
+  if (setup) return;
+  // Set first, so the page's next status check already sees it.
+  setup = "signing-in";
+  const claude = await findClaude();
+  if (!claude) {
+    setup = null;
+    return;
+  }
+  console.log(
+    "\nSign in to Claude in the browser tab that opens. Claude Code needs a paid Claude plan (Pro, Max, Team or Enterprise).",
+  );
+  await runVisible(
+    claude.command,
+    [...claude.prefix, "auth", "login", "--claudeai"],
+    childEnv(account),
+  );
+  setup = null;
+}
+
+/** On start: installs Claude Code and signs in when needed, without asking. */
+async function prepare() {
+  if (!(await findClaude())) await installClaude();
+  const claude = await findClaude();
+  if (!claude) return;
+  const accounts = await Promise.all(
+    configDirs().map((account) => accountStatus(claude, account)),
+  );
+  if (!accounts.some((account) => account.loggedIn)) await signIn();
 }
 
 // --- One autofill run ---------------------------------------------------------
@@ -213,14 +340,14 @@ function describeTool(block) {
   return null;
 }
 
-function autofill(request, response) {
+async function autofill(request, response) {
   const send = (message) => response.write(`${JSON.stringify(message)}\n`);
   const fail = (message) => {
     send({ type: "error", message });
     response.end();
   };
 
-  const claude = findClaude();
+  const claude = await findClaude();
   if (!claude) return fail("Claude Code wasn't found on this computer.");
   if (!configDirs().includes(request.account))
     return fail("That Claude Code account isn't on this computer.");
@@ -262,6 +389,7 @@ function autofill(request, response) {
     ],
     { env: childEnv(request.account), cwd: tmpdir(), windowsHide: true },
   );
+  track(child);
 
   let finished = false;
   let stderr = "";
@@ -413,6 +541,15 @@ const server = createServer((req, res) => {
       (error) => json(res, 500, { error: error.message }),
     );
   }
+  if (
+    req.method === "POST" &&
+    (path === "/api/install" || path === "/api/sign-in")
+  ) {
+    req.resume();
+    if (path === "/api/install") installClaude();
+    else signIn();
+    return json(res, 202, { started: true });
+  }
   if (req.method === "POST" && path === "/api/autofill") {
     let body = "";
     let size = 0;
@@ -554,6 +691,26 @@ if (process.argv.includes("--uninstall")) {
   process.exit(0);
 }
 
+// --- Stopping -------------------------------------------------------------------
+// Ctrl+C or closing the window. Dying from the signal itself makes terminals
+// like Konsole report a crash and keep the window open, so exit normally.
+
+const children = new Set();
+
+function track(child) {
+  children.add(child);
+  child.on("exit", () => children.delete(child));
+  return child;
+}
+
+for (const signal of ["SIGINT", "SIGTERM", "SIGHUP"]) {
+  process.on(signal, () => {
+    for (const child of children) child.kill();
+    console.log("\nCover letter helper stopped.");
+    process.exit(0);
+  });
+}
+
 const url = `http://${HOST}:${PORT}/`;
 
 server.on("error", async (error) => {
@@ -589,4 +746,5 @@ server.listen(PORT, HOST, () => {
     );
   }
   openBrowser(url);
+  prepare();
 });

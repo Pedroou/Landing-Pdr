@@ -1326,8 +1326,12 @@ ${KNOWN_GUIDANCE}`;
           ${FIRST_TIME}`;
       }
 
-      async function checkHelper() {
-        panels.connect.innerHTML = `<p class="working"><span class="spinner" aria-hidden="true"></span>Looking for Claude Code…</p>`;
+      let setupPoll = null;
+      let waitedForSetup = false; // Saw an install or sign-in, so continue by itself once it's done.
+
+      async function checkHelper({ quiet = false } = {}) {
+        clearTimeout(setupPoll);
+        if (!quiet) panels.connect.innerHTML = `<p class="working"><span class="spinner" aria-hidden="true"></span>Looking for Claude Code…</p>`;
         if (location.protocol === "file:") {
           renderNotRunning("To fill this in with Claude Code, start the helper first.");
           return;
@@ -1395,16 +1399,49 @@ ${KNOWN_GUIDANCE}`;
         return params.get("autofill") === "1";
       }
 
-      function renderConnect({ claude, accounts }) {
+      const PLAN_NOTE = "Claude Code needs a paid Claude plan (Pro, Max, Team or Enterprise); the free plan doesn't include it.";
+
+      function renderWorking(message, hint) {
+        panels.connect.innerHTML = `
+          <p class="working"><span class="spinner" aria-hidden="true"></span>${message}</p>
+          <p class="hint">${hint}</p>`;
+      }
+
+      /** Asks the helper to install Claude Code or sign in; it shows that in its own window. */
+      async function startSetup(path) {
+        panels.connect.innerHTML = `<p class="working"><span class="spinner" aria-hidden="true"></span>Starting…</p>`;
+        try {
+          await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
+        } catch {}
+        checkHelper({ quiet: true });
+      }
+
+      function renderConnect({ setup, claude, accounts }) {
+        // The helper installs Claude Code and signs in by itself on its first start.
+        if (setup) {
+          waitedForSetup = true;
+          if (setup === "installing") renderWorking("Installing Claude Code…", "This takes a minute or two. You can follow it in the helper's window.");
+          else renderWorking("Sign in to Claude in the browser tab that opened.", `Come back here when it says you're signed in. ${PLAN_NOTE}`);
+          if (dialog.open) setupPoll = setTimeout(() => checkHelper({ quiet: true }), 2000);
+          return;
+        }
+
         if (!claude) {
           panels.connect.innerHTML = `
-            <p>The helper is running but didn't find Claude Code on this computer.</p>
-            <p class="hint">Install Claude Code and log in once by running <code>claude</code> in a terminal. If it's installed somewhere unusual, start the helper with <code>CLAUDE_PATH</code> set to the program's full path.</p>
-            <div class="modal-actions"><button type="button" class="button primary" data-action="recheck">Check again</button></div>`;
+            <p>Claude Code isn't on this computer yet.</p>
+            <div class="modal-actions"><button type="button" class="button primary" data-action="install">Install Claude Code</button></div>`;
           return;
         }
 
         const usable = accounts.filter((a) => a.loggedIn);
+        if (!usable.length) {
+          panels.connect.innerHTML = `
+            <p>Sign in to Claude to continue.</p>
+            <p class="hint">${PLAN_NOTE}</p>
+            <div class="modal-actions"><button type="button" class="button primary" data-action="sign-in">Sign in</button></div>`;
+          return;
+        }
+
         const preferred = usable.find((a) => a.id === savedAccount()) ?? usable[0];
         const rows = accounts
           .map((a) => {
@@ -1422,14 +1459,14 @@ ${KNOWN_GUIDANCE}`;
             <legend class="group-label">Account to use</legend>
             <div class="choices accounts">${rows}</div>
           </fieldset>
-          ${usable.length ? "" : `<p class="hint">No account is logged in. Run <code>claude</code> in a terminal and type <code>/login</code>, then check again.</p>`}
           <div class="modal-actions">
             <button type="button" class="button secondary" data-action="recheck">Check again</button>
-            <button type="button" class="button primary" data-action="connect" ${usable.length ? "" : "disabled"}>Continue</button>
+            <button type="button" class="button primary" data-action="connect">Continue</button>
           </div>`;
 
-        // Already set up on an earlier visit: go straight to the listing.
-        if (preferred && preferred.id === savedAccount()) connect(preferred.id);
+        // Already set up on an earlier visit, or just now: go straight to the listing.
+        if (preferred.id === savedAccount() || (waitedForSetup && usable.length === 1)) connect(preferred.id);
+        waitedForSetup = false;
       }
 
       function connect(id) {
@@ -1444,6 +1481,8 @@ ${KNOWN_GUIDANCE}`;
       panels.connect.addEventListener("click", (event) => {
         const action = event.target.closest("[data-action]")?.dataset.action;
         if (action === "recheck") checkHelper();
+        if (action === "install") startSetup("/api/install");
+        if (action === "sign-in") startSetup("/api/sign-in");
         if (action === "start") startHelper();
         if (action === "open-helper") location.href = helperPageUrl();
         if (action === "connect") {
