@@ -104,14 +104,27 @@ export function Cv() {
         </Section>
 
         <Section title={cv.headings.education}>
-          {cv.education.map(({ degree, institution, period }) => (
-            <article key={degree} className={styles.entry}>
-              <Dated date={period}>
-                <h3 className={styles.title}>{degree}</h3>
-              </Dated>
-              <p className={styles.meta}>{institution}</p>
-            </article>
-          ))}
+          {cv.education.map(
+            ({ degree, institution, period, grade, coursework }) => (
+              <article key={degree} className={styles.entry}>
+                <Dated date={period}>
+                  <h3 className={styles.title}>{degree}</h3>
+                </Dated>
+                <p className={styles.meta}>
+                  {institution}
+                  <Sep />
+                  {grade}
+                </p>
+                {/* Screen only: the one-page print has no room for it. */}
+                <p className={styles.coursework}>
+                  <span className={styles.courseworkLabel}>
+                    {coursework.label}:
+                  </span>{" "}
+                  {coursework.items.join(", ")}
+                </p>
+              </article>
+            ),
+          )}
         </Section>
 
         <Section title={cv.headings.courses}>

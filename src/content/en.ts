@@ -179,7 +179,19 @@ export const en: Content = {
           "Technologist degree in Systems Analysis and Development (in progress)",
         institution:
           "Federal Institute of Rio Grande do Sul (IFRS), Osório Campus",
-        period: "Feb 2025 – Dec 2027",
+        period: "Jan 2025 – Dec 2027",
+        grade: "GPA 8.6/10",
+        coursework: {
+          label: "Relevant coursework",
+          items: [
+            "Data Structures",
+            "Object-Oriented Programming",
+            "Databases I–II",
+            "Operating Systems",
+            "Systems Analysis and Design",
+            "Computer Networks",
+          ],
+        },
       },
     ],
     courses: [

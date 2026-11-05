@@ -61,7 +61,15 @@ export interface Content {
       description: string;
     }>;
     skills: Array<{ label: string; items: string[] }>;
-    education: Array<{ degree: string; institution: string; period: string }>;
+    education: Array<{
+      degree: string;
+      institution: string;
+      period: string;
+      /** Average grade from the transcript; update each semester. */
+      grade: string;
+      /** Shown on screen only: the printed CV has no room for it. */
+      coursework: { label: string; items: string[] };
+    }>;
     courses: Array<{ name: string; issuer: string }>;
     languages: Array<{ name: string; level: string }>;
   };

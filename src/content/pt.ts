@@ -179,7 +179,19 @@ export const pt: Content = {
           "Tecnologia em Análise e Desenvolvimento de Sistemas (em andamento)",
         institution:
           "Instituto Federal do Rio Grande do Sul (IFRS), Campus Osório",
-        period: "fev. 2025 – dez. 2027",
+        period: "jan. 2025 – dez. 2027",
+        grade: "Média geral 8,6/10",
+        coursework: {
+          label: "Disciplinas relevantes",
+          items: [
+            "Estruturas de Dados",
+            "Programação Orientada a Objetos",
+            "Banco de Dados I e II",
+            "Sistemas Operacionais",
+            "Análise e Projeto de Sistemas",
+            "Redes de Computadores",
+          ],
+        },
       },
     ],
     courses: [
