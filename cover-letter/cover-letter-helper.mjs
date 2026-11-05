@@ -486,7 +486,11 @@ function registerScheme() {
         "reg",
         ["query", `${REG_KEY}\\shell\\open\\command`, "/ve"],
         // Not registered yet on a first run: reg prints an error, which is expected.
-        { encoding: "utf8", windowsHide: true, stdio: ["ignore", "pipe", "ignore"] },
+        {
+          encoding: "utf8",
+          windowsHide: true,
+          stdio: ["ignore", "pipe", "ignore"],
+        },
       );
     } catch {}
     if (current.includes(command)) return false;
