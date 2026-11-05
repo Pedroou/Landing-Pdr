@@ -32,3 +32,16 @@ Every push to `main` runs `.github/workflows/deploy.yml`. It checks, builds and 
 ## The CV as PDF
 
 **Download PDF** on `/cv/` serves the file printed at build time, so it always matches the page. **Print** opens the browser's print dialog; turn off _Headers and footers_ there.
+
+## Cover-letter tool
+
+`cover-letter/` is a standalone page for writing cover letters from a fixed template, plus an optional local helper that fills it in from a job listing with Claude Code. It isn't part of the site: Vite only builds `index.html` and `cv/index.html`, so nothing here is deployed.
+
+- `cover-letter.html`: the page. One self-contained file (styles copied from `src/styles/base.css`, so keep the tokens in step); works opened straight from disk.
+- `cover-letter-helper.mjs`: serves the page at `http://127.0.0.1:4817/` and runs each autofill as a fresh, unsaved `claude -p --safe-mode` session limited to WebSearch and WebFetch. It finds Claude Code and its logged-in accounts by itself, and registers a `pedro-cover-letter://` link so the page's **Start the helper** button can start it later (`node cover-letter/cover-letter-helper.mjs --uninstall` removes that).
+- `Start cover letter helper.cmd` / `start-cover-letter-helper.sh`: double-click launchers for Windows and Linux. Both run on Node.js; the Windows one installs it with `winget` when it's missing.
+- `README.md`: instructions for a Windows user, shipped in the zip below.
+
+`npm run pack:cover-letter` writes `cover-letter-windows.zip` (or the path after `--`) with everything a Windows user needs. It uses the `zip` command.
+
+Biome's `noDescendingSpecificity` is off for this folder: the page has one stylesheet for many unrelated components, and the rule flags their selectors against each other.

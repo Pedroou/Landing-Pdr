@@ -1,0 +1,1678 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cover letters · Pedro Ourique</title>
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      // Same theme key and attribute as the site (Landing-Pdr/src/theme.ts).
+      try {
+        const theme = localStorage.getItem("theme");
+        if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+      } catch {}
+    </script>
+    <style>
+      /* The site's typeface, from Fontsource's CDN. Offline, system-ui takes over. */
+      @font-face {
+        font-family: "Instrument Sans";
+        font-weight: 400;
+        font-display: swap;
+        src: url(https://cdn.jsdelivr.net/fontsource/fonts/instrument-sans@latest/latin-400-normal.woff2)
+          format("woff2");
+      }
+      @font-face {
+        font-family: "Instrument Sans";
+        font-weight: 600;
+        font-display: swap;
+        src: url(https://cdn.jsdelivr.net/fontsource/fonts/instrument-sans@latest/latin-600-normal.woff2)
+          format("woff2");
+      }
+
+      /* Tokens copied from Landing-Pdr/src/styles/base.css; keep them in step. */
+      :root {
+        color-scheme: light dark;
+        --bg: light-dark(oklch(0.985 0.002 250), oklch(0.17 0.006 250));
+        --fg: light-dark(oklch(0.24 0.01 250), oklch(0.93 0.004 250));
+        --muted: light-dark(oklch(0.5 0.012 250), oklch(0.7 0.01 250));
+        --rule: light-dark(oklch(0.86 0.006 250), oklch(0.4 0.008 250));
+        --highlight: light-dark(oklch(0.9 0.12 98), oklch(0.56 0.12 98));
+        --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+        --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+        background: var(--bg);
+        scrollbar-color: color-mix(in oklch, var(--fg) 25%, transparent) transparent;
+      }
+      :root[data-theme="light"] { color-scheme: light; }
+      :root[data-theme="dark"] { color-scheme: dark; }
+
+      *, *::before, *::after { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100svh;
+        color: var(--fg);
+        font-family: var(--font-sans);
+        font-size: 1rem;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      h1, h2, h3, p, ul, ol, fieldset { margin: 0; }
+      fieldset { padding: 0; border: 0; min-width: 0; }
+      /* biome-ignore lint/complexity/noImportantStyles: `hidden` must beat the display rules of flex/grid components. */
+      [hidden] { display: none !important; }
+
+      a {
+        color: inherit;
+        text-decoration-thickness: 1px;
+        text-decoration-color: var(--rule);
+        text-underline-offset: 0.25em;
+      }
+      a:hover { text-decoration-color: currentColor; }
+
+      :focus-visible {
+        outline: 2px solid var(--fg);
+        outline-offset: 3px;
+        border-radius: 2px;
+      }
+
+      ::selection { color: var(--fg); background: var(--highlight); }
+
+      /* --- Header: the site's bar, minus the language switch ----------------- */
+
+      .bar {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        max-width: 64rem;
+        height: 3.5rem;
+        margin-inline: auto;
+        padding-inline: 1.5rem;
+        font-size: 0.9375rem;
+      }
+      .wordmark { margin-right: auto; font-weight: 600; text-decoration: none; }
+      .bar nav { display: flex; gap: 1.25rem; }
+      .bar nav a { color: var(--muted); text-decoration: none; transition: color 150ms; }
+      .bar nav a:hover { color: var(--fg); }
+      .divider { width: 1px; height: 1rem; background: var(--rule); }
+      .icon-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 2.5rem;
+        min-height: 2.5rem;
+        margin-inline: -0.5rem;
+        color: var(--muted);
+        background: none;
+        border: 0;
+        cursor: pointer;
+        transition: color 150ms;
+      }
+      .icon-button:hover { color: var(--fg); }
+      .icon-button svg { width: 1.125rem; height: 1.125rem; }
+
+      /* --- Page ---------------------------------------------------------------- */
+
+      main {
+        max-width: 64rem;
+        margin-inline: auto;
+        padding: clamp(1.5rem, 6svh, 3.5rem) 1.5rem 4rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: 1.15;
+        letter-spacing: -0.025em;
+      }
+      .lede { margin-top: 0.25rem; color: var(--muted); }
+
+      .workspace {
+        display: grid;
+        grid-template-columns: minmax(0, 21rem) minmax(0, 1fr);
+        gap: 3.5rem;
+        align-items: start;
+        margin-top: 2.5rem;
+      }
+
+      /* --- Controls ------------------------------------------------------------ */
+
+      .controls { display: grid; gap: 1.5rem; }
+
+      .group-label,
+      .field > label {
+        display: block;
+        margin-bottom: 0.375rem;
+        color: var(--muted);
+        font-size: 0.875rem;
+      }
+
+      .hint { margin-top: 0.375rem; color: var(--muted); font-size: 0.8125rem; line-height: 1.5; }
+
+      .pills { display: flex; flex-wrap: wrap; gap: 0.375rem; }
+      .pills label,
+      .choices label { position: relative; display: block; }
+      .pills input,
+      .choices input {
+        position: absolute;
+        inset: 0;
+        margin: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+      .pills span {
+        display: block;
+        padding: 0.25rem 0.8125rem;
+        border: 1px solid var(--rule);
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 0.875rem;
+        transition: color 150ms, border-color 150ms, background-color 150ms;
+      }
+      .pills label:hover span { color: var(--fg); border-color: var(--fg); }
+      .pills input:checked + span { color: var(--bg); background: var(--fg); border-color: var(--fg); }
+
+      .choices { display: grid; gap: 0.375rem; }
+      .choices span {
+        display: block;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+        font-size: 0.9375rem;
+        line-height: 1.4;
+        transition: border-color 150ms;
+      }
+      .choices small { display: block; margin-top: 0.125rem; color: var(--muted); font-size: 0.8125rem; }
+      .choices label:hover span,
+      .choices input:checked + span { border-color: var(--fg); }
+      .choices input:checked + span { box-shadow: inset 0 0 0 1px var(--fg); }
+
+      .pills input:focus-visible + span,
+      .choices input:focus-visible + span { outline: 2px solid var(--fg); outline-offset: 2px; }
+
+      .switch {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.9375rem;
+        cursor: pointer;
+      }
+      .switch input {
+        position: relative;
+        flex: none;
+        width: 2.25rem;
+        height: 1.25rem;
+        margin: 0;
+        border-radius: 999px;
+        background: var(--rule);
+        appearance: none;
+        cursor: pointer;
+        transition: background-color 150ms;
+      }
+      .switch input::before {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: calc(1.25rem - 4px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--bg);
+        transition: translate 200ms var(--ease-out);
+      }
+      .switch input:checked { background: var(--fg); }
+      .switch input:checked::before { translate: 1rem 0; }
+      .switch input:focus-visible { outline-offset: 2px; }
+
+      .toggles { display: grid; gap: 0.625rem; }
+
+      input[type="text"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 0.4375rem 0.625rem;
+        color: var(--fg);
+        font: inherit;
+        font-size: 0.9375rem;
+        background: transparent;
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+        transition: border-color 150ms;
+      }
+      textarea { min-height: 6.5rem; resize: vertical; line-height: 1.5; }
+      select { width: auto; }
+      input[type="text"]:hover,
+      textarea:hover,
+      select:hover { border-color: color-mix(in oklch, var(--fg) 45%, var(--rule)); }
+      input[type="text"]:focus-visible,
+      textarea:focus-visible,
+      select:focus-visible { border-color: var(--fg); outline-offset: 1px; }
+      ::placeholder { color: color-mix(in oklch, var(--muted) 75%, transparent); }
+
+      .row { display: flex; gap: 0.5rem; }
+      .row > :first-child { flex: 1; }
+
+      .button {
+        padding: 0.3125rem 0.875rem;
+        font: inherit;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        white-space: nowrap;
+        border: 1px solid var(--fg);
+        border-radius: 999px;
+        cursor: pointer;
+        transition: background-color 150ms, border-color 150ms;
+      }
+      .button.primary { color: var(--bg); background: var(--fg); }
+      .button.secondary { color: var(--fg); background: none; border-color: var(--rule); }
+      .button.secondary:hover { border-color: var(--fg); }
+
+      /* --- Output -------------------------------------------------------------- */
+
+      .output { display: grid; gap: 1.25rem; }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid var(--rule);
+      }
+      .count { margin-right: auto; color: var(--muted); font-size: 0.875rem; font-variant-numeric: tabular-nums; }
+
+      .subject {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        padding: 0.625rem 0.75rem;
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+      }
+      .subject p { flex: 1; }
+      .subject .group-label { margin: 0; }
+
+      .letter {
+        display: grid;
+        gap: 1em;
+        font-size: 1.0625rem;
+        white-space: pre-line;
+        text-wrap: pretty;
+        overflow-wrap: anywhere;
+      }
+
+      /* What you typed reads as a quiet tint; what's missing as the site's yellow. */
+      .filled { background: color-mix(in oklch, var(--fg) 7%, transparent); border-radius: 2px; }
+      .blank { color: var(--fg); background: var(--highlight); border-radius: 2px; padding-inline: 0.15em; }
+
+      /* A card apart from the letter: it's about the text, not part of it. */
+      .checks-card {
+        margin-top: 0.75rem;
+        padding: 0.75rem 1rem;
+        /* The site's highlight yellow (text selection, blanks); light-dark() per theme. */
+        border: 1px solid var(--highlight);
+        border-radius: 6px;
+        background: color-mix(in oklch, var(--fg) 4%, transparent);
+      }
+      .checks-card .group-label { margin-bottom: 0.375rem; font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; }
+      .checks { display: grid; gap: 0.375rem; padding: 0; list-style: none; font-size: 0.875rem; line-height: 1.5; }
+      .checks li { display: flex; gap: 0.5rem; color: var(--muted); }
+      .checks li::before { content: "✓"; flex: none; width: 1.125rem; text-align: center; }
+      .checks li.warn { color: var(--fg); }
+      .checks li.warn::before {
+        content: "!";
+        height: 1.125rem;
+        margin-top: 0.0625rem;
+        border-radius: 50%;
+        background: var(--highlight);
+        font-size: 0.75rem;
+        font-weight: 600;
+        line-height: 1.125rem;
+      }
+
+      /* --- Notes --------------------------------------------------------------- */
+
+      .notes { margin-top: 4rem; border-top: 1px solid var(--rule); }
+      .notes summary {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        padding-block: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        list-style: none;
+      }
+      .notes summary::-webkit-details-marker { display: none; }
+      .notes summary::before {
+        content: "";
+        width: 0.4375rem;
+        height: 0.4375rem;
+        border-right: 1.5px solid currentColor;
+        border-bottom: 1.5px solid currentColor;
+        rotate: -45deg;
+        transition: rotate 200ms var(--ease-out);
+      }
+      .notes[open] summary::before { rotate: 45deg; }
+      .notes summary span { color: var(--muted); font-weight: 400; font-size: 0.875rem; }
+
+      .notes-body {
+        display: grid;
+        gap: 2rem;
+        max-width: 40rem;
+        padding-bottom: 1rem;
+        font-size: 0.9375rem;
+        text-wrap: pretty;
+      }
+      .notes h2 { margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600; }
+      .notes ul,
+      .notes ol { display: grid; gap: 0.5rem; padding-left: 1.25rem; }
+      .notes ul { list-style: disc; }
+      .notes p + p,
+      .notes p + ul,
+      .notes ul + p { margin-top: 0.5rem; }
+      .notes li::marker { color: var(--muted); }
+
+      /* --- Claude Code autofill -------------------------------------------------- */
+
+      .intro {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: space-between;
+        gap: 1rem 2rem;
+      }
+
+      .findings-card {
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--rule);
+        border-radius: 6px;
+        font-size: 0.875rem;
+        line-height: 1.5;
+      }
+      .findings-card .group-label { margin-bottom: 0.375rem; font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; }
+      .findings-card ul { display: grid; gap: 0.375rem; margin-top: 0.5rem; padding-left: 1.125rem; list-style: disc; }
+      .findings-card li::marker { color: var(--muted); }
+      .findings-card a { color: var(--muted); white-space: nowrap; }
+
+      .modal {
+        width: min(36rem, calc(100vw - 2rem));
+        max-height: calc(100svh - 2rem);
+        overflow: auto;
+        padding: 0;
+        color: var(--fg);
+        background: var(--bg);
+        border: 1px solid var(--rule);
+        border-radius: 8px;
+        box-shadow: 0 24px 64px -24px oklch(0 0 0 / 0.45);
+      }
+      .modal::backdrop { background: oklch(0 0 0 / 0.45); backdrop-filter: blur(2px); }
+      .modal-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.25rem 0;
+      }
+      .modal-head h2 { font-size: 1.125rem; font-weight: 600; }
+      .modal-body { display: grid; gap: 1rem; padding: 1rem 1.25rem 1.25rem; }
+      .modal-body p { font-size: 0.9375rem; }
+      .modal-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; }
+      .modal code {
+        padding: 0.05em 0.3em;
+        font-size: 0.875em;
+        background: color-mix(in oklch, var(--fg) 7%, transparent);
+        border-radius: 3px;
+        overflow-wrap: anywhere;
+      }
+
+      /* Both lines are inset shadows on the bottom edge of boxes that end on the
+         same pixel row, so the selected tab's line sits exactly on the rule at
+         any zoom. (Overlapping borders with a -1px margin drift apart when
+         scaled.) */
+      .tabs {
+        display: flex;
+        gap: 1.25rem;
+        margin-top: 0.75rem;
+        padding-inline: 1.25rem;
+        box-shadow: inset 0 -1px var(--rule);
+      }
+      .tabs button {
+        padding: 0.5rem 0;
+        color: var(--muted);
+        font: inherit;
+        font-size: 0.9375rem;
+        background: none;
+        border: 0;
+        cursor: pointer;
+        transition: color 150ms, box-shadow 150ms;
+      }
+      .tabs button:hover:not(:disabled) { color: var(--fg); }
+      .tabs button[aria-selected="true"] { color: var(--fg); box-shadow: inset 0 -1px var(--fg); }
+      .tabs button:disabled { cursor: default; opacity: 0.5; }
+
+      .accounts { display: grid; gap: 0.375rem; }
+      .accounts input:disabled + span { opacity: 0.55; }
+      .accounts input:disabled { cursor: not-allowed; }
+
+      .dropzone {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 0.75rem;
+        padding: 0.75rem;
+        color: var(--muted);
+        font-size: 0.875rem;
+        border: 1px dashed var(--rule);
+        border-radius: 4px;
+        transition: border-color 150ms;
+      }
+      .dropzone[data-over],
+      .dropzone:focus-within { border-color: var(--fg); }
+      .dropzone img { max-width: 100%; max-height: 10rem; border-radius: 3px; }
+
+      .progress { display: grid; gap: 0.25rem; padding: 0; list-style: none; font-size: 0.875rem; color: var(--muted); }
+      .progress li { overflow-wrap: anywhere; }
+      .progress li:last-child { color: var(--fg); }
+      .working { display: flex; align-items: center; gap: 0.625rem; font-size: 0.9375rem; }
+      .working time { margin-left: auto; color: var(--muted); font-variant-numeric: tabular-nums; }
+      .spinner {
+        width: 1rem;
+        height: 1rem;
+        border: 1.5px solid var(--rule);
+        border-top-color: var(--fg);
+        border-radius: 50%;
+        animation: spin 800ms linear infinite;
+      }
+      @keyframes spin { to { rotate: 1turn; } }
+      .error { padding: 0.625rem 0.75rem; font-size: 0.875rem; border: 1px solid var(--highlight); border-radius: 4px; overflow-wrap: anywhere; }
+
+      /* Same box as the checks card. */
+      .first-time {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border: 1px solid var(--highlight);
+        border-radius: 6px;
+        background: color-mix(in oklch, var(--fg) 4%, transparent);
+      }
+
+      @media (max-width: 52rem) {
+        .workspace { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
+      }
+
+      @media (max-width: 40rem) {
+        .bar { padding-inline: 1rem; gap: 1rem; }
+        main { padding-inline: 1rem; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        /* biome-ignore lint/complexity/noImportantStyles: reduced motion has to override every component's transition. */
+        *, *::before { transition: none !important; }
+        .spinner { animation-duration: 3s; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="bar">
+      <a class="wordmark" href="https://pedroou.github.io/Landing-Pdr/">Pedro Ourique</a>
+      <nav>
+        <a href="https://pedroou.github.io/Landing-Pdr/">Home</a>
+        <a href="https://pedroou.github.io/Landing-Pdr/cv/">CV</a>
+      </nav>
+      <span class="divider"></span>
+      <button type="button" class="icon-button" id="theme-toggle"></button>
+    </header>
+
+    <main>
+      <div class="intro">
+        <div>
+          <h1>Cover letters</h1>
+          <p class="lede">Fill in the blanks for one listing, check the result, and copy it as plain text.</p>
+        </div>
+        <button type="button" class="button primary" id="autofill-open">Fill from a listing with Claude Code</button>
+      </div>
+
+      <div class="workspace">
+        <form class="controls" id="controls" autocomplete="off">
+          <fieldset>
+            <legend class="group-label">What are you writing?</legend>
+            <div class="pills">
+              <label><input type="radio" name="mode" value="letter" /><span>Cover letter</span></label>
+              <label><input type="radio" name="mode" value="short" /><span>Short answer</span></label>
+              <label><input type="radio" name="mode" value="project" /><span>Project answer</span></label>
+            </div>
+            <p class="hint" data-when="mode=short">For "Anything else?" and "Tell us about you" fields that a person reads.</p>
+            <p class="hint" data-when="mode=project">For "Tell us about a project you're proud of". No blanks to fill.</p>
+          </fieldset>
+
+          <fieldset>
+            <legend class="group-label">Language</legend>
+            <div class="pills">
+              <label><input type="radio" name="lang" value="en" /><span>English</span></label>
+              <label lang="pt"><input type="radio" name="lang" value="pt" /><span>Português</span></label>
+            </div>
+            <p class="hint" data-when="lang=pt mode=letter">For Gupy's "Apresente-se!", career-page fields, and emails.</p>
+          </fieldset>
+
+          <fieldset data-when="mode=letter, mode=short lang=en">
+            <legend class="group-label">Where is the job?</legend>
+            <div class="pills">
+              <label><input type="radio" name="location" value="remote" /><span>Remote</span></label>
+              <label><input type="radio" name="location" value="hybrid" /><span>Hybrid or on site in Brazil</span></label>
+            </div>
+            <p class="hint" data-when="lang=en mode=letter">Remote is for jobs abroad (UTC−3, contractor or EOR). Hybrid covers jobs in Brazil, including ones in English like SAP Labs.</p>
+          </fieldset>
+
+          <fieldset data-when="mode=letter">
+            <legend class="group-label">Main story</legend>
+            <div class="choices">
+              <label>
+                <input type="radio" name="story" value="erp" />
+                <span>ERP rewrite at NetComet<small>Default. Front-end or full-stack React, business software.</small></span>
+              </label>
+              <label>
+                <input type="radio" name="story" value="surveillance" />
+                <span>Video-surveillance product<small>Python, AI or product roles.</small></span>
+              </label>
+              <label>
+                <input type="radio" name="story" value="school" />
+                <span>School-transport platform<small>Node.js / PostgreSQL full-stack or startup roles.</small></span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="toggles" data-when="mode=letter">
+            <label class="switch" data-when="lang=en">
+              <input type="checkbox" name="asm" />Mention Agent Session Manager
+            </label>
+            <label class="switch" data-when="lang=pt">
+              <input type="checkbox" name="email" />Sending by email (subject line)
+            </label>
+            <label class="switch" data-when="lang=pt">
+              <input type="checkbox" name="salary" />The posting asks for a salary
+            </label>
+          </div>
+
+          <div class="field" data-when="mode=letter">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" />
+          </div>
+
+          <div class="field" data-when="mode=letter">
+            <label for="contact">Person's name (optional)</label>
+            <input type="text" id="contact" name="contact" />
+            <p class="hint">Leave it empty to greet the company's team.</p>
+          </div>
+
+          <div class="field" data-when="mode=letter">
+            <label for="role">Exact role title</label>
+            <input type="text" id="role" name="role" />
+          </div>
+
+          <div class="field" data-when="mode=letter, mode=short">
+            <label for="why">Why this company</label>
+            <textarea id="why" name="why"></textarea>
+            <p class="hint">One sentence, in the letter's language: something specific you used, read or noticed about their product, stack or domain, tied to your own work. If it still makes sense with a competitor's name in it, rewrite it.</p>
+          </div>
+
+          <div class="field" data-when="mode=letter">
+            <label for="extra">Company-specific sentence (optional)</label>
+            <textarea id="extra" name="extra" rows="2"></textarea>
+            <p class="hint">Added to the end of the main story. Claude fills it only when the company asks for something the story doesn't already show.</p>
+          </div>
+
+          <fieldset data-when="mode=letter lang=en location=remote, mode=short lang=en location=remote">
+            <legend class="group-label">Company's time zone</legend>
+            <div class="pills">
+              <label><input type="radio" name="zone" value="americas" /><span>US / Americas</span></label>
+              <label><input type="radio" name="zone" value="europe" /><span>Europe</span></label>
+              <label><input type="radio" name="zone" value="unstated" /><span>Not stated</span></label>
+            </div>
+            <p class="hint">Look for a time zone or "overlap with" requirement in the listing, or where the team is based. Brazil is 1 to 2 hours ahead of US Eastern and 4 to 5 hours behind Central Europe.</p>
+          </fieldset>
+
+          <div class="field" data-when="mode=letter location=hybrid">
+            <label for="city">City of the office</label>
+            <input type="text" id="city" name="city" placeholder="São Leopoldo" />
+          </div>
+
+          <div class="field" data-when="mode=letter lang=pt salary=true">
+            <label for="salaryRange">Salary range</label>
+            <div class="row">
+              <input type="text" id="salaryRange" name="salaryRange" placeholder="R$ 6.000 a R$ 7.500" />
+              <select name="contract" aria-label="Contract type">
+                <option>CLT ou PJ</option>
+                <option>CLT</option>
+                <option>PJ</option>
+              </select>
+            </div>
+            <p class="hint">One line, as a range. "CLT ou PJ" when you have no preference and the listing doesn't say.</p>
+          </div>
+
+          <div data-when="mode=letter, mode=short">
+            <button type="button" class="button secondary" id="reset">New listing</button>
+            <p class="hint">Clears the company, role, sentence and other per-listing fields. Everything you type is kept in this browser until then.</p>
+          </div>
+        </form>
+
+        <section class="output" aria-label="Result">
+          <div class="toolbar">
+            <span class="count" id="count"></span>
+            <button type="button" class="button primary" id="copy">Copy text</button>
+          </div>
+
+          <div class="subject" id="subject" hidden>
+            <span class="group-label">Assunto</span>
+            <p id="subject-text"></p>
+            <button type="button" class="button secondary" id="copy-subject">Copy</button>
+          </div>
+
+          <div class="letter" id="letter"></div>
+
+          <aside class="checks-card" aria-label="Checks">
+            <p class="group-label">Checks</p>
+            <ul class="checks" id="checks" aria-live="polite"></ul>
+          </aside>
+
+          <aside class="findings-card" id="findings" aria-label="What Claude found" hidden>
+            <p class="group-label">From Claude</p>
+            <p id="findings-summary"></p>
+            <ul id="findings-list"></ul>
+          </aside>
+        </section>
+      </div>
+
+      <details class="notes">
+        <summary>When to send one, and how <span>Notes and checklist</span></summary>
+        <div class="notes-body">
+          <section>
+            <h2>When to use it</h2>
+            <ul>
+              <li><strong>Send one:</strong> startups and companies under ~200 people, remote-first companies, direct emails to a founder or engineering manager, Hacker News "Who is hiring" replies, and any posting that asks for one.</li>
+              <li><strong>Skip it:</strong> optional fields on big-company portals, LinkedIn Easy Apply, and vetting platforms (Lemon.io, Toptal, G2i). They don't read them. Exception: if the field says a person reads it ("We are real humans looking at applications"), fill it with the short answer.</li>
+              <li><strong>Screening questions instead of a letter?</strong> Answer the questions and skip the letter.</li>
+              <li><strong>Brazil:</strong> most companies don't ask for one. Use the Portuguese version in Gupy's "Apresente-se!" field (a person reads it; the AI ranking doesn't), in optional fields on career pages, and as the email body when a posting says "envie seu currículo". For email, turn on the subject line and attach the CV as a PDF. Gupy's field fits 1,500 characters.</li>
+              <li><strong>Format:</strong> paste it as plain text into the form or the email body. No bold, bullets or em dashes. Use a PDF only when there's nothing but an upload slot.</li>
+            </ul>
+            <p>Never send it with blanks left in, and never without the company-specific sentence. Anyone can generate a polished generic letter now, so it counts for almost nothing. What a reader notices is the company-specific sentence and the details your CV can't show.</p>
+          </section>
+
+          <section>
+            <h2>Picking the story</h2>
+            <p>Keep one story per letter. The ERP rewrite is the default: it covers front-end and full-stack React and business software, and it carries the point about AI-written code checked by tests. Switch to the video-surveillance product for Python, AI or product roles, and to the school-transport platform for Node.js / PostgreSQL full-stack or startup roles.</p>
+            <p>Salary goes in only if the posting asks: one line, as a range, saying CLT, PJ, or "CLT ou PJ" when you have no preference and the listing doesn't say.</p>
+          </section>
+
+          <section>
+            <h2>"Why do you want to work here?"</h2>
+            <p>Always write this one fresh: one specific thing about the company, then the closest thing you've actually done.</p>
+          </section>
+
+          <section>
+            <h2>Before sending</h2>
+            <ol>
+              <li>Every blank filled, and the "why this company" sentence fails the competitor-swap test.</li>
+              <li>No em dashes, bold, bullets, or words like "passionate", "thrive", "align", "leverage", "robust", "delve". The checks under the letter catch these.</li>
+              <li>No adjectives about yourself. Every claim is something you can explain on a call, screen by screen.</li>
+              <li>Read it out loud once and change anything you wouldn't say.</li>
+              <li>Free-text fields a person reads: about 100 words. A reader skims anything longer.</li>
+            </ol>
+          </section>
+        </div>
+      </details>
+
+      <dialog class="modal" id="autofill" aria-labelledby="autofill-title">
+        <div class="modal-head">
+          <h2 id="autofill-title">Fill from a listing</h2>
+          <button type="button" class="icon-button" id="autofill-close" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+          </button>
+        </div>
+        <div class="tabs" role="tablist">
+          <button type="button" role="tab" id="tab-connect" aria-controls="panel-connect" aria-selected="true">1. Claude Code</button>
+          <button type="button" role="tab" id="tab-listing" aria-controls="panel-listing" aria-selected="false" disabled>2. Listing</button>
+        </div>
+
+        <section class="modal-body" role="tabpanel" id="panel-connect" aria-labelledby="tab-connect"></section>
+
+        <section class="modal-body" role="tabpanel" id="panel-listing" aria-labelledby="tab-listing" hidden>
+          <form id="listing-form" class="controls">
+            <fieldset>
+              <legend class="group-label">What do you have?</legend>
+              <div class="pills">
+                <label><input type="radio" name="source" value="text" checked /><span>Copy - Paste</span></label>
+                <label><input type="radio" name="source" value="url" /><span>URL</span></label>
+                <label><input type="radio" name="source" value="screenshot" /><span>Screenshot</span></label>
+              </div>
+            </fieldset>
+            <div class="field" data-source="text">
+              <label for="listing-text">Paste the listing</label>
+              <textarea id="listing-text" rows="6" placeholder="Select everything on the job page (Ctrl+A), copy and paste it here."></textarea>
+              <p class="hint">Works best: nothing for Claude to open, nothing behind a login.</p>
+            </div>
+            <div class="field" data-source="url" hidden>
+              <label for="listing-url">Link to the listing</label>
+              <input type="text" id="listing-url" inputmode="url" placeholder="https://…" />
+              <p class="hint">Fine for public pages. LinkedIn, Workday and other pages that need a login usually can't be opened; paste the text instead.</p>
+            </div>
+            <div class="field" data-source="screenshot" hidden>
+              <span class="group-label">Screenshot of the listing</span>
+              <div class="dropzone" id="dropzone">
+                <span id="dropzone-label">Paste it here (Ctrl+V), drop a file, or</span>
+                <button type="button" class="button secondary" id="screenshot-pick">Choose a file</button>
+                <button type="button" class="button secondary" id="screenshot-remove" hidden>Remove</button>
+                <input type="file" id="screenshot-file" accept="image/png,image/jpeg,image/webp,image/gif" hidden />
+              </div>
+            </div>
+            <p class="hint">Each run starts a new Claude Code session. Claude reads the listing, checks the company's own careers pages for application preferences, then fills in the fields. It usually takes one to three minutes.</p>
+            <div class="error" id="listing-error" role="alert" hidden></div>
+            <div class="modal-actions">
+              <button type="submit" class="button primary" id="listing-run">Fill it in</button>
+            </div>
+          </form>
+
+          <div id="listing-progress" hidden>
+            <div class="working"><span class="spinner" aria-hidden="true"></span>Claude is working<time id="listing-elapsed">0:00</time></div>
+            <ul class="progress" id="progress-list" aria-live="polite"></ul>
+            <div class="modal-actions">
+              <button type="button" class="button secondary" id="listing-cancel">Cancel</button>
+            </div>
+          </div>
+        </section>
+      </dialog>
+    </main>
+
+    <script>
+      "use strict";
+
+      const PROFILE = {
+        email: "pedro.g.ourique@gmail.com",
+        phone: "(51) 98058-4781",
+        site: "https://pedroou.github.io/Landing-Pdr/",
+        linkedin: "https://www.linkedin.com/in/pedro-guimaraes-ourique/",
+        asm: "https://github.com/Pedroou/agent-session-manager",
+      };
+
+      const STORAGE_KEY = "cover-letter-builder";
+      const DEFAULTS = {
+        mode: "letter",
+        lang: "en",
+        location: "remote",
+        story: "erp",
+        asm: true,
+        email: false,
+        salary: false,
+        company: "",
+        contact: "",
+        role: "",
+        why: "",
+        zone: "americas",
+        city: "",
+        salaryRange: "",
+        contract: "CLT ou PJ",
+        extra: "",
+        // Filled by the Claude Code autofill: what it found about the company.
+        findings: [],
+        summary: "",
+      };
+      // What "New listing" clears; the rest are standing choices.
+      const LISTING_FIELDS = ["company", "contact", "role", "why", "zone", "city", "salaryRange", "extra", "findings", "summary"];
+
+      const BANNED = /\b(passionat\w*|thriv\w*|align\w*|leverag\w*|robust\w*|delv\w*|apaixonad\w*|alavanc\w*)\b/gi;
+      const GUPY_LIMIT = 1500;
+      const SHORT_ANSWER_WORDS = 110;
+
+      const state = load();
+
+      function load() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "{}");
+          // Only known keys, so fields removed from the page don't linger in storage.
+          return Object.fromEntries(Object.entries(DEFAULTS).map(([key, value]) => [key, saved[key] ?? value]));
+        } catch {
+          return { ...DEFAULTS };
+        }
+      }
+
+      function save() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch {
+          // Storage blocked: the page still works, it just forgets on reload.
+        }
+      }
+
+      // --- Templates -----------------------------------------------------------
+      // A paragraph is a list of parts: plain strings, or a field the user fills.
+
+      const field = (key, label) => ({ key, label, value: String(state[key] ?? "").trim() });
+
+      /** Tagged template: p`Hi ${field("company", "Company")} team,` */
+      function p(strings, ...values) {
+        const parts = [];
+        strings.forEach((text, i) => {
+          if (text) parts.push(text);
+          const value = values[i];
+          if (Array.isArray(value)) parts.push(...value);
+          else if (value) parts.push(value);
+        });
+        return parts;
+      }
+
+      const STORIES = {
+        en: {
+          erp: "I work as a software developer at NetComet, an internet provider in southern Brazil. Most of my week goes into rewriting a decade-old, multi-tenant PHP ERP (sales, finance, Brazilian e-invoicing, ISP network management) as a React app on a PHP REST API, as its main developer. I write most of it with AI coding agents, and in a system like this a screen that looks right can still save the wrong data. So a screen only counts as done when a Puppeteer test runs its flows and checks the resulting rows in the database. 163 of its 186 screens pass so far. It isn't in production yet.",
+          surveillance: "At NetComet I was the only developer of a video-surveillance product the company built on Frigate NVR for condominiums, office buildings and factories (Python/FastAPI, React/TypeScript). I wrote its automation engine, which turns detections, line crossings and recognized faces into push notifications, MQTT messages or on-screen alarms, and I used Gemini to describe events with the building's floor plan as context. It never went to market.",
+          school: "Outside work, I'm one of two developers of a school-transport platform that a municipal school network in southern Brazil is piloting, covering about 1,500 students in 19 schools. It runs on React, Node.js and PostgreSQL. My part includes the route suggestions, which use geocoding and OSRM walking distances to place each student on a route and stop.",
+        },
+        pt: {
+          erp: "Sou o principal desenvolvedor da reescrita de um ERP multiempresa em PHP com mais de dez anos (vendas, financeiro, NF-e e gestão de rede de provedor) para React e uma API REST em PHP. Escrevo a maior parte com agentes de IA, e uma tela só conta como pronta quando um teste Puppeteer roda os fluxos e confere os dados gravados no banco. 163 das 186 telas já passam; o sistema ainda não está em produção.",
+          surveillance: "Lá, fui o único desenvolvedor de um produto de videomonitoramento que a empresa criou sobre o Frigate NVR para condomínios, prédios comerciais e fábricas (Python/FastAPI, React/TypeScript). Criei o motor de automações, que transforma detecções, cruzamentos de linha e rostos reconhecidos em notificações push, mensagens MQTT ou alarmes na tela, e usei o Gemini para descrever eventos com a planta do prédio como contexto. O produto não chegou ao mercado.",
+          school: "Fora do trabalho, sou um de dois desenvolvedores de uma plataforma de transporte escolar (React, Node.js, PostgreSQL) que a rede municipal de ensino de uma cidade do RS usa em piloto, com cerca de 1.500 alunos em 19 escolas. Fiz a sugestão de rotas, com geocodificação e distâncias a pé calculadas pelo OSRM.",
+        },
+      };
+
+      const PROJECT_ANSWER = {
+        en: "The test tooling for the ERP rewrite I work on at NetComet. The old PHP system is about ten years old, serves several companies from one codebase, and handles things like Brazilian e-invoicing, so a screen that looks right can still save the wrong data. Before calling a ported screen done, I wanted proof that it does what the old one did. I wrote Puppeteer tests that run each flow in the browser and then check the resulting rows in the database, plus PHP integration tests for the API running in Docker, and a pre-push check that runs them. 163 of the 186 screens pass today. The system isn't live yet.",
+        pt: "As ferramentas de teste da reescrita do ERP em que trabalho na NetComet. O sistema antigo em PHP tem cerca de dez anos, atende várias empresas com um único código e cuida de coisas como a NF-e, então uma tela que parece certa ainda pode gravar dados errados. Antes de dar uma tela migrada como pronta, eu queria provas de que ela faz o mesmo que a antiga. Escrevi testes em Puppeteer que rodam cada fluxo no navegador e depois conferem as linhas gravadas no banco, além de testes de integração da API em PHP rodando em Docker e uma verificação antes de cada push que roda todos eles. Hoje, 163 das 186 telas passam. O sistema ainda não está em produção.",
+      };
+
+      // Brazil has no daylight saving: UTC−3 is 1–2 h ahead of US Eastern, 4–5 h behind CET.
+      const ZONE_LINE = {
+        americas: "I'm in Brazil (UTC−3), one to two hours ahead of US Eastern time, so I can work your business hours.",
+        europe: "I'm in Brazil (UTC−3), four to five hours behind Central European time, so my working day overlaps with your afternoons.",
+        unstated: "I'm in Brazil (UTC−3) and can adjust my working hours to overlap with your team.",
+      };
+      // Completes "…and can ___as a contractor or through your EOR."
+      const ZONE_SHORT = {
+        americas: "work US business hours ",
+        europe: "overlap with your afternoons (CET) ",
+        unstated: "work ",
+      };
+
+      /** The chosen story, plus the optional company-specific sentence. */
+      function storyParagraph(lang) {
+        const extra = field("extra", "");
+        return extra.value ? [STORIES[lang][state.story], " ", extra] : [STORIES[lang][state.story]];
+      }
+
+      function letterEn() {
+        const greeting = state.contact.trim()
+          ? p`Hi ${field("contact", "Name")},`
+          : p`Hi ${field("company", "Company")} team,`;
+        const asm =
+          (state.story === "school" ? "I also maintain" : "Outside work I maintain") +
+          ` Agent Session Manager, an open-source KDE Plasma widget for Claude Code sessions, with 200+ tests and available on the KDE Store: ${PROFILE.asm}`;
+        const location =
+          state.location === "remote"
+            ? [`${ZONE_LINE[state.zone]} I can work as a contractor or through your employer of record, and can start immediately.`]
+            : p`I live in Santo Antônio da Patrulha (RS) and can work hybrid or on site in ${field("city", "city")}. I can start immediately.`;
+        return {
+          body: [
+            greeting,
+            p`I'd like to apply for the ${field("role", "exact role title")} role. ${field("why", "why this company, in one specific sentence")}`,
+            storyParagraph("en"),
+            state.asm ? [asm] : null,
+            location,
+            ["Happy to walk through any of this."],
+            [`Pedro Ourique\n${PROFILE.email} · ${PROFILE.site} · ${PROFILE.linkedin}`],
+          ],
+        };
+      }
+
+      function letterPt() {
+        const greeting = state.contact.trim()
+          ? p`Olá, ${field("contact", "nome")},`
+          : p`Olá, equipe ${field("company", "Empresa")},`;
+        const hybrid =
+          state.location === "hybrid"
+            ? p` Moro em Santo Antônio da Patrulha e posso me deslocar até ${field("city", "cidade")}.`
+            : [];
+        return {
+          subject: state.email ? p`${field("role", "título exato da vaga")} – Pedro Ourique` : null,
+          body: [
+            greeting,
+            p`Quero me candidatar à vaga de ${field("role", "título exato da vaga")}. Trabalho como desenvolvedor de software na NetComet, um provedor de internet do RS, onde entrei como estagiário em 2025 e fui efetivado em setembro do mesmo ano.`,
+            storyParagraph("pt"),
+            p`${field("why", "motivo concreto para esta empresa, em uma frase")}${hybrid}`,
+            state.salary ? p`Pretensão salarial: ${field("salaryRange", "faixa")} (${state.contract}).` : null,
+            ["Código e projetos: github.com/Pedroou · pedroou.github.io/Landing-Pdr · linkedin.com/in/pedro-guimaraes-ourique"],
+            [`Atenciosamente,\nPedro Ourique\n${PROFILE.phone} · ${PROFILE.email}`],
+          ],
+        };
+      }
+
+      function shortAnswer() {
+        if (state.lang === "pt") {
+          return {
+            body: [
+              p`Boa parte do que construo hoje é sobre tornar confiável o código escrito por IA. No trabalho, escrevo a maior parte da reescrita de um ERP de 186 telas com agentes de IA, e uma tela só conta como pronta quando um teste no navegador confirma os dados no banco. Por conta própria, criei o Agent Session Manager, um widget do KDE Plasma que mostra quais sessões de agentes de código estão esperando por mim. Ele tem mais de 200 testes e está na KDE Store. ${field("why", "uma frase sobre o que te atrai nesta empresa ou time")} Posso mostrar qualquer parte disso numa conversa.`,
+            ],
+          };
+        }
+        const remote =
+          state.location === "remote"
+            ? [` I'm in Brazil (UTC−3), work in English every day, and can ${ZONE_SHORT[state.zone]}as a contractor or through your EOR.`]
+            : [];
+        return {
+          body: [
+            p`Most of what I build lately is about making AI-written code trustworthy. At work I write most of a 186-screen ERP rewrite with AI coding agents, and a screen only counts as done when a browser test confirms its data in the database. On my own time I built Agent Session Manager, a KDE Plasma widget that shows which coding-agent sessions are waiting on me. It has 200+ tests and is on the KDE Store. ${field("why", "one sentence on what draws you to this company or team")}${remote} Happy to show any of it on a call.`,
+          ],
+        };
+      }
+
+      function compose() {
+        if (state.mode === "project") return { body: [[PROJECT_ANSWER[state.lang]]] };
+        if (state.mode === "short") return shortAnswer();
+        return state.lang === "pt" ? letterPt() : letterEn();
+      }
+
+      // --- Output --------------------------------------------------------------
+
+      const partText = (part) => (typeof part === "string" ? part : part.value || `[${part.label}]`);
+      const toText = (paragraphs) => paragraphs.map((parts) => parts.map(partText).join("")).join("\n\n");
+
+      // Emails, full URLs, and bare domains like github.com/Pedroou. Emails come
+      // first so "gmail.com" inside an address isn't taken for a domain.
+      const LINKABLE = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+|https?:\/\/[^\s·]+|\b(?:[a-z0-9-]+\.)+(?:com\.br|com|io|br)(?:\/[^\s·]*)?/gi;
+
+      /** Template text with its links clickable. Copying still uses the plain text. */
+      function linkify(text) {
+        const nodes = [];
+        let last = 0;
+        for (const match of text.matchAll(LINKABLE)) {
+          // A sentence's closing punctuation isn't part of the link.
+          const found = match[0].replace(/[.,;:)]+$/, "");
+          const href = found.includes("@") && !found.includes("/") ? `mailto:${found}` : /^https?:/i.test(found) ? found : `https://${found}`;
+          nodes.push(text.slice(last, match.index));
+          nodes.push(Object.assign(document.createElement("a"), { href, textContent: found, target: "_blank", rel: "noreferrer" }));
+          last = match.index + found.length;
+        }
+        nodes.push(text.slice(last));
+        return nodes;
+      }
+
+      function renderParagraph(parts) {
+        const el = document.createElement("p");
+        for (const part of parts) {
+          if (typeof part === "string") {
+            el.append(...linkify(part));
+          } else {
+            const span = document.createElement(part.value ? "span" : "mark");
+            span.className = part.value ? "filled" : "blank";
+            span.textContent = partText(part);
+            el.append(span);
+          }
+        }
+        return el;
+      }
+
+      function checks(result, text) {
+        const items = [];
+        const all = [...(result.subject ? [result.subject] : []), ...result.body].flat();
+        const blanks = [...new Set(all.filter((part) => typeof part !== "string" && !part.value).map((part) => part.label))];
+        if (blanks.length) items.push({ warn: true, text: `${blanks.length} blank${blanks.length > 1 ? "s" : ""} left: ${blanks.join("; ")}` });
+
+        const banned = [...new Set((text.match(BANNED) ?? []).map((word) => word.toLowerCase()))];
+        if (banned.length) items.push({ warn: true, text: `Words to cut: ${banned.join(", ")}` });
+        if (text.includes("—")) items.push({ warn: true, text: "Contains an em dash (—)" });
+
+        const words = text.split(/\s+/).filter(Boolean).length;
+        if (state.mode === "short" && words > SHORT_ANSWER_WORDS)
+          items.push({ warn: true, text: `${words} words: aim for about 100, a reader skims anything longer` });
+        if (state.mode === "letter" && state.lang === "pt" && !state.email && text.length > GUPY_LIMIT)
+          items.push({ warn: true, text: `${text.length} characters: over Gupy's ${GUPY_LIMIT.toLocaleString("en")}` });
+
+        if (!items.length) items.push({ warn: false, text: "No blanks or flagged words. Read it out loud once before sending." });
+        return items;
+      }
+
+      function render() {
+        for (const el of document.querySelectorAll("[data-when]")) el.hidden = !matches(el.dataset.when);
+
+        const result = compose();
+        const body = result.body.filter(Boolean);
+        const text = toText(body);
+
+        const letter = document.getElementById("letter");
+        letter.replaceChildren(...body.map(renderParagraph));
+        letter.lang = state.lang === "pt" ? "pt-BR" : "en";
+
+        const subject = document.getElementById("subject");
+        subject.hidden = !result.subject;
+        if (result.subject) document.getElementById("subject-text").replaceChildren(renderParagraph(result.subject));
+
+        const words = text.split(/\s+/).filter(Boolean).length;
+        document.getElementById("count").textContent =
+          state.lang === "pt" && state.mode === "letter"
+            ? `${words} words · ${text.length.toLocaleString("en")} / ${GUPY_LIMIT.toLocaleString("en")} characters`
+            : `${words} words · ${text.length.toLocaleString("en")} characters`;
+
+        document.getElementById("checks").replaceChildren(
+          ...checks({ ...result, body }, text).map(({ warn, text: message }) => {
+            const li = document.createElement("li");
+            if (warn) li.className = "warn";
+            li.textContent = message;
+            return li;
+          }),
+        );
+
+        renderFindings();
+
+        return { text, subject: result.subject ? toText([result.subject]) : "" };
+      }
+
+      function renderFindings() {
+        const card = document.getElementById("findings");
+        card.hidden = !state.summary && !state.findings.length;
+        const summary = document.getElementById("findings-summary");
+        summary.textContent = state.summary;
+        summary.hidden = !state.summary;
+        document.getElementById("findings-list").replaceChildren(
+          ...state.findings.map(({ text, source }) => {
+            const li = document.createElement("li");
+            li.append(`${text} `);
+            const url = safeUrl(source);
+            if (url) {
+              const link = Object.assign(document.createElement("a"), { href: url.href, target: "_blank", rel: "noreferrer", textContent: url.hostname });
+              li.append(link);
+            }
+            return li;
+          }),
+        );
+      }
+
+      function safeUrl(value) {
+        try {
+          const url = new URL(value);
+          return url.protocol === "https:" || url.protocol === "http:" ? url : null;
+        } catch {
+          return null;
+        }
+      }
+
+      /** `data-when="mode=letter lang=en, mode=short"`: comma = or, space = and, | = any of. */
+      function matches(expression) {
+        return expression.split(",").some((group) =>
+          group
+            .trim()
+            .split(/\s+/)
+            .every((condition) => {
+              const [key, values] = condition.split("=");
+              return values.split("|").includes(String(state[key]));
+            }),
+        );
+      }
+
+      // --- Wiring --------------------------------------------------------------
+
+      const form = document.getElementById("controls");
+
+      function syncForm() {
+        for (const el of form.elements) {
+          if (!el.name || !(el.name in state)) continue;
+          if (el.type === "radio") el.checked = state[el.name] === el.value;
+          else if (el.type === "checkbox") el.checked = Boolean(state[el.name]);
+          else el.value = state[el.name];
+        }
+      }
+
+      function onInput(event) {
+        const el = event.target;
+        if (!el.name || !(el.name in state)) return;
+        state[el.name] = el.type === "checkbox" ? el.checked : el.value;
+        save();
+        render();
+      }
+      form.addEventListener("input", onInput);
+      form.addEventListener("change", onInput);
+      form.addEventListener("submit", (event) => event.preventDefault());
+
+      document.getElementById("reset").addEventListener("click", () => {
+        for (const key of LISTING_FIELDS) state[key] = DEFAULTS[key];
+        state.salary = false;
+        save();
+        syncForm();
+        render();
+        clearListing();
+        document.getElementById("company").focus();
+      });
+
+      async function copy(text, button) {
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const area = Object.assign(document.createElement("textarea"), { value: text });
+          document.body.append(area);
+          area.select();
+          document.execCommand("copy");
+          area.remove();
+        }
+        const label = button.textContent;
+        button.textContent = "Copied";
+        setTimeout(() => (button.textContent = label), 1500);
+      }
+
+      document.getElementById("copy").addEventListener("click", (event) => copy(render().text, event.currentTarget));
+      document.getElementById("copy-subject").addEventListener("click", (event) => copy(render().subject, event.currentTarget));
+
+      // --- Autofill with Claude Code ----------------------------------------------
+      // A page can't start programs, so this talks to cover-letter-helper.mjs, which
+      // serves the page and runs one fresh headless Claude Code session per request.
+
+      const HELPER_URL = "http://127.0.0.1:4817/";
+      // Registered by the helper's first run (cover-letter-helper.mjs, registerScheme).
+      const HELPER_LINK = "pedro-cover-letter://start";
+      const ACCOUNT_KEY = "cover-letter-claude-account";
+      const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
+      const MAX_IMAGE_EDGE = 1600; // Claude downsizes anything larger anyway.
+
+      const AUTOFILL_SCHEMA = {
+        type: "object",
+        additionalProperties: false,
+        required: ["lang", "location", "zone", "story", "asm", "email", "salary", "contract", "company", "role", "contact", "city", "why", "extra", "findings", "summary"],
+        properties: {
+          lang: { type: "string", enum: ["en", "pt"] },
+          location: { type: "string", enum: ["remote", "hybrid"] },
+          zone: { type: "string", enum: ["americas", "europe", "unstated"] },
+          story: { type: "string", enum: ["erp", "surveillance", "school"] },
+          asm: { type: "boolean" },
+          email: { type: "boolean" },
+          salary: { type: "boolean" },
+          contract: { type: "string", enum: ["CLT", "PJ", "CLT ou PJ"] },
+          company: { type: "string" },
+          role: { type: "string" },
+          contact: { type: "string" },
+          city: { type: "string" },
+          why: { type: "string" },
+          extra: { type: "string" },
+          findings: {
+            type: "array",
+            maxItems: 4,
+            items: {
+              type: "object",
+              additionalProperties: false,
+              required: ["text", "source"],
+              properties: { text: { type: "string" }, source: { type: "string" } },
+            },
+          },
+          summary: { type: "string" },
+        },
+      };
+
+      // From the research behind this page; Claude checks for anything newer.
+      const KNOWN_GUIDANCE = `- SAP: applications are preferred in English (https://jobs.sap.com/en/how-we-hire/). To show AI skills, "include examples of how you used AI ... and how you validated the results and protected data" (https://jobs.sap.com/en/how-we-hire/ai-skills-assessment/). The cover letter is optional; use it for details that aren't on the CV. AI tools aren't allowed in interviews or online assessments (https://jobs.sap.com/en/how-we-hire/use-of-ai-in-the-recruiting-process/). SAP Labs Latin America is in São Leopoldo, RS.
+- Google: cover letters aren't required; tailor the CV to each job (https://www.google.com/about/careers/applications/how-we-hire/).
+- Amazon: doesn't accept cover letters (https://amazon.jobs/content/en/how-we-hire/online-application).
+- Atlassian: tailor to the role, show impact rather than duties, avoid buzzwords (https://www.atlassian.com/company/careers/resources/applying/five-tips-for-an-atlassian-application).
+- Stripe: new-grad engineers must use AI tools while critically reviewing and validating all of their output (https://stripe.com/careers/listing/software-engineer-new-grad/8202299).
+- Meta: technical interviews include a built-in AI assistant that candidates are expected to use (https://www.metacareers.com/hiring-process/).
+- Canva: expects candidates to use AI coding tools in technical interviews and to fix what they get wrong (https://www.canva.dev/blog/engineering/yes-you-can-use-ai-in-our-interviews/).
+- Anthropic: write your own first draft; AI may only refine it; no AI in live interviews (https://www.anthropic.com/candidate-ai-guidance).
+- Companies hiring through Gupy: a person reads the "Apresente-se!" text; the AI ranking uses experience, education, courses and certificates, distance and referrals (https://suporte-candidatos.gupy.io/s/article/Como-as-empresas-utilizam-a-nova-ordena%C3%A7%C3%A3o-de-candidaturas-da-Gupy?language=pt_BR).`;
+
+      function autofillPrompt(listing) {
+        const inputs = [
+          listing.url && `- URL: ${listing.url}\n  Open it with WebFetch. If it fails or needs a login, say so in "summary" and use the other inputs.`,
+          listing.image && "- A screenshot of the listing (attached).",
+          listing.text && `- Pasted text:\n"""\n${listing.text}\n"""`,
+        ].filter(Boolean).join("\n");
+
+        return `You are filling in Pedro Ourique's cover-letter template for one job listing. The letter's paragraphs are fixed text written by Pedro: you only pick options and write two short slots. Return everything through the structured output.
+
+# The listing
+${inputs}
+
+# Steps
+1. Read the listing: company, exact role title, language, where the job is (remote, hybrid or on site, and in which country and city), time-zone requirements, how to apply (form or email), whether it asks for a salary expectation and whether it's CLT or PJ, and whether a named person is hiring.
+2. Quick company check, at most 4 web searches or page fetches in total. On the company's own careers site, look for what it says about applications: CV or cover-letter preferences, the language to apply in, what it looks for in developers, and AI skills or its rules on using AI when applying. If the company is in "Known guidance" below, use that and only look for anything newer. Ignore generic career blogs.
+3. Fill in the fields. Apply the company's main preferences through the options and the two slots, keeping the letter close to the template.
+
+# Pedro (these are the only facts; never add to them)
+- Software developer in Santo Antônio da Patrulha, RS, Brazil (UTC−3). Portuguese native, English C1.
+- NetComet, an internet provider: software development intern from May 2025, software developer since September 2025.
+- Studying Systems Analysis and Development (technologist degree) at IFRS, Osório campus; expected to finish in 2027.
+- Stack: TypeScript, JavaScript, React, Node.js, Python (FastAPI), PHP (Slim), PostgreSQL, MySQL, Docker, Puppeteer, Gemini API, MQTT.
+- Writes most of his code with AI coding agents and counts work as done only when tests confirm it.
+- Side projects: Agent Session Manager (open-source KDE Plasma widget that tracks Claude Code sessions; 200+ tests; on the KDE Store) and Claude Acc-Manager (command-line tool for several Claude Code accounts on one machine).
+- His three stories are the paragraphs under "story" below.
+
+# Options
+- lang: "pt" if the listing is in Portuguese, unless the company asks for applications in English (SAP does); otherwise "en".
+- location: "remote" for remote jobs; "hybrid" for hybrid or on-site jobs in Brazil. In English, "remote" adds a paragraph about working from Brazil as a contractor or through an employer of record, which is meant for companies abroad.
+- zone (matters only for remote): "americas" for US or Americas time zones, "europe" for European ones, "unstated" when the listing doesn't say.
+- story: the main paragraph. "erp" for front-end, full-stack, React or business-software roles (the default); "surveillance" for Python, AI, computer-vision or product roles; "school" for Node.js / PostgreSQL full-stack or startup roles.
+  erp: ${STORIES.en.erp}
+  surveillance: ${STORIES.en.surveillance}
+  school: ${STORIES.en.school}
+- asm: true adds a paragraph about Agent Session Manager (English letters only). Use true unless the role has nothing to do with developer tooling or AI-assisted work.
+- email: true only if the listing says to apply by email (adds an email subject line to Portuguese letters).
+- salary: true only if the listing asks for a salary expectation. contract: "CLT" or "PJ" if the listing names one, otherwise "CLT ou PJ". Never write a salary figure; Pedro adds it.
+- company: the name people use (for example "SAP", not "SAP SE").
+- role: the exact title from the listing.
+- contact: the hiring person's name if the listing gives one, otherwise "".
+- city: the office city for hybrid or on-site jobs, otherwise "".
+
+# Slots you write
+- why: one sentence, at most 35 words, in the letter's language. Name something specific and checkable about this company or role (its product, stack, domain, or something in the listing) and connect it to one of Pedro's real projects. If the sentence would still make sense with a competitor's name in it, rewrite it.
+- extra: usually "". Only when a company preference you found asks for something Pedro can truthfully show and the chosen story doesn't already say it, write one sentence (at most 30 words, in the letter's language). It's appended to the story paragraph, so never repeat the story.
+- Style for both: plain and factual. No adjectives about Pedro, no flattery, no em dashes, and none of these words: passionate, thrive, align, leverage, robust, delve, apaixonado, alavancar.
+
+# Report
+- findings: up to 4 company preferences that matter for this application. Each is one English sentence of at most 25 words on what the company prefers and what you did about it, with the URL of the page that says so (the company's own page when possible). Always include it when the company doesn't read or doesn't accept cover letters. Use [] if you found nothing specific.
+- summary: one English sentence of at most 35 words on what you used (URL, text or screenshot) and anything Pedro should check, such as a URL that couldn't be opened, a time-zone mismatch, or a screening question that a short answer would fit better.
+
+# Known guidance
+${KNOWN_GUIDANCE}`;
+      }
+
+      const $ = (id) => document.getElementById(id);
+      const dialog = $("autofill");
+      const tabs = { connect: $("tab-connect"), listing: $("tab-listing") };
+      const panels = { connect: $("panel-connect"), listing: $("panel-listing") };
+      let account = null;
+      let screenshot = null; // { mediaType, data, url }
+      let running = null; // AbortController of the run in progress
+
+      const escapeHtml = (value) =>
+        String(value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+      function savedAccount() {
+        try {
+          return localStorage.getItem(ACCOUNT_KEY);
+        } catch {
+          return null;
+        }
+      }
+
+      function showTab(name) {
+        for (const key of Object.keys(tabs)) {
+          tabs[key].setAttribute("aria-selected", String(key === name));
+          panels[key].hidden = key !== name;
+        }
+        if (name === "listing") focusSource();
+      }
+      tabs.connect.addEventListener("click", () => showTab("connect"));
+      tabs.listing.addEventListener("click", () => showTab("listing"));
+
+      async function openAutofill() {
+        if (!dialog.open) dialog.showModal();
+        if (running) return showTab("listing");
+        tabs.listing.disabled = true;
+        showTab("connect");
+        await checkHelper();
+      }
+
+      // Only the launcher for this computer's system; both when it can't be told.
+      // navigator.platform first: user-agent spoofing (privacy tools, automation) rarely touches it.
+      const PLATFORM = navigator.platform || navigator.userAgentData?.platform || "";
+      const LAUNCHER = /^win/i.test(PLATFORM)
+        ? "<code>Start cover letter helper.cmd</code>"
+        : /linux|x11/i.test(PLATFORM)
+          ? "<code>start-cover-letter-helper.sh</code>"
+          : "<code>Start cover letter helper.cmd</code> (Windows) or <code>start-cover-letter-helper.sh</code> (Linux)";
+      const FIRST_TIME = `<p class="first-time"><strong>First time on this computer?</strong> Start the helper once by double-clicking ${LAUNCHER} in this page's folder.</p>`;
+
+      function renderNotRunning(message) {
+        const secondary =
+          location.protocol === "file:"
+            ? `<button type="button" class="button secondary" data-action="open-helper">Already running? Open its page</button>`
+            : `<button type="button" class="button secondary" data-action="recheck">Check again</button>`;
+        panels.connect.innerHTML = `
+          <p>${message}</p>
+          <div class="modal-actions">
+            ${secondary}
+            <button type="button" class="button primary" data-action="start">Start the helper</button>
+          </div>
+          ${FIRST_TIME}`;
+      }
+
+      async function checkHelper() {
+        panels.connect.innerHTML = `<p class="working"><span class="spinner" aria-hidden="true"></span>Looking for Claude Code…</p>`;
+        if (location.protocol === "file:") {
+          renderNotRunning("To fill this in with Claude Code, start the helper first.");
+          return;
+        }
+        let status;
+        try {
+          const response = await fetch("/api/status", { cache: "no-store" });
+          if (!response.ok) throw new Error();
+          status = await response.json();
+        } catch {
+          renderNotRunning("The helper stopped. Start it again to continue.");
+          return;
+        }
+        renderConnect(status);
+      }
+
+      /** The helper's page with this page's fields: file:// and http:// pages don't share storage. */
+      function helperPageUrl() {
+        return `${HELPER_URL}#${new URLSearchParams({ import: JSON.stringify(state), autofill: "1" })}`;
+      }
+
+      async function helperIsUp() {
+        try {
+          // A file:// page can't read the answer (no-cors), but a refused connection still throws.
+          await fetch(`${HELPER_URL}api/ping`, { mode: "no-cors", cache: "no-store" });
+          return true;
+        } catch {
+          return false;
+        }
+      }
+
+      async function startHelper() {
+        // Hands the link to the OS, which runs the helper. Has to happen inside the click.
+        location.href = HELPER_LINK;
+        panels.connect.innerHTML = `
+          <p class="working"><span class="spinner" aria-hidden="true"></span>Starting the helper…</p>
+          <p class="hint">If the browser asks whether to open "Cover letter helper" or xdg-open, allow it. Ticking "always allow" skips the question next time.</p>`;
+        const deadline = Date.now() + 60_000;
+        while (Date.now() < deadline) {
+          if (await helperIsUp()) {
+            if (location.protocol === "file:") location.href = helperPageUrl();
+            else checkHelper();
+            return;
+          }
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+        renderNotRunning("The helper didn't start. If this is your first time on this computer, see below.");
+      }
+
+      /** Reads fields handed over by `helperPageUrl`; returns whether to open the autofill. */
+      function importFromLink() {
+        if (!location.hash.startsWith("#import=")) return false;
+        const params = new URLSearchParams(location.hash.slice(1));
+        try {
+          const incoming = JSON.parse(params.get("import") ?? "{}");
+          for (const [key, value] of Object.entries(incoming)) {
+            const fallback = DEFAULTS[key];
+            if (key in DEFAULTS && typeof value === typeof fallback && Array.isArray(value) === Array.isArray(fallback)) state[key] = value;
+          }
+          save();
+        } catch {
+          // A broken link: keep what this page already had.
+        }
+        history.replaceState(null, "", location.pathname + location.search);
+        return params.get("autofill") === "1";
+      }
+
+      function renderConnect({ claude, accounts }) {
+        if (!claude) {
+          panels.connect.innerHTML = `
+            <p>The helper is running but didn't find Claude Code on this computer.</p>
+            <p class="hint">Install Claude Code and log in once by running <code>claude</code> in a terminal. If it's installed somewhere unusual, start the helper with <code>CLAUDE_PATH</code> set to the program's full path.</p>
+            <div class="modal-actions"><button type="button" class="button primary" data-action="recheck">Check again</button></div>`;
+          return;
+        }
+
+        const usable = accounts.filter((a) => a.loggedIn);
+        const preferred = usable.find((a) => a.id === savedAccount()) ?? usable[0];
+        const rows = accounts
+          .map((a) => {
+            const details = [a.org, a.plan, a.dir].filter(Boolean).map(escapeHtml).join(" · ");
+            return `<label>
+                <input type="radio" name="claude-account" value="${escapeHtml(a.id)}" ${a.loggedIn ? "" : "disabled"} ${a === preferred ? "checked" : ""} />
+                <span>${a.loggedIn ? escapeHtml(a.email || "Logged in") : "Not logged in"}<small>${details}</small></span>
+              </label>`;
+          })
+          .join("");
+
+        panels.connect.innerHTML = `
+          <p>Found Claude Code ${escapeHtml(claude.version)} at <code>${escapeHtml(claude.path)}</code>.</p>
+          <fieldset>
+            <legend class="group-label">Account to use</legend>
+            <div class="choices accounts">${rows}</div>
+          </fieldset>
+          ${usable.length ? "" : `<p class="hint">No account is logged in. Run <code>claude</code> in a terminal and type <code>/login</code>, then check again.</p>`}
+          <div class="modal-actions">
+            <button type="button" class="button secondary" data-action="recheck">Check again</button>
+            <button type="button" class="button primary" data-action="connect" ${usable.length ? "" : "disabled"}>Continue</button>
+          </div>`;
+
+        // Already set up on an earlier visit: go straight to the listing.
+        if (preferred && preferred.id === savedAccount()) connect(preferred.id);
+      }
+
+      function connect(id) {
+        account = id;
+        try {
+          localStorage.setItem(ACCOUNT_KEY, id);
+        } catch {}
+        tabs.listing.disabled = false;
+        showTab("listing");
+      }
+
+      panels.connect.addEventListener("click", (event) => {
+        const action = event.target.closest("[data-action]")?.dataset.action;
+        if (action === "recheck") checkHelper();
+        if (action === "start") startHelper();
+        if (action === "open-helper") location.href = helperPageUrl();
+        if (action === "connect") {
+          const chosen = panels.connect.querySelector('input[name="claude-account"]:checked');
+          if (chosen) connect(chosen.value);
+        }
+      });
+
+      $("autofill-open").addEventListener("click", openAutofill);
+      $("autofill-close").addEventListener("click", () => dialog.close());
+      dialog.addEventListener("close", () => running?.abort());
+
+      // --- The listing ---
+
+      function showError(message) {
+        const box = $("listing-error");
+        box.textContent = message;
+        box.hidden = !message;
+      }
+
+      function paintScreenshot() {
+        const label = $("dropzone-label");
+        if (screenshot) {
+          label.replaceChildren(Object.assign(document.createElement("img"), { src: screenshot.url, alt: "Screenshot of the listing" }));
+        } else {
+          label.textContent = "Paste it here (Ctrl+V), drop a file, or";
+        }
+        $("screenshot-pick").hidden = Boolean(screenshot);
+        $("screenshot-remove").hidden = !screenshot;
+      }
+
+      /** Scales big screenshots down and re-encodes them, so uploads stay small. */
+      async function setScreenshot(file) {
+        if (!file) return;
+        if (!IMAGE_TYPES.includes(file.type)) return showError("Use a PNG, JPEG, WebP or GIF image.");
+        showError("");
+        const bitmap = await createImageBitmap(file);
+        const scale = Math.min(1, MAX_IMAGE_EDGE / Math.max(bitmap.width, bitmap.height));
+        const canvas = Object.assign(document.createElement("canvas"), {
+          width: Math.round(bitmap.width * scale),
+          height: Math.round(bitmap.height * scale),
+        });
+        canvas.getContext("2d").drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+        const url = canvas.toDataURL("image/jpeg", 0.9);
+        screenshot = { mediaType: "image/jpeg", data: url.slice(url.indexOf(",") + 1), url };
+        paintScreenshot();
+      }
+
+      const currentSource = () => $("listing-form").querySelector('input[name="source"]:checked').value;
+
+      /** Shows only the input for the chosen kind of listing. */
+      function showSource(name) {
+        $("listing-form").querySelector(`input[name="source"][value="${name}"]`).checked = true;
+        for (const el of $("listing-form").querySelectorAll("[data-source]")) el.hidden = el.dataset.source !== name;
+        showError("");
+      }
+
+      function focusSource() {
+        const screenshotButton = screenshot ? $("screenshot-remove") : $("screenshot-pick");
+        ({ text: $("listing-text"), url: $("listing-url"), screenshot: screenshotButton })[currentSource()].focus();
+      }
+
+      $("listing-form").addEventListener("change", (event) => {
+        if (event.target.name !== "source") return;
+        showSource(event.target.value);
+        focusSource();
+      });
+
+      function clearListing() {
+        $("listing-text").value = "";
+        $("listing-url").value = "";
+        screenshot = null;
+        paintScreenshot();
+        showSource("text");
+        showError("");
+      }
+
+      const dropzone = $("dropzone");
+      $("screenshot-pick").addEventListener("click", () => $("screenshot-file").click());
+      $("screenshot-file").addEventListener("change", (event) => setScreenshot(event.target.files?.[0]));
+      $("screenshot-remove").addEventListener("click", () => {
+        screenshot = null;
+        paintScreenshot();
+      });
+      dialog.addEventListener("paste", (event) => {
+        const file = [...(event.clipboardData?.files ?? [])].find((f) => f.type.startsWith("image/"));
+        if (file) {
+          event.preventDefault();
+          showSource("screenshot");
+          setScreenshot(file);
+        }
+      });
+      dropzone.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        dropzone.dataset.over = "";
+      });
+      dropzone.addEventListener("dragleave", () => delete dropzone.dataset.over);
+      dropzone.addEventListener("drop", (event) => {
+        event.preventDefault();
+        delete dropzone.dataset.over;
+        setScreenshot(event.dataTransfer?.files?.[0]);
+      });
+
+      function setRunning(on) {
+        $("listing-form").hidden = on;
+        $("listing-progress").hidden = !on;
+        tabs.connect.disabled = on;
+        if (on) $("progress-list").replaceChildren();
+      }
+
+      function addProgress(text) {
+        const list = $("progress-list");
+        list.append(Object.assign(document.createElement("li"), { textContent: text }));
+        while (list.children.length > 6) list.firstElementChild.remove();
+      }
+
+      function applyAutofill(data) {
+        for (const key of AUTOFILL_SCHEMA.required) if (key in data) state[key] = data[key];
+        state.salaryRange = "";
+        if (state.mode === "project") state.mode = "letter";
+        save();
+        syncForm();
+        render();
+      }
+
+      $("listing-cancel").addEventListener("click", () => running?.abort());
+
+      $("listing-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const source = currentSource();
+        const listing = {
+          text: source === "text" ? $("listing-text").value.trim() : "",
+          url: source === "url" ? $("listing-url").value.trim() : "",
+          image: source === "screenshot" ? screenshot : null,
+        };
+        if (!listing.text && !listing.url && !listing.image) {
+          return showError({ text: "Paste the listing first.", url: "Paste the link first.", screenshot: "Add a screenshot first." }[source]);
+        }
+        if (listing.url && !safeUrl(listing.url)) return showError("The URL should start with https://");
+        showError("");
+
+        running = new AbortController();
+        setRunning(true);
+        const started = Date.now();
+        const clock = setInterval(() => {
+          const seconds = Math.floor((Date.now() - started) / 1000);
+          $("listing-elapsed").textContent = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+        }, 1000);
+        $("listing-elapsed").textContent = "0:00";
+
+        try {
+          const response = await fetch("/api/autofill", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              account,
+              prompt: autofillPrompt(listing),
+              schema: AUTOFILL_SCHEMA,
+              image: listing.image ? { mediaType: listing.image.mediaType, data: listing.image.data } : undefined,
+            }),
+            signal: running.signal,
+          });
+          if (!response.ok) {
+            const body = await response.json().catch(() => ({}));
+            throw new Error(body.error || `The helper answered with an error (${response.status}).`);
+          }
+
+          const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
+          let buffer = "";
+          let outcome = null;
+          for (;;) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            buffer += value;
+            const lines = buffer.split("\n");
+            buffer = lines.pop() ?? "";
+            for (const line of lines.filter(Boolean)) {
+              const message = JSON.parse(line);
+              if (message.type === "progress") addProgress(message.text);
+              else outcome = message;
+            }
+          }
+          if (!outcome) throw new Error("The helper stopped without an answer.");
+          if (outcome.type === "error") throw new Error(outcome.message);
+
+          applyAutofill(outcome.data);
+          dialog.close();
+        } catch (error) {
+          if (error.name === "AbortError") showError("");
+          else if (error instanceof TypeError) showError("Lost the connection to the helper. Is its window still open?");
+          else showError(error.message || "Something went wrong.");
+        } finally {
+          clearInterval(clock);
+          running = null;
+          setRunning(false);
+        }
+      });
+
+      // --- Theme (mirrors Landing-Pdr/src/theme.ts) ------------------------------
+
+      const SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>';
+      const MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>';
+      const systemDark = matchMedia("(prefers-color-scheme: dark)");
+      const themeButton = document.getElementById("theme-toggle");
+
+      const currentTheme = () => document.documentElement.dataset.theme ?? (systemDark.matches ? "dark" : "light");
+
+      function paintThemeButton() {
+        const dark = currentTheme() === "dark";
+        // Like the site: the icon shows where a click leads.
+        themeButton.innerHTML = dark ? SUN : MOON;
+        themeButton.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
+      }
+
+      themeButton.addEventListener("click", () => {
+        const next = currentTheme() === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem("theme", next);
+        } catch {}
+        paintThemeButton();
+      });
+      systemDark.addEventListener("change", paintThemeButton);
+
+      const openAutofillNow = importFromLink();
+      syncForm();
+      paintThemeButton();
+      render();
+      if (openAutofillNow) openAutofill();
+    </script>
+  </body>
+</html>
