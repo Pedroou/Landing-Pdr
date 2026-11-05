@@ -407,8 +407,12 @@
         gap: 1rem 2rem;
       }
 
-      /* "Fill with AI": a highlight-yellow sheen sweeps across every few seconds. */
+      /* "Fill with AI": a silver sheen sweeps across every few seconds, the outline
+         glints and the sparkles twinkle as it passes. Only transform/opacity animate. */
       .shiny {
+        /* Halfway between button and text in both themes: reads as metal, keeps contrast. */
+        --sheen: color-mix(in oklch, var(--muted) 65%, var(--bg));
+        --sheen-period: 4.5s;
         position: relative;
         display: inline-flex;
         align-items: center;
@@ -416,30 +420,64 @@
         overflow: hidden;
         isolation: isolate;
       }
+      .shiny:hover,
+      .shiny:focus-visible { --sheen-period: 1.6s; }
       .shiny svg { flex: none; width: 1.0625rem; height: 1.0625rem; }
+      .shiny::before,
       .shiny::after {
         content: "";
         position: absolute;
         inset: 0;
         z-index: -1;
+        pointer-events: none;
+        animation: var(--sheen-period) var(--ease-out) 0.8s infinite;
+      }
+      /* Narrow bright core with a soft falloff, so it looks like metal and not a stripe. */
+      .shiny::after {
         background: linear-gradient(
           105deg,
-          transparent 30%,
-          color-mix(in oklch, var(--highlight) 85%, transparent) 50%,
-          transparent 70%
+          transparent 32%,
+          color-mix(in oklch, var(--sheen) 30%, transparent) 45%,
+          color-mix(in oklch, var(--sheen) 85%, transparent) 50%,
+          color-mix(in oklch, var(--sheen) 30%, transparent) 55%,
+          transparent 68%
         );
         translate: -110% 0;
-        animation: sheen 4.5s var(--ease-out) 0.8s infinite;
-        pointer-events: none;
+        animation-name: sheen;
       }
-      .shiny:hover::after { animation-duration: 1.6s; }
+      /* A faint ring just inside the border that glints while the sweep is on. */
+      .shiny::before {
+        border-radius: inherit;
+        box-shadow: inset 0 0 0 1px var(--sheen);
+        opacity: 0;
+        animation-name: sheen-ring;
+      }
+      .shiny .spark {
+        transform-box: fill-box;
+        transform-origin: center;
+        opacity: 0.7;
+        animation: spark var(--sheen-period) var(--ease-out) 0.8s infinite;
+      }
+      /* The sweep crosses the icon early in the cycle; stagger the sparkles behind it. */
+      .shiny .spark:nth-of-type(4) { animation-delay: 0.95s; }
+      .shiny .spark:nth-of-type(5) { animation-delay: 1.1s; }
       @keyframes sheen {
         0% { translate: -110% 0; }
         30%,
         100% { translate: 110% 0; }
       }
+      @keyframes sheen-ring {
+        0%, 35%, 100% { opacity: 0; }
+        12% { opacity: 0.55; }
+      }
+      @keyframes spark {
+        0%, 20%, 100% { opacity: 0.7; scale: 1; }
+        6% { opacity: 1; scale: 1.3; }
+      }
       @media (prefers-reduced-motion: reduce) {
+        .shiny::before,
         .shiny::after { display: none; }
+        .shiny .spark { opacity: 1; animation: none; }
       }
 
       .findings-card {
@@ -594,9 +632,9 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M13.5 6.5l4 4L8 20H4v-4z" />
             <path d="M11.5 8.5l4 4" />
-            <path d="M18 2v3.5M16.25 3.75h3.5" />
-            <path d="M21.5 8.5v2M20.5 9.5h2" />
-            <path d="M6.5 3v2M5.5 4h2" />
+            <path class="spark" d="M18 2v3.5M16.25 3.75h3.5" />
+            <path class="spark" d="M21.5 8.5v2M20.5 9.5h2" />
+            <path class="spark" d="M6.5 3v2M5.5 4h2" />
           </svg>
           <span data-pt="Preencher com IA">Fill with AI</span>
         </button>
