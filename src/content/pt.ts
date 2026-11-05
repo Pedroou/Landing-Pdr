@@ -18,7 +18,7 @@ export const pt: Content = {
     about: [
       "Trabalho na NetComet, um provedor de internet no Rio Grande do Sul, onde passo a maior parte da semana reescrevendo um ERP em PHP de mais de dez anos como uma aplicação React com API REST. Escrevo com agentes de IA, reviso cada mudança eu mesmo e só dou uma tela como pronta quando um teste no navegador confirma os dados no banco.",
       "Também fui o único desenvolvedor de um produto de videomonitoramento que a empresa criou para condomínios, prédios comerciais e fábricas, baseado no Frigate NVR. Criei regras de automação que disparam alertas por push e MQTT, e descrições de eventos geradas por IA que levam em conta a planta de um prédio.",
-      "Fora do trabalho, codesenvolvi uma plataforma de transporte escolar que a prefeitura de Imbé (RS) usa para gerir o transporte de cerca de 1.500 alunos.",
+      "Fora do trabalho, codesenvolvi uma plataforma de transporte escolar que a prefeitura de Imbé (RS) usa para gerir o transporte de cerca de 4.000 alunos.",
       "Curso Análise e Desenvolvimento de Sistemas no IFRS, com conclusão prevista para dezembro de 2027.",
     ],
     stack: [
@@ -58,7 +58,7 @@ export const pt: Content = {
       "Presencial, híbrido ou remoto",
     ],
     summary: (years) =>
-      `Desenvolvedor de software com ${String(years).replace(".", ",")} ${years < 2 ? "ano" : "anos"} de experiência e estudante de Análise e Desenvolvimento de Sistemas no IFRS. Principal desenvolvedor da reescrita de um ERP de 186 telas em React, único desenvolvedor de um produto de videomonitoramento com IA e codesenvolvedor de uma plataforma de transporte escolar usada pela prefeitura de Imbé. Desenvolvo com agentes de IA e reviso e testo cada mudança.`,
+      `Desenvolvedor de software com ${String(years).replace(".", ",")} ${years < 2 ? "ano" : "anos"} de experiência e estudante de Análise e Desenvolvimento de Sistemas no IFRS. Principal desenvolvedor da reescrita de um ERP de 187 telas em React, único desenvolvedor de um produto de videomonitoramento com IA e codesenvolvedor de uma plataforma de transporte escolar usada pela prefeitura de Imbé. Desenvolvo com agentes de IA e reviso e testo cada mudança.`,
     headings: {
       experience: "Experiência profissional",
       projects: "Projetos",
@@ -83,8 +83,8 @@ export const pt: Content = {
             name: "Reescrita do ERP",
             stack: ["React", "JavaScript", "PHP (Slim)", "MySQL", "Puppeteer"],
             highlights: [
-              "Reescrevo, como principal desenvolvedor, um ERP multiempresa em PHP com mais de dez anos e 186 telas (vendas, financeiro, NF-e, rede de provedor) para React e API REST em PHP.",
-              "Desenvolvo a maior parte das telas com agentes de IA e reviso cada mudança eu mesmo; uma tela só conta como pronta quando o fluxo no Puppeteer passa e os dados gravados conferem no banco (163 de 186 até agora).",
+              "Reescrevo, como principal desenvolvedor, um ERP multiempresa em PHP com mais de dez anos e 187 telas (vendas, financeiro, NF-e, rede de provedor) para React e API REST em PHP.",
+              "Desenvolvo a maior parte das telas com agentes de IA e reviso cada mudança eu mesmo; uma tela só conta como pronta quando o fluxo no Puppeteer passa e os dados gravados conferem no banco (175 de 187 até agora).",
               "Escrevi testes de integração da API em PHP com Docker e uma verificação pré-push que roda as duas suítes.",
             ],
           },
@@ -109,7 +109,7 @@ export const pt: Content = {
         work: [
           {
             highlights: [
-              "Codesenvolvi uma plataforma de transporte escolar (React, Node.js, PostgreSQL) em uso pela prefeitura de Imbé (RS) nas secretarias de Educação e de Transportes (~1.500 alunos); fiz a sugestão de rotas com o OSRM.",
+              "Codesenvolvi uma plataforma de transporte escolar (React, Node.js, PostgreSQL) em uso pela prefeitura de Imbé (RS) nas secretarias de Educação e de Transportes (~4.000 alunos); fiz a sugestão de rotas com o OSRM.",
               "Fiz a página de links de uma escola de dança e um painel para editá-la sem código (React, API do GitHub).",
             ],
           },
