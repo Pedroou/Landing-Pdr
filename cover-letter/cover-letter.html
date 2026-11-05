@@ -412,7 +412,8 @@
       .shiny {
         /* Halfway between button and text in both themes: reads as metal, keeps contrast. */
         --sheen: color-mix(in oklch, var(--muted) 65%, var(--bg));
-        --sheen-period: 4.5s;
+        /* The sweep takes 35% of this (about 2.8s), then rests. */
+        --sheen-period: 8s;
         position: relative;
         display: inline-flex;
         align-items: center;
@@ -421,7 +422,7 @@
         isolation: isolate;
       }
       .shiny:hover,
-      .shiny:focus-visible { --sheen-period: 1.6s; }
+      .shiny:focus-visible { --sheen-period: 4s; }
       .shiny svg { flex: none; width: 1.0625rem; height: 1.0625rem; }
       .shiny::before,
       .shiny::after {
@@ -459,20 +460,20 @@
         animation: spark var(--sheen-period) var(--ease-out) 0.8s infinite;
       }
       /* The sweep crosses the icon early in the cycle; stagger the sparkles behind it. */
-      .shiny .spark:nth-of-type(4) { animation-delay: 0.95s; }
-      .shiny .spark:nth-of-type(5) { animation-delay: 1.1s; }
+      .shiny .spark:nth-of-type(4) { animation-delay: 1.2s; }
+      .shiny .spark:nth-of-type(5) { animation-delay: 1.6s; }
       @keyframes sheen {
         0% { translate: -110% 0; }
-        30%,
+        35%,
         100% { translate: 110% 0; }
       }
       @keyframes sheen-ring {
-        0%, 35%, 100% { opacity: 0; }
-        12% { opacity: 0.55; }
+        0%, 40%, 100% { opacity: 0; }
+        15% { opacity: 0.55; }
       }
       @keyframes spark {
-        0%, 20%, 100% { opacity: 0.7; scale: 1; }
-        6% { opacity: 1; scale: 1.3; }
+        0%, 25%, 100% { opacity: 0.7; scale: 1; }
+        8% { opacity: 1; scale: 1.3; }
       }
       @media (prefers-reduced-motion: reduce) {
         .shiny::before,
