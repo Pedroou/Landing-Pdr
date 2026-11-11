@@ -927,9 +927,19 @@
 
         <section class="modal-body" role="tabpanel" id="panel-listing" aria-labelledby="tab-listing" hidden>
           <form id="listing-form" class="controls">
-            <div class="contents" data-when="mode=letter, mode=project">
+            <div class="contents" data-when="mode=short">
+              <div class="field">
+                <label for="listing-question" data-pt="Cole a pergunta">Paste the question</label>
+                <textarea id="listing-question" rows="4" placeholder="Why do you want to work here?" data-pt-placeholder="Por que você quer trabalhar aqui?"></textarea>
+                <p class="hint" data-pt="Cole também o limite de palavras ou caracteres, se houver.">Include its word or character limit, if it has one.</p>
+              </div>
+            </div>
+            <div class="contents">
               <fieldset>
-                <legend class="group-label" data-pt="O que você tem?">What do you have?</legend>
+                <legend class="group-label">
+                  <span data-when="mode=letter, mode=project" data-pt="O que você tem?">What do you have?</span>
+                  <span data-when="mode=short" data-pt="A vaga (opcional, mas deixa a resposta sob medida)">The listing (optional, but it makes the answer fit the job)</span>
+                </legend>
                 <div class="pills">
                   <label><input type="radio" name="source" value="text" checked /><span data-pt="Copiar - Colar">Copy - Paste</span></label>
                   <label><input type="radio" name="source" value="url" /><span>URL</span></label>
@@ -955,15 +965,8 @@
                   <input type="file" id="screenshot-file" accept="image/png,image/jpeg,image/webp,image/gif" hidden />
                 </div>
               </div>
-              <p class="hint" data-pt="Cada execução abre uma sessão nova do Claude Code. O Claude lê a vaga, confere as páginas de carreira da própria empresa atrás de preferências para candidaturas e preenche os campos. Costuma levar de um a três minutos.">Each run starts a new Claude Code session. Claude reads the listing, checks the company's own careers pages for application preferences, then fills in the fields. It usually takes one to three minutes.</p>
-            </div>
-            <div class="contents" data-when="mode=short">
-              <div class="field">
-                <label for="listing-question" data-pt="Cole a pergunta">Paste the question</label>
-                <textarea id="listing-question" rows="5" placeholder="Why do you want to work here?" data-pt-placeholder="Por que você quer trabalhar aqui?"></textarea>
-                <p class="hint" data-pt="Cole também o limite de palavras ou caracteres, se houver.">Include its word or character limit, if it has one.</p>
-              </div>
-              <p class="hint" data-pt="Cada execução abre uma sessão nova do Claude Code. O Claude pesquisa como recrutadores e gestores recomendam responder esse tipo de pergunta e, quando ela fala da empresa, o que a empresa procura, usando a empresa e a vaga preenchidas na carta, se houver. O que ele diz sobre você vem só do seu currículo, projetos e perfis públicos; o que ele não sabe fica num [espaço entre colchetes] para você.">Each run starts a new Claude Code session. Claude looks up how recruiters and hiring managers recommend answering that kind of question and, when it's about the company, what the company looks for, using the company and role filled in for the letter, if any. What it says about you comes only from your CV, projects and public profiles; anything it doesn't know is left as a [bracketed placeholder] for you.</p>
+              <p class="hint" data-when="mode=letter, mode=project" data-pt="Cada execução abre uma sessão nova do Claude Code. O Claude lê a vaga, confere as páginas de carreira da própria empresa atrás de preferências para candidaturas e preenche os campos. Costuma levar de um a três minutos.">Each run starts a new Claude Code session. Claude reads the listing, checks the company's own careers pages for application preferences, then fills in the fields. It usually takes one to three minutes.</p>
+              <p class="hint" data-when="mode=short" data-pt="Cada execução abre uma sessão nova do Claude Code. O Claude lê a vaga, pesquisa a empresa e como recrutadores recomendam responder esse tipo de pergunta, e responde com o seu currículo, projetos e perfis. A vaga usada na carta continua aqui até você clicar em Nova vaga. O que ele não sabe sobre você fica num [espaço entre colchetes] para você preencher.">Each run starts a new Claude Code session. Claude reads the listing, looks into the company and how recruiters recommend answering that kind of question, and answers with your CV, projects and profiles. The listing you used for the letter stays here until you click New listing. Anything it doesn't know about you is left as a [bracketed placeholder] for you to fill in.</p>
             </div>
             <div class="error" id="listing-error" role="alert" hidden></div>
             <div class="modal-actions">
@@ -1034,6 +1037,9 @@
         salaryRange: "",
         contract: "CLT ou PJ",
         extra: "",
+        // The listing as pasted in Fill with AI, kept for short answers about the same job.
+        listingText: "",
+        listingUrl: "",
         // Short answers: the pasted question and Claude's answer, in the question's language.
         question: "",
         answer: "",
@@ -1045,7 +1051,7 @@
         summary: "",
       };
       // What "New listing" clears; the rest are standing choices.
-      const LISTING_FIELDS = ["company", "contact", "role", "why", "zone", "city", "salaryRange", "extra", "question", "answer", "fills", "findings", "summary"];
+      const LISTING_FIELDS = ["company", "contact", "role", "why", "zone", "city", "salaryRange", "extra", "listingText", "listingUrl", "question", "answer", "fills", "findings", "summary"];
 
       // Words that mark text as AI-written: the checks flag them and both prompts forbid them. Each value
       // is the stem the checks match, so "passionately" and "fostering" count too.
@@ -1478,12 +1484,33 @@
         },
       };
 
+      // "plan" is written before "answer", so the answer is decided around the question instead of
+      // around the facts; the page doesn't read it (applyAnswer takes lang, answer, findings, summary).
       const ANSWER_SCHEMA = {
         type: "object",
         additionalProperties: false,
-        required: ["lang", "answer", "findings", "summary"],
+        required: ["lang", "plan", "answer", "findings", "summary"],
         properties: {
           lang: { type: "string", enum: ["en", "pt"] },
+          plan: {
+            type: "object",
+            additionalProperties: false,
+            required: ["reader", "claim", "points"],
+            properties: {
+              reader: { type: "string" },
+              claim: { type: "string" },
+              points: {
+                type: "array",
+                maxItems: 3,
+                items: {
+                  type: "object",
+                  additionalProperties: false,
+                  required: ["fact", "why"],
+                  properties: { fact: { type: "string" }, why: { type: "string" } },
+                },
+              },
+            },
+          },
           answer: { type: "string" },
           findings: FINDINGS_SCHEMA,
           summary: { type: "string" },
@@ -1529,7 +1556,7 @@
 
 ## What he wants
 - A junior or mid-level (pleno) full-stack or frontend role; both levels are targets, senior roles are not. He would like an international company, and is just as open to on-site or hybrid roles in the Porto Alegre and São Leopoldo region, or remote ones in Brazil. He would love to work at SAP: a big, successful and interesting company.
-- Why he is looking: his work has grown past his current position (he is the main developer on major projects), and he wants a role that matches the work he already does.
+- Why he is leaving: his work has grown past his current position (he is the main developer on major projects), and he wants a role that matches the work he already does. Only for a question that asks why he is leaving or looking; it is not a reason to want a particular company, and next to one it reads as a complaint about his employer.
 - The thread through his recent work: making AI-written code trustworthy, and building complete products from zero to production rather than isolated tickets.
 - Spends his own time on learning (courses, English, certifications) because he wants to keep developing his career. Co-founded Lab2 because he and his partner wanted more than they had; his attitude: if one product doesn't work out, they'll find one that does.
 - Contract: CLT or PJ, no preference unless the listing says. Doesn't plan to move abroad.
@@ -1592,25 +1619,25 @@
       // What makes application text read as AI-written, and what to do instead. From Wikipedia's "Signs of AI
       // writing" (WikiProject AI Cleanup, Oct 2026), recruiters quoted by Business Insider (Jul 2025), and
       // Pedro's own rules. Used by both prompts.
-      const HUMAN_STYLE = `Recruiters now spot AI-written applications quickly, and many drop them: "every sentence is grammatically correct, evenly spaced, and emotionally vacant". These are the patterns that give it away. Write the way Pedro would type into the form himself.
-- Don't open by describing the company or the role back to them ("Nightwatch is an international, fully remote team building a data-heavy SPA..."), and don't open with a setup that's true of almost any job ("I want to work on a product where the frontend is the main thing people use"). They know who they are. Open with the answer itself, in plain words, or go straight to the concrete example. When you mention the company, name one specific thing (a product, a feature, a technical choice) and put it next to something Pedro did.
+      const HUMAN_STYLE = `Recruiters now spot AI-written applications quickly, and many drop them: "every sentence is grammatically correct, evenly spaced, and emotionally vacant". These are the patterns that give it away. Write the way Pedro would type into the form himself: he says why something matters in plain words, and he doesn't decorate.
+- Don't open by describing the company or the role back to them ("Nightwatch is an international, fully remote team building a data-heavy SPA..."), and don't open with a setup that's true of almost any job ("I want to work on a product where the frontend is the main thing people use"). They know who they are. Open with the answer itself, in plain words. When you mention the company, name one specific thing (a product, a feature, a technical choice, a line in the listing) and put it next to something Pedro did.
 - No figurative, writerly or aphoristic phrasing: nothing "carries the product", "lives or dies on", "sits at the intersection of", "bridges", "powers" or "drives" anything; no "journey", "landscape", "ecosystem", or "space" for a field; no one-line maxims ("A screen can look right and still save the wrong data.") standing on their own.
-- Don't spell out the match ("which matches your focus on...", "this lines up with...", "making me a good fit", "exactly the kind of work..."). Put his facts next to what they need and let the reader connect them.
-- No commentary tacked onto a fact (", showing...", ", highlighting...", ", which reflects...", ", ensuring..."). State the fact and stop.
+- Reasons are welcome, formulas are not. A sentence that says what a piece of his work shows for this job, naming the work and the need, belongs. "Making me a good fit", "exactly the kind of work you describe", "this lines up with your needs" and "which matches your focus on..." claim a match without naming it, so they don't. Every reason names the specific thing it rests on.
+- No participial tails that grade a fact (", showing...", ", highlighting...", ", which reflects...", ", ensuring..."). When a fact needs its reason said, give the reason a plain sentence of its own.
 - No contrast templates: "not just X but Y", "it's not X, it's Y", "X rather than Y", "more than just".
 - No lists of three (adjectives, phrases or examples) and no stacked adjectives; one good example beats three.
 - Plain verbs and simple sentences: is, has, built, wrote, used, fixed; not "serves as", "stands as", "boasts", "utilize". Vary sentence length; contractions are fine.
 - Say his traits the way he'd say them out loud, through one concrete instance from his facts (for an eye for detail: the Syn greys he and his partner compared on two screens), never as self-description ("I'm the kind of person who..."), never as a closing line about his character, and never copied word for word from his facts.
 - No short punchy sentences used as paragraph openers or closers ("I also test what I ship.", "And I fix it."); start a paragraph with the substance.
-- Use each fact once, and one or two pieces of work per answer; don't repeat a proof point inside the same answer.
+- One or two pieces of work per answer, each told once and cut down to the details the point needs; don't repeat a proof point inside the same answer.
 - No bridge sentences that only link two parts ("The work I've enjoyed most is similar.", "That's where my experience comes in."); start the next part with the example.
-- Don't add a sentence only to tick a keyword from the listing (a stray "I also have some X"). Mention a skill only when it answers the question.
-- No stock phrases: dynamic, innovative, cutting-edge, impactful, results-driven, team player, fast-paced, "I'm excited to", "I'd love the opportunity", "eager to contribute", "hit the ground running", "make an impact", "work I'm proud of"; in Portuguese, "agregar valor", "sinergia", "proatividade", "somar ao time".
-- No feelings he hasn't stated: don't say he "enjoys", "loves" or "is drawn to" a kind of work unless his facts say so. A "why us" answer can rest on what he has built that's close to what they make, and on what his facts say he wants.
+- Don't add a sentence only to tick a keyword from the listing (a stray "I also have some X"), and don't read the listing's values back to them ("Your emphasis on autonomy, maintainable code and a close-knit team appeals to me"). Mention something from the listing only next to the thing of his that answers it.
+- No stock phrases: dynamic, innovative, cutting-edge, impactful, results-driven, team player, fast-paced, "I'm excited to", "I'd love the opportunity", "eager to contribute", "hit the ground running", "make an impact", "work I'm proud of", "keep learning", "over the long term", "bring that experience to"; in Portuguese, "agregar valor", "sinergia", "proatividade", "somar ao time".
+- No invented feelings about his past ("I've always loved", "the kind of work I enjoy most", "that work reinforced how much I value") and no feelings as self-description. Interest in this job is fine when it names what it rests on: something he has built that is close to what they make, a line in the listing he has an answer to, or what his facts say he wants and how he works.
 - In Portuguese, write the way a Brazilian developer writes, not a translation from English: use the terms devs actually use (dashboard, heatmap, deploy), natural word order, and no literal calques.
-- No closing line that sums up the answer, states a trait, or says what he'd bring or do for them, in any wording.
+- No closing line that restates the answer, states a trait, or says in general terms what he'd bring or do for them ("I'd bring the same care to your product"). A last sentence may name which specific points of the listing his work answers, or say he'd learn their stack; when there is nothing that specific left to say, stop after the last example.
 - Never use these words: ${Object.keys(BANNED_WORDS).join(", ")}. No em dashes.
-- Before returning, reread it: rewrite any sentence that could sit in another candidate's application or that only sets up the next one, and delete an opening sentence that says nothing about Pedro.`;
+- Before returning, reread it: rewrite any sentence that could sit in another candidate's application or that only sets up the next one, delete an opening sentence that says nothing about Pedro, and cut any detail that is there because the facts have it rather than because the question asked for it.`;
 
       // From the research behind this page; Claude checks for anything newer.
       const KNOWN_GUIDANCE = `- SAP: applications are preferred in English (https://jobs.sap.com/en/how-we-hire/). To show AI skills, "include examples of how you used AI ... and how you validated the results and protected data" (https://jobs.sap.com/en/how-we-hire/ai-skills-assessment/). The cover letter is optional; use it for details that aren't on the CV. AI tools aren't allowed in interviews or online assessments (https://jobs.sap.com/en/how-we-hire/use-of-ai-in-the-recruiting-process/). SAP Labs Latin America is in São Leopoldo, RS.
@@ -1623,12 +1650,19 @@
 - Anthropic: write your own first draft; AI may only refine it; no AI in live interviews (https://www.anthropic.com/candidate-ai-guidance).
 - Companies hiring through Gupy: a person reads the "Apresente-se!" text; the AI ranking uses experience, education, courses and certificates, distance and referrals (https://suporte-candidatos.gupy.io/s/article/Como-as-empresas-utilizam-a-nova-ordena%C3%A7%C3%A3o-de-candidaturas-da-Gupy?language=pt_BR).`;
 
-      function autofillPrompt(listing) {
-        const inputs = [
+      /** How Claude should read each part of the listing that was given. */
+      function listingInputs(listing) {
+        return [
           listing.url && `- URL: ${listing.url}\n  Open it with WebFetch. If it fails or needs a login, say so in "summary" and use the other inputs.`,
           listing.image && "- A screenshot of the listing (attached).",
           listing.text && `- Pasted text:\n"""\n${listing.text}\n"""`,
-        ].filter(Boolean).join("\n");
+        ]
+          .filter(Boolean)
+          .join("\n");
+      }
+
+      function autofillPrompt(listing) {
+        const inputs = listingInputs(listing);
 
         return `You are filling in Pedro Ourique's cover-letter template for one job listing. The letter's paragraphs are fixed text written by Pedro: you only pick options and write two short slots. Return everything through the structured output.
 
@@ -1676,11 +1710,12 @@ ${HUMAN_STYLE}
 ${KNOWN_GUIDANCE}`;
       }
 
-      function answerPrompt(question) {
+      function answerPrompt(question, listing) {
         const company = state.company.trim();
         const role = state.role.trim();
-        const application =
-          company || role
+        const application = hasListing(listing)
+          ? `\n# The listing\nThe job this question is part of:\n${listingInputs(listing)}\n`
+          : company || role
             ? `\n# The application\nThe letter's fields name ${role ? `the "${role}" role` : "a role"}${company ? ` at ${company}` : ""}. They can be left over from an earlier listing: if the question names another company, go by the question, and say which company you assumed in "summary".\n`
             : "";
 
@@ -1691,25 +1726,29 @@ ${KNOWN_GUIDANCE}`;
 ${question}
 """
 ${application}
+# What a good answer does
+The person who wrote this question wants to learn one thing about the candidate, and reads many answers a day. A good answer tells them that thing in the first sentence, at the level the question asks for (a kind of work, a reason, a way of working, a weakness), and then earns it with one or two examples from Pedro's work, cut down to the details that serve the point. Every sentence is there because of this question and this listing: a sentence that would do as well in another application, or a detail that is there because the facts have it, comes out.
+- Lead with the answer, not with a project name and not with the company. For "most relevant experience" that is a kind of work; for "why us", his reason; a project name as the first sentence leaves the reader to work the answer out. The claim names the kind of thing; it doesn't preview the examples (a three-part opener followed by three paragraphs that repeat it reads as a template).
+- The claim has to be true of every example under it: a stack, a quality or a quantifier in the claim ("TypeScript", "data-heavy", "mostly alone", "most recently", "almost all my time") must hold for each project it covers, or the claim gets narrower. When in doubt, drop the quantifier: "I've built management systems" needs no "mostly".
+- Choose the examples for this listing, not by size. For a frontend role about charts and UX, the surveillance product's analytics dashboard says more than the ERP's e-invoicing; for a role about business software it is the other way round. Most of the facts won't be relevant to any one question.
+- An example is the project in a few words, what he built, and one detail or number that matters for this question: about 25 words. Leave the rest out even though the facts have more; the reader can ask. One or two numbers in the whole answer, counting years, screens, tests and distances.
+- After an example, say what it shows for this job in a plain sentence of its own, naming the work and the need it answers, unless the claim already said it. In a question about the past (something he built, a time when), the listing decides which example to tell; it doesn't get a sentence of its own. Reasons come after the evidence, never as a bare trait before it ("which is how I work", "owning features is how I already work" say nothing on their own).
+- For a question about the company, the role or his fit, name their product the way a person would and put his work next to it, as evidence after the claim and in different words each time, and skip what he has nothing to show for. Never refer to the listing as a document ("your line about tested code", "the part of your listing I can answer", "what this job asks for", "isso responde ao que vocês pedem"), and never read their values back to them. If the listing names a stack he hasn't used, one plain sentence saying he hasn't used it, what he uses instead, and that he'd learn it, naming the stack, belongs in those answers, and nowhere else: not in a question about a past project, a weakness or how he works.
+
 # Steps
-1. Work out what kind of question it is (motivation such as "Why us?", experience or behavioral such as "Tell me about a time…", strengths and weaknesses, technical, availability or logistics, salary, an open "Anything else?") and what the person reading it wants to find out.
+1. Read the question and the listing, and work out what the reader wants to learn. "Why us?" asks for his reason to want this company and this job, and the first sentence is that reason: what they make, named (their rank tracking, not "your app"), next to the thing of his that is closest to it, plus what his facts say he wants (an international company, a frontend or full-stack role at his level, building complete products); the evidence follows. "Most relevant experience" asks for a kind of work, with the listing as the measure of relevant. "Something you built" or "tell me about a time" asks for one story, not a product's feature list: pick the piece of work where the facts give a problem, what he decided or built, and a result (GeoRota: a spreadsheet prototype became the product a municipality uses; the security briefing: his own idea, which he specified and built; the ERP: no way to tell what was finished, so one state document and a test rule), and tell it in three sentences: the problem, what he built (at most three things, the ones that matter for this listing), the result. A weakness question asks for a real one, the time it cost him, and the part of what he did that answers that weakness. "How do you work" asks for his method, shown through the one project where the facts show it: one sentence naming the method, the ERP story in three (what went wrong, what he set up, the result), one on the decisions he leaves to his bosses; the story doesn't restate the method, and the method is told as what he does on that project, not as a rule for all time.
 2. Research how to answer that kind of question well: what hiring managers and recruiters recommend including, how to structure it (for example STAR for behavioral questions) and the common mistakes. Prefer guidance from employers' own hiring pages and from recruiters over generic career blogs and listicles; when sources disagree, follow the one closer to the people who hire.
-3. When the question is about the company or the role, check the company's own site: its product, its stack and what it says it looks for. If the company is in "Known guidance" below, use that and only look for anything newer.
-4. Only if the answer needs more detail on one of Pedro's projects, read his own public pages listed below (GitHub repositories, site).
-5. Keep all of this to at most 6 web searches or page fetches in total, then write the answer: follow the recommended approach, using the one or two pieces of Pedro's work that fit it best rather than listing everything.
+3. When the question is about the company or the role, check the company's own site for what the listing doesn't say: its product, its stack and what it says it looks for. If the company is in "Known guidance" below, use that and only look for anything newer.
+4. Only if the answer needs more detail on one of Pedro's projects, read his own public pages listed in the facts (GitHub repositories, site).
+5. Keep all of this to at most 6 web searches or page fetches in total. Then fill in the plan, and write the answer from the plan.
 
-# Pedro (the only facts about him; never add to them)
-${PEDRO}
-
-# Pedro in his own words (also facts; use them for personal questions)
-${PEDRO_PERSONAL}
-
-# The answer
-- lang: "pt" if the question is in Portuguese, otherwise "en". Write the answer in that language (Brazilian Portuguese for "pt").
-- answer: answer the question in the first sentence, then back it up the way the guidance you found recommends, with concrete details: what he built, with what, and a number where the facts give one. If the question states a limit in words or characters, stay under it; otherwise keep it to about 100 words, and shorter when the question is simple or asks for a fact. Plain text for a form field: no headings, bullets, bold or Markdown links; separate paragraphs with a blank line. Never repeat the question back.
-- What's true: the answer can draw on everything you researched (the company, the role, its field, and how strong answers to this question are built), and it can connect something specific about the company to Pedro's real work. But every claim about Pedro himself (what he did, used, knows, wants or feels) must come from the two sections above or his own pages: don't add reasons, wishes or lessons he hasn't stated, even plausible ones like "learning from more experienced engineers".
-- When a good answer needs something about Pedro that neither section above covers (salary, notice period, work authorization outside Brazil, a specific date, a personal story he hasn't told, years with a tool he hasn't listed), don't make it up: answer what the facts support and leave a bracketed placeholder for him to fill in, like [salary range] or [notice period]. Each placeholder becomes a field labeled with its text and is replaced word for word by what he types, so write it in the answer's language as a short description of what goes there, and place it where his words fit the sentence. Use square brackets for nothing else.
-- Style: plain and factual, following "How he wants to come across" above and "Writing like a person" below. No flattering adjectives about Pedro: show a strength through something he did. No flattery of the company.
+# Fields
+- lang: "pt" if the question is in Portuguese, otherwise "en". Write the plan and the answer in that language (Brazilian Portuguese for "pt").
+- plan: filled in before the answer; this is where the answer gets decided. reader: what the person who asked this wants to learn, in one line. claim: the answer in one sentence, at the level the question asks for; not a project name and not a description of the company. points: one or two pieces of his work, each named in a few words with only the details the answer will use (one or two per example), and why it belongs here: which part of the question, or which line of the listing, it answers. A third point only for the one-sentence willingness line above. A point whose reason is "it's impressive" or "it's in the facts" is out, and so is a detail that doesn't serve the point.
+- answer: written from the plan: the claim first, in Pedro's words, then the points in the order that reads best, each told with only the details the plan named, and with its reason said in a sentence of its own where it isn't obvious. If the question states a limit in words or characters, stay under it. Otherwise 100 words is the ceiling, not the target: count them before returning, and when it is over, drop a detail, not a reason; a 100-word answer has room for one example told properly and one more in a single short sentence. Shorter when the question is simple or asks for a fact. A two-part question ("tell us about you and why this job") gets the same 100 words: one clause for each part in the claim, one example each. Two short paragraphs, or one. Plain text for a form field: no headings, bullets, bold or Markdown links; separate paragraphs with a blank line. Never repeat the question back.
+- What's true: what he did, built, used, knows and wants, and his history, come from "Facts about Pedro" below or his own pages, with nothing added and nothing widened. Nothing added: no feature, number, tool, or quality of the work ("accessible", "responsive", "every day") that the facts don't give; no users or scenes the facts don't describe ("thousands of events a manager reads in seconds"); no description of his work in the listing's words ("from talking with users to shipping") unless the facts say he did that; no habit or lesson stretched from one instance ("I keep that structure in every project since", "this is where I learned to"); no feelings about his past ("I've always loved", "the part I like most"); no reasons for leaving. Nothing widened when a fact is shortened: he wrote React screens for camera management, heatmaps and a dashboard on a Frigate fork, not "its UI"; on GeoRota his partner built the prototype and Pedro built the database, the backend logic and most of the APIs, not "the backend" and not "I built GeoRota"; the ERP is React with JavaScript, TypeScript is only in the surveillance product; the surveillance product never went to market, so nothing in it "shipped". Reasons, interest and values are his to state when they rest on something concrete: an overlap between his work and the listing (their charts, his dashboard), or what the facts say he wants and how he works (he builds complete products; a screen is done only when its test passes). Plain willingness that commits him to nothing false is fine.
+- When a good answer needs something about Pedro that the facts don't cover (salary, notice period, work authorization outside Brazil, a specific date, a personal story he hasn't told, years with a tool he hasn't listed), don't make it up: answer what the facts support and leave a bracketed placeholder for him to fill in, like [salary range] or [notice period]. Each placeholder becomes a field labeled with its text and is replaced word for word by what he types, so write it in the answer's language as a short description of what goes there, and place it where his words fit the sentence. Use square brackets for nothing else.
+- Style: plain and factual, following "Writing like a person" below and "How he wants to come across" in the facts. No flattering adjectives about Pedro: show a strength through something he did. No flattery of the company.
 
 # Report
 - findings: up to 4 things that shaped the answer: the advice you followed on answering this kind of question, and what you found about the company. Each is one ${tr("English", "Brazilian Portuguese")} sentence of at most 25 words on what the source says and what you did about it, with the URL of the page that says so. Always include it when the company asks candidates not to use AI for application answers. Use [] if you found nothing usable.
@@ -1717,6 +1756,13 @@ ${PEDRO_PERSONAL}
 
 # Writing like a person
 ${HUMAN_STYLE}
+
+# Facts about Pedro: his CV
+The two fact sections are the only source for anything the answer says about him. They are a reference library, not a checklist: most of it won't be relevant to this question.
+${PEDRO}
+
+# Facts about Pedro: in his own words
+${PEDRO_PERSONAL}
 
 # Known guidance
 ${KNOWN_GUIDANCE}`;
@@ -1755,6 +1801,8 @@ ${KNOWN_GUIDANCE}`;
         if (!dialog.open) dialog.showModal();
         if (running) return showTab("listing");
         $("listing-question").value = state.question;
+        $("listing-text").value = state.listingText;
+        $("listing-url").value = state.listingUrl;
         tabs.listing.disabled = true;
         showTab("connect");
         await checkHelper();
@@ -2031,10 +2079,19 @@ ${KNOWN_GUIDANCE}`;
         focusSource();
       });
 
-      // The same question as the page's Question field: either one edits it.
+      // The same question as the page's Question field: either one edits it. The listing is kept too,
+      // so a short answer can use the one the letter was filled from.
       $("listing-question").addEventListener("input", (event) => {
         state.question = event.target.value;
         $("question").value = state.question;
+        save();
+      });
+      $("listing-text").addEventListener("input", (event) => {
+        state.listingText = event.target.value;
+        save();
+      });
+      $("listing-url").addEventListener("input", (event) => {
+        state.listingUrl = event.target.value;
         save();
       });
 
@@ -2057,8 +2114,7 @@ ${KNOWN_GUIDANCE}`;
       });
       dialog.addEventListener("paste", (event) => {
         const file = [...(event.clipboardData?.files ?? [])].find((f) => f.type.startsWith("image/"));
-        // Only a listing can be a screenshot; a question is pasted as text.
-        if (file && state.mode !== "short") {
+        if (file) {
           event.preventDefault();
           showSource("screenshot");
           setScreenshot(file);
@@ -2112,44 +2168,51 @@ ${KNOWN_GUIDANCE}`;
         render();
       }
 
-      /** What to send for a short answer: the question. Shows what's missing and returns null instead. */
-      function answerJob() {
-        const question = $("listing-question").value.trim();
-        if (!question) {
-          showError(tr("Paste the question first.", "Cole a pergunta primeiro."));
-          return null;
-        }
-        return { prompt: answerPrompt(question), schema: ANSWER_SCHEMA, apply: (data) => applyAnswer(question, data) };
-      }
-
-      /** What to send for a letter: the listing. Shows what's missing and returns null instead. */
-      function listingJob() {
+      /** The listing as entered in the dialog, possibly empty; null (with the error shown) when the URL is malformed. */
+      function readListing() {
         const source = currentSource();
         const listing = {
           text: source === "text" ? $("listing-text").value.trim() : "",
           url: source === "url" ? $("listing-url").value.trim() : "",
           image: source === "screenshot" ? screenshot : null,
         };
-        if (!listing.text && !listing.url && !listing.image) {
+        if (listing.url && !safeUrl(listing.url)) {
+          showError(tr("The URL should start with https://", "O link deve começar com https://"));
+          return null;
+        }
+        return listing;
+      }
+
+      const hasListing = (listing) => Boolean(listing.text || listing.url || listing.image);
+      const imagePayload = (listing) => (listing.image ? { mediaType: listing.image.mediaType, data: listing.image.data } : undefined);
+
+      /** What to send for a short answer: the question, and the listing when there is one. Shows what's missing and returns null instead. */
+      function answerJob() {
+        const question = $("listing-question").value.trim();
+        if (!question) {
+          showError(tr("Paste the question first.", "Cole a pergunta primeiro."));
+          return null;
+        }
+        const listing = readListing();
+        if (!listing) return null;
+        return { prompt: answerPrompt(question, listing), schema: ANSWER_SCHEMA, image: imagePayload(listing), apply: (data) => applyAnswer(question, data) };
+      }
+
+      /** What to send for a letter: the listing. Shows what's missing and returns null instead. */
+      function listingJob() {
+        const listing = readListing();
+        if (!listing) return null;
+        if (!hasListing(listing)) {
           showError(
             {
               text: tr("Paste the listing first.", "Cole a vaga primeiro."),
               url: tr("Paste the link first.", "Cole o link primeiro."),
               screenshot: tr("Add a screenshot first.", "Adicione uma captura de tela primeiro."),
-            }[source],
+            }[currentSource()],
           );
           return null;
         }
-        if (listing.url && !safeUrl(listing.url)) {
-          showError(tr("The URL should start with https://", "O link deve começar com https://"));
-          return null;
-        }
-        return {
-          prompt: autofillPrompt(listing),
-          schema: AUTOFILL_SCHEMA,
-          image: listing.image ? { mediaType: listing.image.mediaType, data: listing.image.data } : undefined,
-          apply: applyAutofill,
-        };
+        return { prompt: autofillPrompt(listing), schema: AUTOFILL_SCHEMA, image: imagePayload(listing), apply: applyAutofill };
       }
 
       $("listing-cancel").addEventListener("click", () => running?.abort());
