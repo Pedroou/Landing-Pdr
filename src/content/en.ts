@@ -112,7 +112,7 @@ export const en: Content = {
             highlights: [
               "Built it alone on Frigate NVR, for condominiums, office buildings and factories.",
               "Wrote its automation engine: faces, line crossings and AI searches trigger push, MQTT or on-screen alarms.",
-              "Added Gemini event descriptions that use the building's floor plan as context, plus a daily security briefing.",
+              "Added AI event descriptions that use a building's floor plan as context, plus a daily security briefing.",
               "Extended its React UI with camera management without restarts, activity heatmaps and an analytics dashboard.",
             ],
           },

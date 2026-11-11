@@ -112,7 +112,7 @@ export const pt: Content = {
             highlights: [
               "Construí o produto sozinho, sobre o Frigate NVR, para condomínios, prédios comerciais e fábricas.",
               "Escrevi o motor de automações: rostos, linhas cruzadas e buscas por IA disparam push, MQTT ou alarmes.",
-              "Criei descrições de eventos com o Gemini usando a planta do prédio, e um resumo diário de segurança.",
+              "Criei descrições de eventos por IA usando a planta do prédio, e um resumo diário de segurança.",
               "Ampliei a interface React com gestão de câmeras sem reinício, mapas de calor e um painel de análises.",
             ],
           },
