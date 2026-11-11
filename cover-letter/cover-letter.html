@@ -1047,7 +1047,28 @@
       // What "New listing" clears; the rest are standing choices.
       const LISTING_FIELDS = ["company", "contact", "role", "why", "zone", "city", "salaryRange", "extra", "question", "answer", "fills", "findings", "summary"];
 
-      const BANNED = /\b(passionat\w*|thriv\w*|align\w*|leverag\w*|robust\w*|delv\w*|apaixonad\w*|alavanc\w*)\b/gi;
+      // Words that mark text as AI-written: the checks flag them and both prompts forbid them. Each value
+      // is the stem the checks match, so "passionately" and "fostering" count too.
+      const BANNED_WORDS = {
+        passionate: "passionat",
+        thrive: "thriv",
+        align: "align",
+        leverage: "leverag",
+        robust: "robust",
+        delve: "delv",
+        showcase: "showcas",
+        underscore: "underscor",
+        foster: "foster",
+        crucial: "crucial",
+        pivotal: "pivotal",
+        seamless: "seamless",
+        tapestry: "tapestr",
+        testament: "testament",
+        vibrant: "vibrant",
+        apaixonado: "apaixonad",
+        alavancar: "alavanc",
+      };
+      const BANNED = new RegExp(`\\b(${Object.values(BANNED_WORDS).map((stem) => `${stem}\\w*`).join("|")})\\b`, "gi");
       const GUPY_LIMIT = 1500;
       const SHORT_ANSWER_WORDS = 110;
 
@@ -1482,7 +1503,7 @@
 - Contact: ${PROFILE.email}, ${PROFILE.phone}. Site with his CV: ${PROFILE.site}. LinkedIn: ${PROFILE.linkedin}. GitHub: https://github.com/Pedroou.
 - Paid development work since May 2025: ${yearsOfExperience()} years of experience (he describes himself as "software developer with ${yearsOfExperience()} years of experience").
 - NetComet, an internet provider in southern Brazil: software development intern May to September 2025, software developer since September 2025 (hired after four months).
-  - ERP rewrite (React, JavaScript, PHP with Slim, MySQL, Puppeteer): main developer of the rewrite of a decade-old, 187-screen multi-tenant PHP ERP (sales, finance, Brazilian e-invoicing, ISP network management) as a React app on a PHP REST API. Builds most screens with AI coding agents and reviews every change himself; a screen counts as done only when its Puppeteer flow passes and the saved rows match the database (175 of 187 so far). Wrote Dockerized PHP integration tests for the API and a pre-push check that runs both test suites. Merged the API's main branch (74 commits, 19 conflicts) into the rewrite's branch while keeping every local run away from production data. Not in production yet.
+  - ERP rewrite (React, JavaScript, PHP with Slim, MySQL, Puppeteer): main developer of the rewrite of a decade-old, 187-screen multi-tenant PHP ERP (sales, finance, Brazilian e-invoicing, ISP network management) as a React app on a PHP REST API. Builds most screens with AI coding agents and reviews every change himself; a screen counts as done only when a Puppeteer test runs its flows in the browser and checks the rows they saved in the database, because a screen that looks right can still save the wrong data (175 of 187 pass so far). Wrote Dockerized PHP integration tests for the API and a pre-push check that runs both test suites. Merged the API's main branch (74 commits, 19 conflicts) into the rewrite's branch while keeping every local run away from production data. Not in production yet.
   - AI video-surveillance product (Python, FastAPI, React, TypeScript, Frigate NVR): its only developer, a product for condominiums, office buildings and factories, built on his fork of Frigate. Started as an intern with camera setup, detection tuning and integration testing on Proxmox. Wrote its automation engine (recognized faces, line crossings and AI searches trigger push notifications, MQTT messages or on-screen alarms), AI event descriptions that use a building's floor plan as context (they work with any AI model through an API, including local ones; he moved them to Google's new Gemini library), a daily security briefing (his own idea), and React UI for camera management without restarts, activity heatmaps and an analytics dashboard. Embedded it as a WebView screen in the company's Expo/React Native app, with push notifications through a colleague's API. It never went to market; when the company dropped it, he asked to keep working on it on his own time and was allowed to.
 - Lab2, a two-person registered company he co-founded with a classmate he met in his first semester at IFRS (named after their classroom, "Lab 2"); part-time, alongside his job, since 2026:
   - GeoRota (https://lab2solutions.com.br/): school-transport platform (React, Node.js, PostgreSQL) that the municipality of Imbé, RS, uses in its education and transport departments, for about 4,000 students. His partner built the first prototype (data in a spreadsheet, no database); Pedro turned it into the product: the database, the backend logic and most of the APIs, components for almost all of the UI, route suggestions that use geocoding and OSRM walking distances to place each student on a route and stop, automated student-pass issuance that replaced a manual process, occupancy analytics, and a role-scoped AI assistant for staff who find computers hard to use.
@@ -1527,7 +1548,7 @@
 - Interview nerves: once blanked when asked to implement a delete operation, then practised CRUD tasks before his next interview.
 
 ## How he works
-- Simple over complex: to him robust means an efficient, simple strategy, not layers of guards. Asks what the simplest, cheapest reliable way is instead of letting an agent decide.
+- Simple over complex: he wants an efficient, simple strategy, not layers of guards. Asks what the simplest, cheapest reliable way is instead of letting an agent decide.
 - Finds the root cause before changing anything, and leaves working code alone unless the task needs it; on legacy code he keeps changes minimal and scoped.
 - Fixes the shared component so a fix applies across the whole app, and reuses components across products.
 - Protects production: nothing he runs locally may touch live data.
@@ -1538,7 +1559,7 @@
 - Says "I" for his own work and makes sure he can explain and defend every decision.
 
 ## Stories (situation, what he did, result)
-- ERP rewrite, September 2026: months into the solo migration the docs had sprawled, he couldn't tell what was finished, and demos to his boss crashed on common screens. He admitted he had drifted from checking the AI's output, restructured the project around one state document and one backlog (keeping the logs of legacy bugs and deliberate differences), and set the rule that a screen is done only when its browser flow passes and the database rows match, plus a pre-push check so he could commit with confidence. Within a day he found the project far easier to manage; 175 of 187 screens pass now.
+- ERP rewrite, September 2026: months into the solo migration the docs had sprawled, he couldn't tell what was finished, and demos to his boss crashed on common screens. He admitted he had drifted from checking the AI's output, restructured the project around one state document and one backlog (keeping the logs of legacy bugs and deliberate differences), and set the rule that a screen is done only when a browser test runs its flows and checks the rows they saved in the database, plus a pre-push check so he could commit with confidence. Within a day he found the project far easier to manage; 175 of 187 screens pass now.
 - Syn, security vs. usability (October 2026): his partner wanted booking links to expire; Pedro thought links that keep working are what make the product easy, and that the real risk was unprotected endpoints. He protected the API against double booking and made an expired link ask for the patient's CPF instead of failing, which kept links usable and data safe.
 - Syn, a design disagreement settled with evidence: the two kept disagreeing about the theme's greys. He showed his partner the colours on his own laptop, they found their displays rendered them differently, checked the theme tokens, and chose the greys deliberately.
 - Syn, both needs met: his partner needed a demo lab for sales and Pedro needed a test lab with real numbers; he reverted an over-complicated change and designed a way to keep both.
@@ -1567,6 +1588,29 @@
 - Mention co-founding Lab2 only when the question is about ownership, side projects or entrepreneurship.
 - Leave out unfinished courses, his old MyNotes app and the IFRS talk (it was cancelled), and never name other companies he has applied to or the tools he uses to apply.
 - Keep his employer's internal details out.`;
+
+      // What makes application text read as AI-written, and what to do instead. From Wikipedia's "Signs of AI
+      // writing" (WikiProject AI Cleanup, Oct 2026), recruiters quoted by Business Insider (Jul 2025), and
+      // Pedro's own rules. Used by both prompts.
+      const HUMAN_STYLE = `Recruiters now spot AI-written applications quickly, and many drop them: "every sentence is grammatically correct, evenly spaced, and emotionally vacant". These are the patterns that give it away. Write the way Pedro would type into the form himself.
+- Don't open by describing the company or the role back to them ("Nightwatch is an international, fully remote team building a data-heavy SPA..."), and don't open with a setup that's true of almost any job ("I want to work on a product where the frontend is the main thing people use"). They know who they are. Open with the answer itself, in plain words, or go straight to the concrete example. When you mention the company, name one specific thing (a product, a feature, a technical choice) and put it next to something Pedro did.
+- No figurative, writerly or aphoristic phrasing: nothing "carries the product", "lives or dies on", "sits at the intersection of", "bridges", "powers" or "drives" anything; no "journey", "landscape", "ecosystem", or "space" for a field; no one-line maxims ("A screen can look right and still save the wrong data.") standing on their own.
+- Don't spell out the match ("which matches your focus on...", "this lines up with...", "making me a good fit", "exactly the kind of work..."). Put his facts next to what they need and let the reader connect them.
+- No commentary tacked onto a fact (", showing...", ", highlighting...", ", which reflects...", ", ensuring..."). State the fact and stop.
+- No contrast templates: "not just X but Y", "it's not X, it's Y", "X rather than Y", "more than just".
+- No lists of three (adjectives, phrases or examples) and no stacked adjectives; one good example beats three.
+- Plain verbs and simple sentences: is, has, built, wrote, used, fixed; not "serves as", "stands as", "boasts", "utilize". Vary sentence length; contractions are fine.
+- Say his traits the way he'd say them out loud, through one concrete instance from his facts (for an eye for detail: the Syn greys he and his partner compared on two screens), never as self-description ("I'm the kind of person who..."), never as a closing line about his character, and never copied word for word from his facts.
+- No short punchy sentences used as paragraph openers or closers ("I also test what I ship.", "And I fix it."); start a paragraph with the substance.
+- Use each fact once, and one or two pieces of work per answer; don't repeat a proof point inside the same answer.
+- No bridge sentences that only link two parts ("The work I've enjoyed most is similar.", "That's where my experience comes in."); start the next part with the example.
+- Don't add a sentence only to tick a keyword from the listing (a stray "I also have some X"). Mention a skill only when it answers the question.
+- No stock phrases: dynamic, innovative, cutting-edge, impactful, results-driven, team player, fast-paced, "I'm excited to", "I'd love the opportunity", "eager to contribute", "hit the ground running", "make an impact", "work I'm proud of"; in Portuguese, "agregar valor", "sinergia", "proatividade", "somar ao time".
+- No feelings he hasn't stated: don't say he "enjoys", "loves" or "is drawn to" a kind of work unless his facts say so. A "why us" answer can rest on what he has built that's close to what they make, and on what his facts say he wants.
+- In Portuguese, write the way a Brazilian developer writes, not a translation from English: use the terms devs actually use (dashboard, heatmap, deploy), natural word order, and no literal calques.
+- No closing line that sums up the answer, states a trait, or says what he'd bring or do for them, in any wording.
+- Never use these words: ${Object.keys(BANNED_WORDS).join(", ")}. No em dashes.
+- Before returning, reread it: rewrite any sentence that could sit in another candidate's application or that only sets up the next one, and delete an opening sentence that says nothing about Pedro.`;
 
       // From the research behind this page; Claude checks for anything newer.
       const KNOWN_GUIDANCE = `- SAP: applications are preferred in English (https://jobs.sap.com/en/how-we-hire/). To show AI skills, "include examples of how you used AI ... and how you validated the results and protected data" (https://jobs.sap.com/en/how-we-hire/ai-skills-assessment/). The cover letter is optional; use it for details that aren't on the CV. AI tools aren't allowed in interviews or online assessments (https://jobs.sap.com/en/how-we-hire/use-of-ai-in-the-recruiting-process/). SAP Labs Latin America is in São Leopoldo, RS.
@@ -1619,11 +1663,14 @@ ${PEDRO}
 # Slots you write
 - why: one sentence, at most 35 words, in the letter's language. Name something specific and checkable about this company or role (its product, stack, domain, or something in the listing) and connect it to one of Pedro's real projects. If the sentence would still make sense with a competitor's name in it, rewrite it.
 - extra: usually "". Only when a company preference you found asks for something Pedro can truthfully show and the chosen story doesn't already say it, write one sentence (at most 30 words, in the letter's language). It's appended to the story paragraph, so never repeat the story.
-- Style for both: plain and factual. No adjectives about Pedro, no flattery, no em dashes, and none of these words: passionate, thrive, align, leverage, robust, delve, apaixonado, alavancar.
+- Style for both: plain and factual. No adjectives about Pedro, no flattery, and follow "Writing like a person" below.
 
 # Report
 - findings: up to 4 company preferences that matter for this application. Each is one ${tr("English", "Brazilian Portuguese")} sentence of at most 25 words on what the company prefers and what you did about it, with the URL of the page that says so (the company's own page when possible). Always include it when the company doesn't read or doesn't accept cover letters. Use [] if you found nothing specific.
 - summary: one ${tr("English", "Brazilian Portuguese")} sentence of at most 35 words on what you used (URL, text or screenshot) and anything Pedro should check, such as a URL that couldn't be opened, a time-zone mismatch, or a screening question that a short answer would fit better.
+
+# Writing like a person
+${HUMAN_STYLE}
 
 # Known guidance
 ${KNOWN_GUIDANCE}`;
@@ -1662,11 +1709,14 @@ ${PEDRO_PERSONAL}
 - answer: answer the question in the first sentence, then back it up the way the guidance you found recommends, with concrete details: what he built, with what, and a number where the facts give one. If the question states a limit in words or characters, stay under it; otherwise keep it to about 100 words, and shorter when the question is simple or asks for a fact. Plain text for a form field: no headings, bullets, bold or Markdown links; separate paragraphs with a blank line. Never repeat the question back.
 - What's true: the answer can draw on everything you researched (the company, the role, its field, and how strong answers to this question are built), and it can connect something specific about the company to Pedro's real work. But every claim about Pedro himself (what he did, used, knows, wants or feels) must come from the two sections above or his own pages: don't add reasons, wishes or lessons he hasn't stated, even plausible ones like "learning from more experienced engineers".
 - When a good answer needs something about Pedro that neither section above covers (salary, notice period, work authorization outside Brazil, a specific date, a personal story he hasn't told, years with a tool he hasn't listed), don't make it up: answer what the facts support and leave a bracketed placeholder for him to fill in, like [salary range] or [notice period]. Each placeholder becomes a field labeled with its text and is replaced word for word by what he types, so write it in the answer's language as a short description of what goes there, and place it where his words fit the sentence. Use square brackets for nothing else.
-- Style: plain and factual, following "How he wants to come across" above. No flattering adjectives about Pedro: show a strength through something he did. No flattery of the company, no em dashes, and none of these words: passionate, thrive, align, leverage, robust, delve, apaixonado, alavancar.
+- Style: plain and factual, following "How he wants to come across" above and "Writing like a person" below. No flattering adjectives about Pedro: show a strength through something he did. No flattery of the company.
 
 # Report
 - findings: up to 4 things that shaped the answer: the advice you followed on answering this kind of question, and what you found about the company. Each is one ${tr("English", "Brazilian Portuguese")} sentence of at most 25 words on what the source says and what you did about it, with the URL of the page that says so. Always include it when the company asks candidates not to use AI for application answers. Use [] if you found nothing usable.
 - summary: one ${tr("English", "Brazilian Portuguese")} sentence of at most 35 words on the approach the answer follows, which of Pedro's work it uses, and anything he should check, such as a placeholder to fill in.
+
+# Writing like a person
+${HUMAN_STYLE}
 
 # Known guidance
 ${KNOWN_GUIDANCE}`;
