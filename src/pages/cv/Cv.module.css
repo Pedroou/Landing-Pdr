@@ -602,6 +602,20 @@
     box-shadow: none;
   }
 
+  /*
+   * Projects that don't fit on the page stay off paper. scripts/cv-pdf.ts
+   * finds how many fit, per language, and stamps it on the built page's
+   * <html> as data-print-projects-en / -pt. Without it (dev), all print.
+   */
+  :root[data-print-projects-en="0"]:lang(en) .projects,
+  :root[data-print-projects-pt="0"]:lang(pt) .projects,
+  :root[data-print-projects-en="1"]:lang(en) .project:nth-of-type(n + 2),
+  :root[data-print-projects-pt="1"]:lang(pt) .project:nth-of-type(n + 2),
+  :root[data-print-projects-en="2"]:lang(en) .project:nth-of-type(n + 3),
+  :root[data-print-projects-pt="2"]:lang(pt) .project:nth-of-type(n + 3) {
+    display: none;
+  }
+
   .projectLink::after {
     content: none;
   }

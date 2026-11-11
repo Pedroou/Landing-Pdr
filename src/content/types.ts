@@ -53,6 +53,10 @@ export interface Content {
        */
       work: Array<{ name?: string; stack?: string[]; highlights: string[] }>;
     }>;
+    /**
+     * Best first, at most 3. All show on screen; paper keeps as many as fit
+     * on one page, counted at build time by scripts/cv-pdf.ts.
+     */
     projects: Array<{
       name: string;
       url: string;

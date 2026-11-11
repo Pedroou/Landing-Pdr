@@ -34,10 +34,28 @@ export const en: Content = {
     projectsTitle: "Projects",
     projects: [
       {
+        name: "GeoRota",
+        url: "https://lab2solutions.com.br/",
+        description:
+          "School-transport platform I co-developed (React, Node.js, PostgreSQL). The municipality of Imbé, RS, runs its school transport on it, for about 4,000 students.",
+      },
+      {
         name: "Agent Session Manager",
         url: "https://github.com/Pedroou/agent-session-manager",
         description:
           "KDE Plasma widget that shows which Claude Code sessions are waiting on you. Available on the KDE Store.",
+      },
+      {
+        name: "Claude Profiles",
+        url: "https://github.com/Pedroou/claude-profiles",
+        description:
+          "Command-line tool for keeping separate Claude Code logins, such as work and personal, with one shared set of settings, skills and history. Works in bash, zsh and fish.",
+      },
+      {
+        name: "Oficina de Dança Renata Guimarães",
+        url: "https://odreguimaraes.github.io/Bio/",
+        description:
+          "Links page for a dance school, with an admin panel the owner uses to edit it without code. Freelance work.",
       },
     ],
     avatarAlt: "Portrait of Pedro Ourique",
@@ -123,6 +141,20 @@ export const en: Content = {
         year: "2026",
         description:
           "KDE Plasma widget that tracks AI coding-agent sessions: status, model, context and git branch. On the KDE Store.",
+      },
+      {
+        name: "Claude Profiles",
+        url: "https://github.com/Pedroou/claude-profiles",
+        year: "2026",
+        description:
+          "Command-line tool (bash, zsh, fish) for separate Claude Code logins with shared settings, skills and history.",
+      },
+      {
+        name: "Lab2 website",
+        url: "https://lab2solutions.com.br/",
+        year: "2026",
+        description:
+          "Site of Lab2, the company behind GeoRota (React, GSAP, Motion).",
       },
     ],
     skills: [

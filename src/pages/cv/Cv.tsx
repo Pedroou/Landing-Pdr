@@ -86,7 +86,8 @@ export function Cv() {
           ))}
         </Section>
 
-        <Section title={cv.headings.projects}>
+        {/* Ranked: paper keeps as many as fit on the page (scripts/cv-pdf.ts). */}
+        <Section title={cv.headings.projects} className={styles.projects}>
           {cv.projects.map((project) => (
             <Project key={project.url} {...project} />
           ))}
@@ -156,9 +157,17 @@ export function Cv() {
   );
 }
 
-function Section({ title, children }: { title: string; children: ReactNode }) {
+function Section({
+  title,
+  className = "",
+  children,
+}: {
+  title: string;
+  className?: string;
+  children: ReactNode;
+}) {
   return (
-    <section className={styles.section}>
+    <section className={`${styles.section} ${className}`}>
       <h2 className={styles.heading}>{title}</h2>
       {children}
     </section>
@@ -262,7 +271,7 @@ function Project({
   description,
 }: CvContent["projects"][number]) {
   return (
-    <article className={`${styles.entry} ${styles.project}`}>
+    <article className={`${styles.entry} ${styles.project}`} data-project>
       <Dated
         date={
           <>

@@ -34,10 +34,28 @@ export const pt: Content = {
     projectsTitle: "Projetos",
     projects: [
       {
+        name: "GeoRota",
+        url: "https://lab2solutions.com.br/",
+        description:
+          "Plataforma de transporte escolar que codesenvolvi (React, Node.js, PostgreSQL). A prefeitura de Imbé (RS) gere com ela o transporte de cerca de 4.000 alunos.",
+      },
+      {
         name: "Agent Session Manager",
         url: "https://github.com/Pedroou/agent-session-manager",
         description:
           "Widget do KDE Plasma que mostra quais sessões do Claude Code estão esperando por você. Disponível na KDE Store.",
+      },
+      {
+        name: "Claude Profiles",
+        url: "https://github.com/Pedroou/claude-profiles",
+        description:
+          "Ferramenta de linha de comando para manter logins separados do Claude Code, como trabalho e pessoal, com configurações, skills e histórico compartilhados. Funciona em bash, zsh e fish.",
+      },
+      {
+        name: "Oficina de Dança Renata Guimarães",
+        url: "https://odreguimaraes.github.io/Bio/",
+        description:
+          "Página de links de uma escola de dança, com um painel em que a dona edita tudo sem código. Trabalho freelance.",
       },
     ],
     avatarAlt: "Retrato de Pedro Ourique",
@@ -123,6 +141,20 @@ export const pt: Content = {
         year: "2026",
         description:
           "Widget do KDE Plasma que acompanha sessões de agentes de IA: status, modelo, contexto e branch do git. Na KDE Store.",
+      },
+      {
+        name: "Claude Profiles",
+        url: "https://github.com/Pedroou/claude-profiles",
+        year: "2026",
+        description:
+          "Ferramenta de linha de comando (bash, zsh, fish) para logins separados do Claude Code, com configurações, skills e histórico compartilhados.",
+      },
+      {
+        name: "Site da Lab2",
+        url: "https://lab2solutions.com.br/",
+        year: "2026",
+        description:
+          "Site da Lab2, a empresa por trás do GeoRota (React, GSAP, Motion).",
       },
     ],
     skills: [

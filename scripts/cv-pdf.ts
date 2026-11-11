@@ -3,10 +3,14 @@
  * `vite build` (it is part of `npm run build`), so the download on the CV page
  * is always the current CV, printed by the same stylesheet as the Print button.
  *
+ * Projects are ranked: paper keeps as many as fit on one page in every paper
+ * size of that language. The count is stamped on dist/cv/index.html's <html>
+ * (data-print-projects-en / -pt), so the Print button drops the same ones.
+ *
  * Needs Google Chrome or Chromium: set CHROME_PATH if it isn't at the default.
  * File names must match the download link in src/pages/cv/Cv.tsx.
  */
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import puppeteer, { type PaperFormat } from "puppeteer-core";
 import { preview } from "vite";
 
@@ -19,6 +23,10 @@ const files: Array<{ lang: string; format: PaperFormat; name: string }> = [
   { lang: "pt", format: "a4", name: "pedro-ourique-cv-pt" },
 ];
 
+// Cv.module.css has hiding rules for 0, 1 and 2 projects, so 3 is the most.
+const MAX_PROJECTS = 3;
+const HTML = "dist/cv/index.html";
+
 const server = await preview({ preview: { port: 0, open: false } });
 const base = server.resolvedUrls?.local[0];
 if (!base) throw new Error("vite preview did not report a URL");
@@ -30,30 +38,68 @@ const browser = await puppeteer.launch({
   args: ["--no-sandbox"],
 });
 
+const fit: Record<string, number> = {};
+
 try {
   const page = await browser.newPage();
-  for (const { lang, format, name } of files) {
+  for (const lang of new Set(files.map((file) => file.lang))) {
+    const formats = files.filter((file) => file.lang === lang);
     await page.goto(new URL(`cv/?lang=${lang}`, base).href, {
       waitUntil: "networkidle0",
     });
     // Printing before the web font arrives would bake the fallback in.
     await page.evaluate(() => document.fonts.ready.then(() => undefined));
 
-    const pdf = await page.pdf({ format });
-    const pages = new TextDecoder("latin1")
-      .decode(pdf)
-      .match(/\/Type\s*\/Page\b/g)?.length;
-    if (pages !== 1) {
+    const total = await page.$$eval("[data-project]", (els) => els.length);
+    if (total > MAX_PROJECTS) {
       throw new Error(
-        `The ${lang} CV prints on ${pages} pages on ${format}; it must fit on one. Shorten the content.`,
+        `The ${lang} CV lists ${total} projects; the print stylesheet handles at most ${MAX_PROJECTS}.`,
       );
     }
 
-    const out = `dist/cv/${name}.pdf`;
-    await writeFile(out, pdf);
-    console.log(`${out} (${format}, 1 page)`);
+    // Most projects first; stop at the first count that fits every format.
+    let pdfs: Uint8Array[] | null = null;
+    for (let count = total; count >= 0 && !pdfs; count--) {
+      await page.evaluate(
+        (attr, value) => document.documentElement.setAttribute(attr, value),
+        `data-print-projects-${lang}`,
+        String(count),
+      );
+      const printed = [];
+      for (const { format } of formats)
+        printed.push(await page.pdf({ format }));
+      // One "/Type /Page" object per page in Chrome's PDF output.
+      const onePage = printed.every(
+        (pdf) =>
+          new TextDecoder("latin1").decode(pdf).match(/\/Type\s*\/Page\b/g)
+            ?.length === 1,
+      );
+      if (onePage) {
+        fit[lang] = count;
+        pdfs = printed;
+      }
+    }
+    if (!pdfs) {
+      throw new Error(
+        `The ${lang} CV runs past one page even without projects. Shorten the content.`,
+      );
+    }
+
+    for (const [i, { format, name }] of formats.entries()) {
+      const out = `dist/cv/${name}.pdf`;
+      await writeFile(out, pdfs[i]);
+      console.log(`${out} (${format}, 1 page)`);
+    }
+    console.log(`${lang}: ${fit[lang]} of ${total} projects on paper`);
   }
 } finally {
   await browser.close();
   await server.close();
 }
+
+const attrs = Object.entries(fit)
+  .map(([lang, count]) => ` data-print-projects-${lang}="${count}"`)
+  .join("");
+const html = await readFile(HTML, "utf8");
+if (!/<html\b/.test(html)) throw new Error(`No <html> tag in ${HTML}`);
+await writeFile(HTML, html.replace(/<html\b/, `<html${attrs}`));
