@@ -163,6 +163,8 @@
       /* --- Controls ------------------------------------------------------------ */
 
       .controls { display: grid; gap: 1.5rem; }
+      /* A wrapper that only shows or hides its children: they stay in the parent's grid. */
+      .contents { display: contents; }
 
       .group-label,
       .field > label {
@@ -265,6 +267,7 @@
         transition: border-color 150ms;
       }
       textarea { min-height: 6.5rem; resize: vertical; line-height: 1.5; }
+      #fills textarea { min-height: 0; }
       select { width: auto; }
       input[type="text"]:hover,
       textarea:hover,
@@ -715,11 +718,20 @@
               <label><input type="radio" name="mode" value="short" /><span data-pt="Resposta curta">Short answer</span></label>
               <label><input type="radio" name="mode" value="project" /><span data-pt="Resposta sobre projeto">Project answer</span></label>
             </div>
-            <p class="hint" data-when="mode=short" data-pt="Para campos como &quot;Anything else?&quot; e &quot;Tell us about you&quot;, que uma pessoa lê.">For "Anything else?" and "Tell us about you" fields that a person reads.</p>
+            <p class="hint" data-when="mode=short" data-pt="Para perguntas de triagem e campos como &quot;Anything else?&quot;, que uma pessoa lê. O Preencher com IA pede a pergunta; o Claude pesquisa como recrutadores recomendam responder esse tipo de pergunta e responde com o seu currículo, projetos e perfis.">For screening questions and fields like "Anything else?" that a person reads. Fill with AI asks for the question; Claude looks up how recruiters recommend answering that kind of question, then answers it with your CV, projects and profiles.</p>
             <p class="hint" data-when="mode=project" data-pt="Para &quot;Tell us about a project you're proud of&quot;. Nada para preencher.">For "Tell us about a project you're proud of". No blanks to fill.</p>
           </fieldset>
 
-          <fieldset>
+          <div class="field" data-when="mode=short">
+            <label for="question" data-pt="Pergunta">Question</label>
+            <textarea id="question" name="question" rows="3"></textarea>
+            <p class="hint" data-pt="A que o Claude respondeu. Para reescrever, use o Preencher com IA de novo.">The one Claude answered. To rewrite the answer, use Fill with AI again.</p>
+          </div>
+
+          <!-- One field per [placeholder] Claude left in the answer; built by renderFills(). -->
+          <div class="contents" id="fills" data-when="mode=short"></div>
+
+          <fieldset data-when="mode=letter, mode=project">
             <legend class="group-label" data-pt="Idioma da carta">Letter language</legend>
             <div class="pills">
               <label><input type="radio" name="lang" value="en" /><span>English</span></label>
@@ -728,7 +740,7 @@
             <p class="hint" data-when="lang=pt mode=letter" data-pt="Para o &quot;Apresente-se!&quot; da Gupy, campos de sites de carreira e e-mails.">For Gupy's "Apresente-se!", career-page fields, and emails.</p>
           </fieldset>
 
-          <fieldset data-when="mode=letter, mode=short lang=en">
+          <fieldset data-when="mode=letter">
             <legend class="group-label" data-pt="Onde é a vaga?">Where is the job?</legend>
             <div class="pills">
               <label><input type="radio" name="location" value="remote" /><span data-pt="Remota">Remote</span></label>
@@ -783,7 +795,7 @@
             <input type="text" id="role" name="role" />
           </div>
 
-          <div class="field" data-when="mode=letter, mode=short">
+          <div class="field" data-when="mode=letter">
             <label for="why" data-pt="Por que esta empresa">Why this company</label>
             <textarea id="why" name="why"></textarea>
             <p class="hint" data-pt="Uma frase, no idioma da carta: algo específico que você usou, leu ou notou no produto, na stack ou no ramo da empresa, ligado ao seu trabalho. Se ainda fizer sentido com o nome de um concorrente, reescreva.">One sentence, in the letter's language: something specific you used, read or noticed about their product, stack or domain, tied to your own work. If it still makes sense with a competitor's name in it, rewrite it.</p>
@@ -795,7 +807,7 @@
             <p class="hint" data-pt="Vai no fim da história principal. O Claude só preenche quando a empresa pede algo que a história ainda não mostra.">Added to the end of the main story. Claude fills it only when the company asks for something the story doesn't already show.</p>
           </div>
 
-          <fieldset data-when="mode=letter lang=en location=remote, mode=short lang=en location=remote">
+          <fieldset data-when="mode=letter lang=en location=remote">
             <legend class="group-label" data-pt="Fuso horário da empresa">Company's time zone</legend>
             <div class="pills">
               <label><input type="radio" name="zone" value="americas" /><span data-pt="EUA / Américas">US / Americas</span></label>
@@ -895,51 +907,70 @@
 
       <dialog class="modal" id="autofill" aria-labelledby="autofill-title">
         <div class="modal-head">
-          <h2 id="autofill-title" data-pt="Preencher a partir de uma vaga">Fill from a listing</h2>
+          <h2 id="autofill-title">
+            <span data-when="mode=letter, mode=project" data-pt="Preencher a partir de uma vaga">Fill from a listing</span>
+            <span data-when="mode=short" data-pt="Responder a uma pergunta">Answer a question</span>
+          </h2>
           <button type="button" class="icon-button" id="autofill-close" aria-label="Close" data-pt-aria-label="Fechar">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
           </button>
         </div>
         <div class="tabs" role="tablist">
           <button type="button" role="tab" id="tab-connect" aria-controls="panel-connect" aria-selected="true">1. Claude Code</button>
-          <button type="button" role="tab" id="tab-listing" aria-controls="panel-listing" aria-selected="false" disabled data-pt="2. Vaga">2. Listing</button>
+          <button type="button" role="tab" id="tab-listing" aria-controls="panel-listing" aria-selected="false" disabled>
+            <span data-when="mode=letter, mode=project" data-pt="2. Vaga">2. Listing</span>
+            <span data-when="mode=short" data-pt="2. Pergunta">2. Question</span>
+          </button>
         </div>
 
         <section class="modal-body" role="tabpanel" id="panel-connect" aria-labelledby="tab-connect"></section>
 
         <section class="modal-body" role="tabpanel" id="panel-listing" aria-labelledby="tab-listing" hidden>
           <form id="listing-form" class="controls">
-            <fieldset>
-              <legend class="group-label" data-pt="O que você tem?">What do you have?</legend>
-              <div class="pills">
-                <label><input type="radio" name="source" value="text" checked /><span data-pt="Copiar - Colar">Copy - Paste</span></label>
-                <label><input type="radio" name="source" value="url" /><span>URL</span></label>
-                <label><input type="radio" name="source" value="screenshot" /><span data-pt="Captura de tela">Screenshot</span></label>
+            <div class="contents" data-when="mode=letter, mode=project">
+              <fieldset>
+                <legend class="group-label" data-pt="O que você tem?">What do you have?</legend>
+                <div class="pills">
+                  <label><input type="radio" name="source" value="text" checked /><span data-pt="Copiar - Colar">Copy - Paste</span></label>
+                  <label><input type="radio" name="source" value="url" /><span>URL</span></label>
+                  <label><input type="radio" name="source" value="screenshot" /><span data-pt="Captura de tela">Screenshot</span></label>
+                </div>
+              </fieldset>
+              <div class="field" data-source="text">
+                <label for="listing-text" data-pt="Cole a vaga">Paste the listing</label>
+                <textarea id="listing-text" rows="6" placeholder="Select everything on the job page (Ctrl+A), copy and paste it here." data-pt-placeholder="Selecione tudo na página da vaga (Ctrl+A), copie e cole aqui."></textarea>
+                <p class="hint" data-pt="Funciona melhor: nada para o Claude abrir, nada atrás de login.">Works best: nothing for Claude to open, nothing behind a login.</p>
               </div>
-            </fieldset>
-            <div class="field" data-source="text">
-              <label for="listing-text" data-pt="Cole a vaga">Paste the listing</label>
-              <textarea id="listing-text" rows="6" placeholder="Select everything on the job page (Ctrl+A), copy and paste it here." data-pt-placeholder="Selecione tudo na página da vaga (Ctrl+A), copie e cole aqui."></textarea>
-              <p class="hint" data-pt="Funciona melhor: nada para o Claude abrir, nada atrás de login.">Works best: nothing for Claude to open, nothing behind a login.</p>
-            </div>
-            <div class="field" data-source="url" hidden>
-              <label for="listing-url" data-pt="Link da vaga">Link to the listing</label>
-              <input type="text" id="listing-url" inputmode="url" placeholder="https://…" />
-              <p class="hint" data-pt="Funciona com páginas públicas. LinkedIn, Workday e outras páginas que pedem login geralmente não abrem; cole o texto.">Fine for public pages. LinkedIn, Workday and other pages that need a login usually can't be opened; paste the text instead.</p>
-            </div>
-            <div class="field" data-source="screenshot" hidden>
-              <span class="group-label" data-pt="Captura de tela da vaga">Screenshot of the listing</span>
-              <div class="dropzone" id="dropzone">
-                <span id="dropzone-label"></span>
-                <button type="button" class="button secondary" id="screenshot-pick" data-pt="Escolher arquivo">Choose a file</button>
-                <button type="button" class="button secondary" id="screenshot-remove" hidden data-pt="Remover">Remove</button>
-                <input type="file" id="screenshot-file" accept="image/png,image/jpeg,image/webp,image/gif" hidden />
+              <div class="field" data-source="url" hidden>
+                <label for="listing-url" data-pt="Link da vaga">Link to the listing</label>
+                <input type="text" id="listing-url" inputmode="url" placeholder="https://…" />
+                <p class="hint" data-pt="Funciona com páginas públicas. LinkedIn, Workday e outras páginas que pedem login geralmente não abrem; cole o texto.">Fine for public pages. LinkedIn, Workday and other pages that need a login usually can't be opened; paste the text instead.</p>
               </div>
+              <div class="field" data-source="screenshot" hidden>
+                <span class="group-label" data-pt="Captura de tela da vaga">Screenshot of the listing</span>
+                <div class="dropzone" id="dropzone">
+                  <span id="dropzone-label"></span>
+                  <button type="button" class="button secondary" id="screenshot-pick" data-pt="Escolher arquivo">Choose a file</button>
+                  <button type="button" class="button secondary" id="screenshot-remove" hidden data-pt="Remover">Remove</button>
+                  <input type="file" id="screenshot-file" accept="image/png,image/jpeg,image/webp,image/gif" hidden />
+                </div>
+              </div>
+              <p class="hint" data-pt="Cada execução abre uma sessão nova do Claude Code. O Claude lê a vaga, confere as páginas de carreira da própria empresa atrás de preferências para candidaturas e preenche os campos. Costuma levar de um a três minutos.">Each run starts a new Claude Code session. Claude reads the listing, checks the company's own careers pages for application preferences, then fills in the fields. It usually takes one to three minutes.</p>
             </div>
-            <p class="hint" data-pt="Cada execução abre uma sessão nova do Claude Code. O Claude lê a vaga, confere as páginas de carreira da própria empresa atrás de preferências para candidaturas e preenche os campos. Costuma levar de um a três minutos.">Each run starts a new Claude Code session. Claude reads the listing, checks the company's own careers pages for application preferences, then fills in the fields. It usually takes one to three minutes.</p>
+            <div class="contents" data-when="mode=short">
+              <div class="field">
+                <label for="listing-question" data-pt="Cole a pergunta">Paste the question</label>
+                <textarea id="listing-question" rows="5" placeholder="Why do you want to work here?" data-pt-placeholder="Por que você quer trabalhar aqui?"></textarea>
+                <p class="hint" data-pt="Cole também o limite de palavras ou caracteres, se houver.">Include its word or character limit, if it has one.</p>
+              </div>
+              <p class="hint" data-pt="Cada execução abre uma sessão nova do Claude Code. O Claude pesquisa como recrutadores e gestores recomendam responder esse tipo de pergunta e, quando ela fala da empresa, o que a empresa procura, usando a empresa e a vaga preenchidas na carta, se houver. O que ele diz sobre você vem só do seu currículo, projetos e perfis públicos; o que ele não sabe fica num [espaço entre colchetes] para você.">Each run starts a new Claude Code session. Claude looks up how recruiters and hiring managers recommend answering that kind of question and, when it's about the company, what the company looks for, using the company and role filled in for the letter, if any. What it says about you comes only from your CV, projects and public profiles; anything it doesn't know is left as a [bracketed placeholder] for you.</p>
+            </div>
             <div class="error" id="listing-error" role="alert" hidden></div>
             <div class="modal-actions">
-              <button type="submit" class="button primary" id="listing-run" data-pt="Preencher">Fill it in</button>
+              <button type="submit" class="button primary" id="listing-run">
+                <span data-when="mode=letter, mode=project" data-pt="Preencher">Fill it in</span>
+                <span data-when="mode=short" data-pt="Escrever a resposta">Write the answer</span>
+              </button>
             </div>
           </form>
 
@@ -1003,12 +1034,18 @@
         salaryRange: "",
         contract: "CLT ou PJ",
         extra: "",
+        // Short answers: the pasted question and Claude's answer, in the question's language.
+        question: "",
+        answer: "",
+        answerLang: "en",
+        // What Pedro typed for each [placeholder] in the answer, by its text.
+        fills: {},
         // Filled by the Claude Code autofill: what it found about the company.
         findings: [],
         summary: "",
       };
       // What "New listing" clears; the rest are standing choices.
-      const LISTING_FIELDS = ["company", "contact", "role", "why", "zone", "city", "salaryRange", "extra", "findings", "summary"];
+      const LISTING_FIELDS = ["company", "contact", "role", "why", "zone", "city", "salaryRange", "extra", "question", "answer", "fills", "findings", "summary"];
 
       const BANNED = /\b(passionat\w*|thriv\w*|align\w*|leverag\w*|robust\w*|delv\w*|apaixonad\w*|alavanc\w*)\b/gi;
       const GUPY_LIMIT = 1500;
@@ -1054,12 +1091,12 @@
       const STORIES = {
         en: {
           erp: "I work as a software developer at NetComet, an internet provider in southern Brazil. Most of my week goes into rewriting a decade-old, multi-tenant PHP ERP (sales, finance, Brazilian e-invoicing, ISP network management) as a React app on a PHP REST API, as its main developer. I write most of it with AI coding agents and review every change myself, because in a system like this a screen that looks right can still save the wrong data. A screen only counts as done when a Puppeteer test runs its flows and checks the resulting rows in the database. 175 of its 187 screens pass so far. It isn't in production yet.",
-          surveillance: "At NetComet I was the only developer of a video-surveillance product the company built on Frigate NVR for condominiums, office buildings and factories (Python/FastAPI, React/TypeScript). I wrote its automation engine, which turns detections, line crossings and recognized faces into push notifications, MQTT messages or on-screen alarms, and I used Gemini to describe events with the building's floor plan as context. It never went to market.",
+          surveillance: "At NetComet I was the only developer of a video-surveillance product the company built on Frigate NVR for condominiums, office buildings and factories (Python/FastAPI, React/TypeScript). I wrote its automation engine, which turns detections, line crossings and recognized faces into push notifications, MQTT messages or on-screen alarms, and added AI descriptions of events that use a building's floor plan as context. It never went to market.",
           school: "Outside work, I co-developed a school-transport platform that the municipality of Imbé, in southern Brazil, runs its school transport on: its education and transport departments use it for about 4,000 students. It runs on React, Node.js and PostgreSQL. My part includes the route suggestions, which use geocoding and OSRM walking distances to place each student on a route and stop.",
         },
         pt: {
           erp: "Sou o principal desenvolvedor da reescrita de um ERP multiempresa em PHP com mais de dez anos (vendas, financeiro, NF-e e gestão de rede de provedor) para React e uma API REST em PHP. Escrevo a maior parte com agentes de IA e reviso cada mudança eu mesmo, e uma tela só conta como pronta quando um teste Puppeteer roda os fluxos e confere os dados gravados no banco. 175 das 187 telas já passam; o sistema ainda não está em produção.",
-          surveillance: "Lá, fui o único desenvolvedor de um produto de videomonitoramento que a empresa criou sobre o Frigate NVR para condomínios, prédios comerciais e fábricas (Python/FastAPI, React/TypeScript). Criei o motor de automações, que transforma detecções, cruzamentos de linha e rostos reconhecidos em notificações push, mensagens MQTT ou alarmes na tela, e usei o Gemini para descrever eventos com a planta do prédio como contexto. O produto não chegou ao mercado.",
+          surveillance: "Lá, fui o único desenvolvedor de um produto de videomonitoramento que a empresa criou sobre o Frigate NVR para condomínios, prédios comerciais e fábricas (Python/FastAPI, React/TypeScript). Criei o motor de automações, que transforma detecções, cruzamentos de linha e rostos reconhecidos em notificações push, mensagens MQTT ou alarmes na tela, e descrições de eventos por IA que usam a planta do prédio como contexto. O produto não chegou ao mercado.",
           school: "Fora do trabalho, codesenvolvi uma plataforma de transporte escolar (React, Node.js, PostgreSQL) que a prefeitura de Imbé (RS) usa no transporte escolar, nas secretarias de Educação e de Transportes, com cerca de 4.000 alunos. Fiz a sugestão de rotas, com geocodificação e distâncias a pé calculadas pelo OSRM.",
         },
       };
@@ -1074,12 +1111,6 @@
         americas: "I'm in Brazil (UTC−3), one to two hours ahead of US Eastern time, so I can work your business hours.",
         europe: "I'm in Brazil (UTC−3), four to five hours behind Central European time, so my working day overlaps with your afternoons.",
         unstated: "I'm in Brazil (UTC−3) and can adjust my working hours to overlap with your team.",
-      };
-      // Completes "…and can ___as a contractor or through your EOR."
-      const ZONE_SHORT = {
-        americas: "work US business hours ",
-        europe: "overlap with your afternoons (CET) ",
-        unstated: "work ",
       };
 
       /** The chosen story, plus the optional company-specific sentence. */
@@ -1134,23 +1165,23 @@
         };
       }
 
+      // [salary range] in Claude's answer: something only Pedro can say, filled in on the left.
+      const PLACEHOLDER = /\[([^\]\n]+)\]/g;
+
+      /** The answer's placeholders, each once, in order. */
+      const placeholders = () => [...new Set([...state.answer.matchAll(PLACEHOLDER)].map((match) => match[1].trim()))];
+
+      /** Claude's answer to the pasted question; a blank-line break starts a new paragraph. */
       function shortAnswer() {
-        if (state.lang === "pt") {
-          return {
-            body: [
-              p`Boa parte do que construo hoje é sobre tornar confiável o código escrito por IA. No trabalho, escrevo a maior parte da reescrita de um ERP de 187 telas com agentes de IA, e uma tela só conta como pronta quando um teste no navegador confirma os dados no banco. Por conta própria, criei o Agent Session Manager, um widget do KDE Plasma que mostra quais sessões de agentes de código estão esperando por mim. Ele tem mais de 200 testes e está na KDE Store. ${field("why", "uma frase sobre o que te atrai nesta empresa ou time")} Posso mostrar qualquer parte disso numa conversa.`,
-            ],
-          };
-        }
-        const remote =
-          state.location === "remote"
-            ? [` I'm in Brazil (UTC−3), work in English every day, and can ${ZONE_SHORT[state.zone]}as a contractor or through your EOR.`]
-            : [];
-        return {
-          body: [
-            p`Most of what I build lately is about making AI-written code trustworthy. At work I write most of a 187-screen ERP rewrite with AI coding agents, and a screen only counts as done when a browser test confirms its data in the database. On my own time I built Agent Session Manager, a KDE Plasma widget that shows which coding-agent sessions are waiting on me. It has 200+ tests and is on the KDE Store. ${field("why", "one sentence on what draws you to this company or team")}${remote} Happy to show any of it on a call.`,
-          ],
-        };
+        const answer = state.answer.trim();
+        if (!answer) return { body: [[field("answer", tr("the answer: use Fill with AI and paste the question", "a resposta: use Preencher com IA e cole a pergunta"))]] };
+        // split() with a capture group alternates text and placeholder: odd indexes are placeholders.
+        const paragraph = (block) =>
+          block
+            .split(PLACEHOLDER)
+            .map((piece, i) => (i % 2 ? { key: piece.trim(), label: piece.trim(), value: String(state.fills[piece.trim()] ?? "").trim() } : piece))
+            .filter((part) => part !== "");
+        return { body: answer.split(/\n\s*\n/).map((block) => paragraph(block.trim())) };
       }
 
       function compose() {
@@ -1231,7 +1262,7 @@
 
         const letter = document.getElementById("letter");
         letter.replaceChildren(...body.map(renderParagraph));
-        letter.lang = state.lang === "pt" ? "pt-BR" : "en";
+        letter.lang = (state.mode === "short" ? state.answerLang : state.lang) === "pt" ? "pt-BR" : "en";
 
         const subject = document.getElementById("subject");
         subject.hidden = !result.subject;
@@ -1313,8 +1344,33 @@
         }
       }
 
+      /** One field on the left per placeholder in the answer. Rebuilt only when the answer or page language changes, so typing keeps focus. */
+      function renderFills() {
+        const fields = placeholders().map((label, i) => {
+          const wrapper = Object.assign(document.createElement("div"), { className: "field" });
+          const caption = Object.assign(document.createElement("label"), { htmlFor: `fill-${i}`, textContent: label.charAt(0).toUpperCase() + label.slice(1) });
+          const input = Object.assign(document.createElement("textarea"), { id: `fill-${i}`, rows: 2, value: state.fills[label] ?? "" });
+          input.dataset.fill = label;
+          wrapper.append(caption, input);
+          return wrapper;
+        });
+        fields.at(-1)?.append(
+          Object.assign(document.createElement("p"), {
+            className: "hint",
+            textContent: tr("Claude left these for you to answer. What you type replaces them in the answer.", "O Claude deixou estes para você responder. O que você digitar entra no lugar deles na resposta."),
+          }),
+        );
+        document.getElementById("fills").replaceChildren(...fields);
+      }
+
       function onInput(event) {
         const el = event.target;
+        if (el.dataset.fill !== undefined) {
+          state.fills = { ...state.fills, [el.dataset.fill]: el.value };
+          save();
+          render();
+          return;
+        }
         if (!el.name || !(el.name in state)) return;
         state[el.name] = el.type === "checkbox" ? el.checked : el.value;
         save();
@@ -1329,9 +1385,11 @@
         state.salary = false;
         save();
         syncForm();
+        renderFills();
         render();
         clearListing();
-        document.getElementById("company").focus();
+        // A short answer starts from Fill with AI, which asks for the question.
+        document.getElementById(state.mode === "short" ? "autofill-open" : "company").focus();
       });
 
       async function copy(text, button) {
@@ -1363,6 +1421,18 @@
       const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
       const MAX_IMAGE_EDGE = 1600; // Claude downsizes anything larger anyway.
 
+      // What Claude found about the company, with the page that says so.
+      const FINDINGS_SCHEMA = {
+        type: "array",
+        maxItems: 4,
+        items: {
+          type: "object",
+          additionalProperties: false,
+          required: ["text", "source"],
+          properties: { text: { type: "string" }, source: { type: "string" } },
+        },
+      };
+
       const AUTOFILL_SCHEMA = {
         type: "object",
         additionalProperties: false,
@@ -1382,19 +1452,121 @@
           city: { type: "string" },
           why: { type: "string" },
           extra: { type: "string" },
-          findings: {
-            type: "array",
-            maxItems: 4,
-            items: {
-              type: "object",
-              additionalProperties: false,
-              required: ["text", "source"],
-              properties: { text: { type: "string" }, source: { type: "string" } },
-            },
-          },
+          findings: FINDINGS_SCHEMA,
           summary: { type: "string" },
         },
       };
+
+      const ANSWER_SCHEMA = {
+        type: "object",
+        additionalProperties: false,
+        required: ["lang", "answer", "findings", "summary"],
+        properties: {
+          lang: { type: "string", enum: ["en", "pt"] },
+          answer: { type: "string" },
+          findings: FINDINGS_SCHEMA,
+          summary: { type: "string" },
+        },
+      };
+
+      /** Years since paid work began (May 2025), to the nearest half year, like the CV (src/content/profile.ts). */
+      function yearsOfExperience(now = new Date()) {
+        const months = (now.getFullYear() - 2025) * 12 + now.getMonth() - 4;
+        return Math.round(months / 6) / 2;
+      }
+
+      // What Claude may say about Pedro. The CV and landing page (Landing-Pdr/src/content/en.ts), plus
+      // what Pedro said about his work in his own notes and AI chats (collected Nov 2026). Keep it in
+      // step with src/content.
+      const PEDRO = `- Pedro Ourique, software developer in Santo Antônio da Patrulha, RS, Brazil (UTC−3, no daylight saving), about 70 km from Porto Alegre. Portuguese native. English C1: self-assessed, from the advanced English Place course, and IFRS exempted him from Technical English I and II by proficiency exam (9.0 and 9.6); he reads and writes English every day. Works on site, hybrid or remote; for companies abroad, as a contractor or through an employer of record. Can start immediately.
+- Contact: ${PROFILE.email}, ${PROFILE.phone}. Site with his CV: ${PROFILE.site}. LinkedIn: ${PROFILE.linkedin}. GitHub: https://github.com/Pedroou.
+- Paid development work since May 2025: ${yearsOfExperience()} years of experience (he describes himself as "software developer with ${yearsOfExperience()} years of experience").
+- NetComet, an internet provider in southern Brazil: software development intern May to September 2025, software developer since September 2025 (hired after four months).
+  - ERP rewrite (React, JavaScript, PHP with Slim, MySQL, Puppeteer): main developer of the rewrite of a decade-old, 187-screen multi-tenant PHP ERP (sales, finance, Brazilian e-invoicing, ISP network management) as a React app on a PHP REST API. Builds most screens with AI coding agents and reviews every change himself; a screen counts as done only when its Puppeteer flow passes and the saved rows match the database (175 of 187 so far). Wrote Dockerized PHP integration tests for the API and a pre-push check that runs both test suites. Merged the API's main branch (74 commits, 19 conflicts) into the rewrite's branch while keeping every local run away from production data. Not in production yet.
+  - AI video-surveillance product (Python, FastAPI, React, TypeScript, Frigate NVR): its only developer, a product for condominiums, office buildings and factories, built on his fork of Frigate. Started as an intern with camera setup, detection tuning and integration testing on Proxmox. Wrote its automation engine (recognized faces, line crossings and AI searches trigger push notifications, MQTT messages or on-screen alarms), AI event descriptions that use a building's floor plan as context (they work with any AI model through an API, including local ones; he moved them to Google's new Gemini library), a daily security briefing (his own idea), and React UI for camera management without restarts, activity heatmaps and an analytics dashboard. Embedded it as a WebView screen in the company's Expo/React Native app, with push notifications through a colleague's API. It never went to market; when the company dropped it, he asked to keep working on it on his own time and was allowed to.
+- Lab2, a two-person registered company he co-founded with a classmate he met in his first semester at IFRS (named after their classroom, "Lab 2"); part-time, alongside his job, since 2026:
+  - GeoRota (https://lab2solutions.com.br/): school-transport platform (React, Node.js, PostgreSQL) that the municipality of Imbé, RS, uses in its education and transport departments, for about 4,000 students. His partner built the first prototype (data in a spreadsheet, no database); Pedro turned it into the product: the database, the backend logic and most of the APIs, components for almost all of the UI, route suggestions that use geocoding and OSRM walking distances to place each student on a route and stop, automated student-pass issuance that replaced a manual process, occupancy analytics, and a role-scoped AI assistant for staff who find computers hard to use.
+  - Syn (in development since August 2026): a platform for clinical laboratories that brings past patients back through WhatsApp campaigns (Meta Cloud API) and a public booking page; built with his partner, reusing GeoRota's components.
+  - Lab2 website (https://lab2solutions.com.br/), React, GSAP, Motion.
+- Other systems: a dental-clinic management system (records, scheduling, finances) in Ruby on Rails with Docker, in real use (his Rails is hobby-level); a dance school's links page with an admin panel the owner uses to edit it without code (React, GitHub API), freelance.
+- Side projects, 2026:
+  - Agent Session Manager (https://github.com/Pedroou/agent-session-manager): open-source KDE Plasma 6 widget (QML, JavaScript) that shows which AI coding-agent sessions (Claude Code, Codex, omp) need him, with each session's status, model, context and git branch, and jumps to its terminal. 200+ tests; on the KDE Store, his first published tool.
+  - Claude Profiles (https://github.com/Pedroou/claude-profiles): command-line tool (bash, zsh, fish) for keeping separate Claude Code logins, such as work and personal, with one shared set of settings, skills and history.
+- How he works: has used AI every day for over two years; writes most of his code with AI coding agents, manages their context, picks the model and effort level for each task, reads and checks what they produce himself, and counts work as done only when tests confirm it.
+- Skills: TypeScript, JavaScript, Python, PHP, SQL, Shell, HTML/CSS; React (his main tool), Vite, Tailwind CSS, Bootstrap, PWAs; Node.js/Express, FastAPI, PHP (Slim), REST APIs, PostgreSQL, MySQL, MQTT; Puppeteer, Vitest, Docker/Compose, Git/GitHub Actions, Linux; AI coding agents (Claude Code, Codex, omp), Gemini API, computer vision (Frigate NVR).
+- Education: technologist degree in Systems Analysis and Development at IFRS (Federal Institute of Rio Grande do Sul), Osório campus, January 2025 to December 2027 (4th of 6 semesters, every course passed on schedule), GPA 8.6/10. Coursework: Data Structures, Object-Oriented Programming, Databases I and II, Operating Systems; Systems Analysis and Design and Computer Networks this semester. Studies while working full time.
+- Courses: Programming for Everybody (University of Michigan), Database Fundamentals (IFRS extension course), IoT 3.0 Technician track (FiberSchool), Advanced English, in person (English Place).`;
+
+      // How Pedro sees himself, what he wants, and how he wants to come across: from his own notes and
+      // AI chats on his computers (collected Nov 2026). Only what he said or approved himself.
+      const PEDRO_PERSONAL = `## His story
+- Has used computers since he was about 7. His first code was game modding: extra logic for a Garry's Mod DarkRP addon on a server he ran with friends.
+- Did two of his three high-school years at IFRS Osório, in a course with integrated IT training. When the bus line to that city was cut he paid for private transport for a year to keep going, then left because of the cost and finished high school in 2024 in his own city. Later, with his own car, he went back to the same campus for his degree.
+- Around 17, working part-time as a secretary at a dance school, he wrote Java tools that automated its billing messages and contract and installment calculations: his first code for a real need.
+- His older brother is a senior engineer; talking with him, often about product design, shaped Pedro's skills and his taste for software and product work.
+- Started at NetComet as an intern in May 2025 and was hired as a developer four months later. Has led large projects there with little outside guidance.
+
+## What he wants
+- A junior or mid-level (pleno) full-stack or frontend role; both levels are targets, senior roles are not. He would like an international company, and is just as open to on-site or hybrid roles in the Porto Alegre and São Leopoldo region, or remote ones in Brazil. He would love to work at SAP: a big, successful and interesting company.
+- Why he is looking: his work has grown past his current position (he is the main developer on major projects), and he wants a role that matches the work he already does.
+- The thread through his recent work: making AI-written code trustworthy, and building complete products from zero to production rather than isolated tickets.
+- Spends his own time on learning (courses, English, certifications) because he wants to keep developing his career. Co-founded Lab2 because he and his partner wanted more than they had; his attitude: if one product doesn't work out, they'll find one that does.
+- Contract: CLT or PJ, no preference unless the listing says. Doesn't plan to move abroad.
+
+## Strengths, in his words
+- Good taste and an eye for detail: he notices slightly tinted greys and misalignments of a few pixels, and wants what he ships to look made by a person, not generated.
+- Long hands-on experience with computers; delivers large projects alone.
+- Uses AI agents well: manages context, chooses models and effort levels, and can explain every line they write for him.
+- Stubborn and dedicated; a perfectionist who goes back to fix work he isn't proud of.
+
+## Weaknesses he's honest about (pick one when asked, with what he does about it)
+- Documentation has always been hard for him. On the ERP rewrite it got out of hand, and he fixed it with a process (see the ERP story below).
+- He is stronger on frontend than backend and still building backend and database-design depth; when he doesn't know something (for example what retry with exponential backoff means, in October 2026) he asks instead of guessing.
+- Less confident in Python than in TypeScript and React.
+- Perfectionism: he rebuilds work he isn't happy with, as he did with Claude Profiles.
+- Interview nerves: once blanked when asked to implement a delete operation, then practised CRUD tasks before his next interview.
+
+## How he works
+- Simple over complex: to him robust means an efficient, simple strategy, not layers of guards. Asks what the simplest, cheapest reliable way is instead of letting an agent decide.
+- Finds the root cause before changing anything, and leaves working code alone unless the task needs it; on legacy code he keeps changes minimal and scoped.
+- Fixes the shared component so a fix applies across the whole app, and reuses components across products.
+- Protects production: nothing he runs locally may touch live data.
+- Knows his decision boundaries: in the ERP rewrite he copies the old system's behaviour, logs its bugs and leaves the calls to his bosses.
+- Keeps setup to as few commands as possible so colleagues can run his projects.
+- Checks UI work himself and reviews AI output closely; asks for fresh, unbiased reviews of his own projects.
+- Wants to be challenged with evidence rather than agreed with, and looks at how the best projects do something before building it.
+- Says "I" for his own work and makes sure he can explain and defend every decision.
+
+## Stories (situation, what he did, result)
+- ERP rewrite, September 2026: months into the solo migration the docs had sprawled, he couldn't tell what was finished, and demos to his boss crashed on common screens. He admitted he had drifted from checking the AI's output, restructured the project around one state document and one backlog (keeping the logs of legacy bugs and deliberate differences), and set the rule that a screen is done only when its browser flow passes and the database rows match, plus a pre-push check so he could commit with confidence. Within a day he found the project far easier to manage; 175 of 187 screens pass now.
+- Syn, security vs. usability (October 2026): his partner wanted booking links to expire; Pedro thought links that keep working are what make the product easy, and that the real risk was unprotected endpoints. He protected the API against double booking and made an expired link ask for the patient's CPF instead of failing, which kept links usable and data safe.
+- Syn, a design disagreement settled with evidence: the two kept disagreeing about the theme's greys. He showed his partner the colours on his own laptop, they found their displays rendered them differently, checked the theme tokens, and chose the greys deliberately.
+- Syn, both needs met: his partner needed a demo lab for sales and Pedro needed a test lab with real numbers; he reverted an over-complicated change and designed a way to keep both.
+- Reviewing a big change: when a teammate's pull request changed most of Syn's UI, he ran the old and new versions side by side and went section by section deciding what to keep, revert or adjust, keeping Syn consistent with GeoRota.
+- GeoRota, prototype to product: took over a prototype that kept its data in a spreadsheet and turned it into a real application (database, backend, components, APIs); it is now in use in Imbé.
+- Agent Session Manager, acting on feedback: a KDE Store review asked for tools beyond Claude Code; he added Codex and omp support and tested it against real sessions. Getting it on the KDE Store took persistence: uploads kept failing with server errors, so he debugged with DevTools, tried another browser and network, attached the GitHub release instead, and got it published.
+- Claude Profiles, holding old work to a higher bar: after the widget he saw that his older tool was badly designed, rebuilt it, cut about 450 lines by choosing a simpler settings approach, added bash support, releases and a changelog, and only then made it public.
+- Owning accuracy: he suspected his CV overstated his work on the surveillance product and had his fork audited against upstream Frigate before keeping each line.
+- Surveillance product: the daily security briefing was his idea to make the product stand out; he specified it (schedule, a modal in the live view, history with regeneration). He also put the product inside the company's mobile app; when emulator crashes kept blocking him, he moved to a physical device and cut his attempts down to the minimal change.
+- A take-home test for a junior backend role (January 2026): a legacy PHP (Slim) API. He dockerized it, moved it to MySQL with migrations, fixed a wrong JOIN that put products under the wrong category, added prepared statements, filters and tests, and kept changes to the legacy code minimal. He advanced to the interview and prepared by making sure he could explain every change.
+- Hosting GeoRota: he challenged a cost estimate with real hardware prices, then still chose managed cloud hosting, because with a full-time job he couldn't fix a home server if school transport failed at 7 a.m.
+
+## Outside work
+- Cars: works on his own VW Polo (factory-style retrofits, coding its modules with VCDS and ODIS).
+- AI agent labs at home: agents that research, build and test trading robots on demo accounts, as a statistics and agent-orchestration learning project; and a personal AI assistant.
+- Linux and KDE Plasma tinkering, with a dotfiles repository that sets up a new machine in one go; this is where Agent Session Manager came from.
+- The gym, with a workout app he wrote for himself.
+- Game modding (currently an Arma Reforger mod).
+
+## How he wants to come across
+- Like a person wrote it: no em dashes, no emojis, no generic lines such as "I like to learn, tinker and share what I discover", no hollow taglines.
+- Few numbers: one or two that carry weight, not a list of metrics.
+- Never overstate: he has published one KDE widget and one CLI tool, not "many open-source tools"; the surveillance system was a product, not "our camera system"; he is not senior and doesn't label himself with a seniority.
+- Call his job "software developer". Never mention his pay or his registered job title, and never criticise his employer, colleagues or other developers; turn high standards into what he does, not into comparisons.
+- Don't discuss GeoRota's commercial terms or imply it was sold; say it is in use.
+- Mention co-founding Lab2 only when the question is about ownership, side projects or entrepreneurship.
+- Leave out unfinished courses, his old MyNotes app and the IFRS talk (it was cancelled), and never name other companies he has applied to or the tools he uses to apply.
+- Keep his employer's internal details out.`;
 
       // From the research behind this page; Claude checks for anything newer.
       const KNOWN_GUIDANCE = `- SAP: applications are preferred in English (https://jobs.sap.com/en/how-we-hire/). To show AI skills, "include examples of how you used AI ... and how you validated the results and protected data" (https://jobs.sap.com/en/how-we-hire/ai-skills-assessment/). The cover letter is optional; use it for details that aren't on the CV. AI tools aren't allowed in interviews or online assessments (https://jobs.sap.com/en/how-we-hire/use-of-ai-in-the-recruiting-process/). SAP Labs Latin America is in São Leopoldo, RS.
@@ -1425,12 +1597,7 @@ ${inputs}
 3. Fill in the fields. Apply the company's main preferences through the options and the two slots, keeping the letter close to the template.
 
 # Pedro (these are the only facts; never add to them)
-- Software developer in Santo Antônio da Patrulha, RS, Brazil (UTC−3). Portuguese native, English C1.
-- NetComet, an internet provider: software development intern from May 2025, software developer since September 2025.
-- Studying Systems Analysis and Development (technologist degree) at IFRS, Osório campus, since January 2025; expected to finish in December 2027. Average grade 8.6/10.
-- Stack: TypeScript, JavaScript, React, Node.js, Python (FastAPI), PHP (Slim), PostgreSQL, MySQL, Docker, Puppeteer, Gemini API, MQTT.
-- Writes most of his code with AI coding agents, reviews every change himself, and counts work as done only when tests confirm it.
-- Side project: Agent Session Manager (open-source KDE Plasma widget that tracks Claude Code sessions; 200+ tests; on the KDE Store).
+${PEDRO}
 - His three stories are the paragraphs under "story" below.
 
 # Options
@@ -1457,6 +1624,49 @@ ${inputs}
 # Report
 - findings: up to 4 company preferences that matter for this application. Each is one ${tr("English", "Brazilian Portuguese")} sentence of at most 25 words on what the company prefers and what you did about it, with the URL of the page that says so (the company's own page when possible). Always include it when the company doesn't read or doesn't accept cover letters. Use [] if you found nothing specific.
 - summary: one ${tr("English", "Brazilian Portuguese")} sentence of at most 35 words on what you used (URL, text or screenshot) and anything Pedro should check, such as a URL that couldn't be opened, a time-zone mismatch, or a screening question that a short answer would fit better.
+
+# Known guidance
+${KNOWN_GUIDANCE}`;
+      }
+
+      function answerPrompt(question) {
+        const company = state.company.trim();
+        const role = state.role.trim();
+        const application =
+          company || role
+            ? `\n# The application\nThe letter's fields name ${role ? `the "${role}" role` : "a role"}${company ? ` at ${company}` : ""}. They can be left over from an earlier listing: if the question names another company, go by the question, and say which company you assumed in "summary".\n`
+            : "";
+
+        return `You are writing Pedro Ourique's answer to one question from a job application. Write it as Pedro, in the first person, and return it through the structured output.
+
+# The question
+"""
+${question}
+"""
+${application}
+# Steps
+1. Work out what kind of question it is (motivation such as "Why us?", experience or behavioral such as "Tell me about a time…", strengths and weaknesses, technical, availability or logistics, salary, an open "Anything else?") and what the person reading it wants to find out.
+2. Research how to answer that kind of question well: what hiring managers and recruiters recommend including, how to structure it (for example STAR for behavioral questions) and the common mistakes. Prefer guidance from employers' own hiring pages and from recruiters over generic career blogs and listicles; when sources disagree, follow the one closer to the people who hire.
+3. When the question is about the company or the role, check the company's own site: its product, its stack and what it says it looks for. If the company is in "Known guidance" below, use that and only look for anything newer.
+4. Only if the answer needs more detail on one of Pedro's projects, read his own public pages listed below (GitHub repositories, site).
+5. Keep all of this to at most 6 web searches or page fetches in total, then write the answer: follow the recommended approach, using the one or two pieces of Pedro's work that fit it best rather than listing everything.
+
+# Pedro (the only facts about him; never add to them)
+${PEDRO}
+
+# Pedro in his own words (also facts; use them for personal questions)
+${PEDRO_PERSONAL}
+
+# The answer
+- lang: "pt" if the question is in Portuguese, otherwise "en". Write the answer in that language (Brazilian Portuguese for "pt").
+- answer: answer the question in the first sentence, then back it up the way the guidance you found recommends, with concrete details: what he built, with what, and a number where the facts give one. If the question states a limit in words or characters, stay under it; otherwise keep it to about 100 words, and shorter when the question is simple or asks for a fact. Plain text for a form field: no headings, bullets, bold or Markdown links; separate paragraphs with a blank line. Never repeat the question back.
+- What's true: the answer can draw on everything you researched (the company, the role, its field, and how strong answers to this question are built), and it can connect something specific about the company to Pedro's real work. But every claim about Pedro himself (what he did, used, knows, wants or feels) must come from the two sections above or his own pages: don't add reasons, wishes or lessons he hasn't stated, even plausible ones like "learning from more experienced engineers".
+- When a good answer needs something about Pedro that neither section above covers (salary, notice period, work authorization outside Brazil, a specific date, a personal story he hasn't told, years with a tool he hasn't listed), don't make it up: answer what the facts support and leave a bracketed placeholder for him to fill in, like [salary range] or [notice period]. Each placeholder becomes a field labeled with its text and is replaced word for word by what he types, so write it in the answer's language as a short description of what goes there, and place it where his words fit the sentence. Use square brackets for nothing else.
+- Style: plain and factual, following "How he wants to come across" above. No flattering adjectives about Pedro: show a strength through something he did. No flattery of the company, no em dashes, and none of these words: passionate, thrive, align, leverage, robust, delve, apaixonado, alavancar.
+
+# Report
+- findings: up to 4 things that shaped the answer: the advice you followed on answering this kind of question, and what you found about the company. Each is one ${tr("English", "Brazilian Portuguese")} sentence of at most 25 words on what the source says and what you did about it, with the URL of the page that says so. Always include it when the company asks candidates not to use AI for application answers. Use [] if you found nothing usable.
+- summary: one ${tr("English", "Brazilian Portuguese")} sentence of at most 35 words on the approach the answer follows, which of Pedro's work it uses, and anything he should check, such as a placeholder to fill in.
 
 # Known guidance
 ${KNOWN_GUIDANCE}`;
@@ -1494,6 +1704,7 @@ ${KNOWN_GUIDANCE}`;
       async function openAutofill() {
         if (!dialog.open) dialog.showModal();
         if (running) return showTab("listing");
+        $("listing-question").value = state.question;
         tabs.listing.disabled = true;
         showTab("connect");
         await checkHelper();
@@ -1759,6 +1970,7 @@ ${KNOWN_GUIDANCE}`;
       }
 
       function focusSource() {
+        if (state.mode === "short") return $("listing-question").focus();
         const screenshotButton = screenshot ? $("screenshot-remove") : $("screenshot-pick");
         ({ text: $("listing-text"), url: $("listing-url"), screenshot: screenshotButton })[currentSource()].focus();
       }
@@ -1769,9 +1981,17 @@ ${KNOWN_GUIDANCE}`;
         focusSource();
       });
 
+      // The same question as the page's Question field: either one edits it.
+      $("listing-question").addEventListener("input", (event) => {
+        state.question = event.target.value;
+        $("question").value = state.question;
+        save();
+      });
+
       function clearListing() {
         $("listing-text").value = "";
         $("listing-url").value = "";
+        $("listing-question").value = "";
         screenshot = null;
         paintScreenshot();
         showSource("text");
@@ -1787,7 +2007,8 @@ ${KNOWN_GUIDANCE}`;
       });
       dialog.addEventListener("paste", (event) => {
         const file = [...(event.clipboardData?.files ?? [])].find((f) => f.type.startsWith("image/"));
-        if (file) {
+        // Only a listing can be a screenshot; a question is pasted as text.
+        if (file && state.mode !== "short") {
           event.preventDefault();
           showSource("screenshot");
           setScreenshot(file);
@@ -1833,10 +2054,26 @@ ${KNOWN_GUIDANCE}`;
         render();
       }
 
-      $("listing-cancel").addEventListener("click", () => running?.abort());
+      function applyAnswer(question, { lang, answer, findings, summary }) {
+        Object.assign(state, { question, answerLang: lang, answer, fills: {}, findings, summary });
+        save();
+        syncForm();
+        renderFills();
+        render();
+      }
 
-      $("listing-form").addEventListener("submit", async (event) => {
-        event.preventDefault();
+      /** What to send for a short answer: the question. Shows what's missing and returns null instead. */
+      function answerJob() {
+        const question = $("listing-question").value.trim();
+        if (!question) {
+          showError(tr("Paste the question first.", "Cole a pergunta primeiro."));
+          return null;
+        }
+        return { prompt: answerPrompt(question), schema: ANSWER_SCHEMA, apply: (data) => applyAnswer(question, data) };
+      }
+
+      /** What to send for a letter: the listing. Shows what's missing and returns null instead. */
+      function listingJob() {
         const source = currentSource();
         const listing = {
           text: source === "text" ? $("listing-text").value.trim() : "",
@@ -1844,15 +2081,33 @@ ${KNOWN_GUIDANCE}`;
           image: source === "screenshot" ? screenshot : null,
         };
         if (!listing.text && !listing.url && !listing.image) {
-          return showError(
+          showError(
             {
               text: tr("Paste the listing first.", "Cole a vaga primeiro."),
               url: tr("Paste the link first.", "Cole o link primeiro."),
               screenshot: tr("Add a screenshot first.", "Adicione uma captura de tela primeiro."),
             }[source],
           );
+          return null;
         }
-        if (listing.url && !safeUrl(listing.url)) return showError(tr("The URL should start with https://", "O link deve começar com https://"));
+        if (listing.url && !safeUrl(listing.url)) {
+          showError(tr("The URL should start with https://", "O link deve começar com https://"));
+          return null;
+        }
+        return {
+          prompt: autofillPrompt(listing),
+          schema: AUTOFILL_SCHEMA,
+          image: listing.image ? { mediaType: listing.image.mediaType, data: listing.image.data } : undefined,
+          apply: applyAutofill,
+        };
+      }
+
+      $("listing-cancel").addEventListener("click", () => running?.abort());
+
+      $("listing-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const job = state.mode === "short" ? answerJob() : listingJob();
+        if (!job) return;
         showError("");
 
         running = new AbortController();
@@ -1868,12 +2123,7 @@ ${KNOWN_GUIDANCE}`;
           const response = await fetch("/api/autofill", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              account,
-              prompt: autofillPrompt(listing),
-              schema: AUTOFILL_SCHEMA,
-              image: listing.image ? { mediaType: listing.image.mediaType, data: listing.image.data } : undefined,
-            }),
+            body: JSON.stringify({ account, prompt: job.prompt, schema: job.schema, image: job.image }),
             signal: running.signal,
           });
           if (!response.ok) {
@@ -1899,7 +2149,7 @@ ${KNOWN_GUIDANCE}`;
           if (!outcome) throw new Error(tr("The helper stopped without an answer.", "O ajudante parou sem responder."));
           if (outcome.type === "error") throw new Error(outcome.message);
 
-          applyAutofill(outcome.data);
+          job.apply(outcome.data);
           dialog.close();
         } catch (error) {
           if (error.name === "AbortError") showError("");
@@ -1976,6 +2226,7 @@ ${KNOWN_GUIDANCE}`;
 
         paintThemeButton();
         paintScreenshot();
+        renderFills();
         render();
         // An open dialog's first step is built by script; rebuild it in the new language.
         if (dialog.open && !panels.connect.hidden && !running) checkHelper({ quiet: true });

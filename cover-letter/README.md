@@ -1,6 +1,6 @@
 # Cover letters
 
-A page that writes a cover letter from a fixed template. You can fill in the blanks by hand, or let Claude Code fill them in from a job listing.
+A page that writes a cover letter from a fixed template. You can fill in the blanks by hand, or let Claude Code fill them in from a job listing. For a question on an application form, pick **Short answer**: Claude Code looks up how recruiters recommend answering that kind of question, then writes the answer from Pedro's CV and projects.
 
 ## What you need
 
@@ -18,7 +18,7 @@ Without a paid plan the page works the same; only the button that fills it in wi
    - A black window opens. The first time, it installs Node.js and Claude Code, which takes a few minutes; if Windows asks for permission, click **Yes**.
    - Then the page opens in your browser, and a second tab asks you to sign in to Claude. Sign in, then go back to the page.
    - Keep the black window open while you use the page; close it to stop.
-3. On the page, **Fill with AI** fills in the letter from a job listing (Claude Code does the work).
+3. On the page, **Fill with AI** fills in the letter from a job listing (Claude Code does the work). With **Short answer** selected, it asks for the question instead and writes the answer.
 
 ## Next times
 
@@ -26,4 +26,4 @@ Double-click `cover-letter.html` and use the **Start the helper** button. The fi
 
 ## Only filling it in by hand?
 
-Double-clicking `cover-letter.html` is enough; you don't need anything else.
+Double-clicking `cover-letter.html` is enough; you don't need anything else. Short answers are the exception: Claude writes them, so they need the helper.

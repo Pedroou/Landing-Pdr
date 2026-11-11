@@ -2,8 +2,9 @@
 // Local helper for cover-letter.html.
 //
 // A web page can't start programs, so this serves the page at
-// http://127.0.0.1:4817/ and runs Claude Code for its "Fill from a listing"
-// button. Each run is a new headless `claude -p` process that keeps no session
+// http://127.0.0.1:4817/ and runs Claude Code for its "Fill with AI" button
+// (a letter from a listing, or a short answer to a pasted question). Each run
+// is a new headless `claude -p` process that keeps no session
 // on disk, loads none of your customisations (--safe-mode), and can only use
 // WebSearch and WebFetch.
 //
